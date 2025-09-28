@@ -13,10 +13,12 @@ interface Employee {
   id: string;
   name: string;
   photo: string;
+  flag: string;
   department: string;
   office: string;
   role: string;
   qualification: string;
+  manager: string | null;
   order: number;
   sede: string;
   age: number | null;
@@ -26,6 +28,8 @@ interface NodeWithParent {
   node: Node | null;
   parent: Node | null;
 }
+
+type ViewMode = "location" | "role";
 
 const ROOT_ID = "clevertech-root";
 const FALLBACK_SEDE = "Non specificata";
@@ -39,7 +43,28 @@ const BADGE_BY_TYPE: Record<NodeType, string> = {
   department: "DIPARTIMENTO",
   office: "UFFICIO",
   person: "PERSONA",
+  qualification: "QUALIFICA",
+  "role-group": "RUOLO",
 };
+
+const ROLE_ROOT_ID = "clevertech-role-root";
+const DEFAULT_BRANCH_DIRECTOR = "Giuseppe Reggiani";
+const FALLBACK_QUALIFICATION = "Qualifica non specificata";
+const FALLBACK_MANSIONE = "Ruolo non specificato";
+
+const QUALIFICATION_ORDER: Record<string, number> = {
+  dirigente: 1,
+  direttore: 2,
+  manager: 3,
+  "impiegato senior": 4,
+  "impiegato generico": 5,
+  "operaio specializzato": 6,
+  "operaio generico": 7,
+  apprendista: 8,
+};
+
+const getQualificationOrder = (qualification: string) =>
+  QUALIFICATION_ORDER[qualification.toLowerCase()] ?? 999;
 
 const slugify = (value: string) =>
   value
@@ -59,14 +84,17 @@ const parseCsvEmployees = (csvText: string): Employee[] => {
     const name = (parts[0] || "").trim();
     if (!name) return;
 
+    const flag = (parts[1] || "").trim();
     const sede = (parts[2] || "").trim();
     const photo = (parts[3] || "").trim();
     const department = (parts[4] || "").trim().replace(/^\|/, "").trim();
     const office = (parts[5] || "").trim().replace(/^\|/, "").trim();
     const role = (parts[6] || "").trim().replace(/^\|/, "").trim();
     const qualification = (parts[7] || "").trim();
-    const orderStr = (parts[8] || "99").trim();
-    const ageStr = (parts[9] || "").trim();
+    const hasManagerColumn = parts.length >= 12;
+    const managerName = hasManagerColumn ? (parts[8] || "").trim() : "";
+    const orderStr = (parts[hasManagerColumn ? 9 : 8] || "99").trim();
+    const ageStr = (parts[hasManagerColumn ? 10 : 9] || "").trim();
 
     const orderVal = Number.parseInt(orderStr, 10);
     const ageVal = Number.parseInt(ageStr, 10);
@@ -75,10 +103,12 @@ const parseCsvEmployees = (csvText: string): Employee[] => {
       id: `${name.replace(/\s/g, "-")}-${index}`,
       name,
       photo,
+      flag,
       department: department || FALLBACK_DEPARTMENT,
       office: office || FALLBACK_OFFICE,
-      role: role || "—",
+      role: role || "-",
       qualification,
+      manager: managerName ? managerName : null,
       order: Number.isNaN(orderVal) ? 99 : orderVal,
       sede: sede || FALLBACK_SEDE,
       age: Number.isNaN(ageVal) ? null : ageVal,
@@ -105,6 +135,14 @@ const getEmployeeImage = (emp: Employee) => {
   return `https://picsum.photos/seed/${encodeURIComponent(emp.name)}/128/128`;
 };
 
+const getFlagImage = (flagCode?: string | null) => {
+  const normalized = flagCode?.toLowerCase().replace(/\.png$/i, '').trim();
+  if (!normalized) {
+    return `https://picsum.photos/seed/global-flag/128/128`;
+  }
+  return `https://flagcdn.com/w160/${normalized}.png`;
+};
+
 const selectResponsible = (persons: Node[]): Node | null => {
   const sorted = [...persons].sort((a, b) => {
     const orderA = a.metadata?.order ?? a.order ?? 99;
@@ -114,6 +152,35 @@ const selectResponsible = (persons: Node[]): Node | null => {
   });
   return sorted[0] ?? null;
 };
+
+const createPersonNode = (emp: Employee, context: {
+  location: string;
+  sede?: string | null;
+  department?: string | null;
+  office?: string | null;
+  manager?: string | null;
+}): Node => ({
+  id: emp.id,
+  name: emp.name,
+  role: emp.role,
+  department: emp.department,
+  location: context.location,
+  imageUrl: getEmployeeImage(emp),
+  type: "person",
+  metadata: {
+    badge: BADGE_BY_TYPE.person,
+    sede: context.sede ?? emp.sede ?? FALLBACK_SEDE,
+    department: context.department ?? emp.department ?? FALLBACK_DEPARTMENT,
+    office: context.office ?? emp.office ?? FALLBACK_OFFICE,
+    qualification: emp.qualification || null,
+    mansione: emp.role || null,
+    age: emp.age,
+    order: emp.order,
+    flag: emp.flag || null,
+    reportsTo: context.manager ?? null,
+  },
+  children: undefined,
+});
 
 const applyMetadata = (node: Node, updates: Partial<NodeMetadata>): Node => ({
   ...node,
@@ -157,8 +224,15 @@ const buildOrgTree = (employees: Employee[]): Node => {
 
       const departmentEntries = Array.from(departmentMap.entries())
         .sort((a, b) => {
-          if (a[0] === FALLBACK_DEPARTMENT) return 1;
-          if (b[0] === FALLBACK_DEPARTMENT) return -1;
+          const priority = (name: string) => {
+            const normalized = name.toLowerCase();
+            if (name === FALLBACK_DEPARTMENT) return 2;
+            if (normalized.includes("direzione")) return 0;
+            return 1;
+          };
+
+          const priorityDiff = priority(a[0]) - priority(b[0]);
+          if (priorityDiff !== 0) return priorityDiff;
           return a[0].localeCompare(b[0], "it", { sensitivity: "base" });
         })
         .map(([departmentName, officeMap]) => {
@@ -172,29 +246,19 @@ const buildOrgTree = (employees: Employee[]): Node => {
             })
             .map(([officeName, members]) => {
               const sortedMembers = sortEmployees(members);
-              const personNodes: Node[] = sortedMembers.map((emp) => ({
-                id: emp.id,
-                name: emp.name,
-                role: emp.role,
-                department: emp.department,
-                location: locationValue,
-                imageUrl: getEmployeeImage(emp),
-                type: "person",
-                metadata: {
-                  badge: BADGE_BY_TYPE.person,
+              const personNodes: Node[] = sortedMembers.map((emp) =>
+                createPersonNode(emp, {
+                  location: locationValue,
                   sede: sedeName,
                   department: departmentName,
                   office: officeName,
-                  qualification: emp.qualification || null,
-                  mansione: emp.role || null,
-                  age: emp.age,
-                  order: emp.order,
-                },
-                children: undefined,
-              }));
+                })
+              );
 
               departmentPersons.push(...personNodes);
               const responsiblePerson = selectResponsible(personNodes);
+              const peopleCount = personNodes.length;
+              const officePurpose = responsiblePerson?.metadata?.mansione ?? departmentName;
 
               return {
                 id: `office-${slugify(sedeName)}-${slugify(departmentName)}-${slugify(officeName)}`,
@@ -214,6 +278,10 @@ const buildOrgTree = (employees: Employee[]): Node => {
                   mansione: responsiblePerson?.metadata?.mansione ?? null,
                   age: responsiblePerson?.metadata?.age ?? null,
                   order: responsiblePerson?.metadata?.order ?? null,
+                  stats: {
+                    people: peopleCount,
+                  },
+                  officePurpose,
                 },
                 isExpanded: false,
                 children: personNodes,
@@ -221,84 +289,142 @@ const buildOrgTree = (employees: Employee[]): Node => {
             });
           const departmentResponsible = selectResponsible(departmentPersons);
 
-          const departmentNode: Node = {
-            id: `department-${slugify(sedeName)}-${slugify(departmentName)}`,
-            name: departmentName,
-            role: "Dipartimento",
-            department: departmentName,
-            location: locationValue,
-            imageUrl: `https://picsum.photos/seed/${encodeURIComponent(`department-${sedeName}-${departmentName}`)}/128/128`,
-            type: "department",
-            responsible: departmentResponsible?.name,
-            metadata: {
-              badge: BADGE_BY_TYPE.department,
-              sede: sedeName,
-              department: departmentName,
-              qualification: departmentResponsible?.metadata?.qualification ?? null,
-              mansione: departmentResponsible?.metadata?.mansione ?? null,
-              age: departmentResponsible?.metadata?.age ?? null,
-              order: departmentResponsible?.metadata?.order ?? null,
-            },
-            isExpanded: false,
-            children: officeNodes,
+          const departmentStats = {
+
+            offices: officeNodes.length,
+
+            people: departmentPersons.length,
+
           };
 
+
+
+          const departmentNode: Node = {
+
+            id: `department-${slugify(sedeName)}-${slugify(departmentName)}`,
+
+            name: departmentName,
+
+            role: "Dipartimento",
+
+            department: departmentName,
+
+            location: locationValue,
+
+            imageUrl: `https://picsum.photos/seed/${encodeURIComponent(`department-${sedeName}-${departmentName}`)}/128/128`,
+
+            type: "department",
+
+            responsible: departmentResponsible?.name,
+
+            metadata: {
+
+              badge: BADGE_BY_TYPE.department,
+
+              sede: sedeName,
+
+              department: departmentName,
+
+              qualification: departmentResponsible?.metadata?.qualification ?? null,
+
+              mansione: departmentResponsible?.metadata?.mansione ?? null,
+
+              age: departmentResponsible?.metadata?.age ?? null,
+
+              order: departmentResponsible?.metadata?.order ?? null,
+
+              stats: departmentStats,
+
+            },
+
+            isExpanded: false,
+
+            children: officeNodes,
+
+          };
+
+
+
           return { node: departmentNode, persons: departmentPersons };
+
         });
 
+
+
       const departmentNodes = departmentEntries.map((entry) => entry.node);
+
       const sedePersons = departmentEntries.flatMap((entry) => entry.persons);
+
       const sedeResponsible = selectResponsible(sedePersons);
+      const sedeFlag = sedePersons.find((person) => person.metadata?.flag)?.metadata?.flag ?? null;
+
+      const sedeStats = {
+        departments: departmentNodes.length,
+        offices: departmentNodes.reduce((sum, dept) => sum + (dept.children?.length ?? 0), 0),
+        people: sedePersons.length,
+      };
+
+      const directorName = sedeResponsible?.name ?? DEFAULT_BRANCH_DIRECTOR;
 
       const sedeNode: Node = {
         id: `sede-${slugify(sedeName)}`,
+
         name: sedeName,
+
         role: "Sede",
+
         department: sedeName,
+
         location: locationValue,
-        imageUrl: `https://picsum.photos/seed/${encodeURIComponent(`sede-${sedeName}`)}/128/128`,
+
+        imageUrl: getFlagImage(sedeFlag),
+
         type: "sede",
-        responsible: sedeResponsible?.name,
+
+        responsible: directorName,
+
         metadata: {
+
           badge: BADGE_BY_TYPE.sede,
+
           sede: sedeName,
+
           qualification: sedeResponsible?.metadata?.qualification ?? null,
+
           mansione: sedeResponsible?.metadata?.mansione ?? null,
+
           age: sedeResponsible?.metadata?.age ?? null,
+
           order: sedeResponsible?.metadata?.order ?? null,
+
+          stats: sedeStats,
+          flag: sedeFlag,
         },
+
         isExpanded: false,
+
         children: departmentNodes,
+
       };
 
-      return sedeNode;
-    });
-  const ceo = employees.find((emp) => emp.order === 1) ?? null;
-  const ceoNode: Node | null = ceo
-    ? {
-        id: "ceo-overview",
-        name: ceo.name,
-        role: ceo.role || "Amministratore Delegato",
-        department: ceo.department,
-        location: ceo.sede || "Globale",
-        imageUrl: getEmployeeImage(ceo),
-        type: "ceo",
-        responsible: ceo.name,
-        metadata: {
-          badge: BADGE_BY_TYPE.ceo,
-          sede: ceo.sede,
-          department: ceo.department,
-          office: ceo.office,
-          qualification: ceo.qualification || null,
-          mansione: ceo.role || "Amministratore Delegato",
-          age: ceo.age ?? null,
-          order: ceo.order ?? null,
-        },
-        isExpanded: false,
-      }
-    : null;
 
-  const rootChildren = ceoNode ? [ceoNode, ...sedeNodes] : sedeNodes;
+
+      return sedeNode;
+
+    });
+
+  const ceo = employees.find((emp) => emp.order === 1 || !emp.manager) ?? null;
+
+  const rootChildren = sedeNodes;
+  const locationStats = {
+    sites: sedeNodes.length,
+    departments: sedeNodes.reduce((sum, sede) => sum + (sede.children?.length ?? 0), 0),
+    offices: sedeNodes.reduce((sum, sede) =>
+      sum + (sede.children?.reduce((deptSum, dept) => deptSum + (dept.children?.length ?? 0), 0) ?? 0),
+      0
+    ),
+    people: employees.length,
+  };
 
   const rootNode: Node = {
     id: ROOT_ID,
@@ -308,13 +434,14 @@ const buildOrgTree = (employees: Employee[]): Node => {
     location: "Globale",
     imageUrl: "https://picsum.photos/seed/clevertech-root/128/128",
     type: "root",
-    responsible: ceoNode?.name,
+    responsible: ceo?.name ?? null,
     metadata: {
       badge: BADGE_BY_TYPE.root,
-      qualification: ceoNode?.metadata?.qualification ?? null,
-      mansione: ceoNode?.metadata?.mansione ?? "Organigramma aziendale",
-      age: ceoNode?.metadata?.age ?? null,
-      order: ceoNode?.metadata?.order ?? null,
+      qualification: ceo?.qualification ?? null,
+      mansione: ceo?.role ?? "Organigramma aziendale",
+      age: ceo?.age ?? null,
+      order: ceo?.order ?? null,
+      stats: locationStats,
     },
     isExpanded: true,
     children: rootChildren,
@@ -322,6 +449,105 @@ const buildOrgTree = (employees: Employee[]): Node => {
 
   return rootNode;
 };
+
+
+
+const buildRoleTree = (employees: Employee[]): Node => {
+  const employeeByName = new Map<string, Employee>();
+  employees.forEach((emp) => employeeByName.set(emp.name, emp));
+
+  const personNodeByName = new Map<string, Node>();
+  employees.forEach((emp) => {
+    const node = createPersonNode(emp, {
+      location: emp.sede || FALLBACK_SEDE,
+      sede: emp.sede || FALLBACK_SEDE,
+      department: emp.department || FALLBACK_DEPARTMENT,
+      office: emp.office || FALLBACK_OFFICE,
+      manager: emp.manager ?? null,
+    });
+    node.children = [];
+    personNodeByName.set(emp.name, node);
+  });
+
+  const roots: Node[] = [];
+  const sortNodes = (nodes: Node[]): Node[] =>
+    [...nodes].sort((a, b) => {
+      const orderA = a.metadata?.order ?? 99;
+      const orderB = b.metadata?.order ?? 99;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.name.localeCompare(b.name, "it", { sensitivity: "base" });
+    });
+
+  personNodeByName.forEach((node, name) => {
+    const managerName = employeeByName.get(name)?.manager ?? "";
+    if (managerName && managerName !== name && personNodeByName.has(managerName)) {
+      const managerNode = personNodeByName.get(managerName)!;
+      managerNode.children = [...(managerNode.children ?? []), node];
+    } else {
+      roots.push(node);
+    }
+  });
+
+  const computeReportStats = (node: Node): number => {
+    const children = node.children ?? [];
+    if (children.length === 0) {
+      node.children = undefined;
+      return 0;
+    }
+
+    node.children = sortNodes(children);
+    let total = 0;
+    for (const child of node.children) {
+      total += 1 + computeReportStats(child);
+    }
+    const directs = node.children.length;
+    const stats = {
+      ...(node.metadata?.stats ?? {}),
+      directs,
+      totalReports: total,
+    };
+    node.metadata = {
+      ...node.metadata,
+      stats,
+    };
+    return total;
+  };
+
+  const sortedRoots = sortNodes(roots);
+  sortedRoots.forEach((root) => {
+    computeReportStats(root);
+  });
+
+  const totalPeople = employees.length;
+  const ceo = employees.find((emp) => !emp.manager || emp.manager === '' || emp.order === 1) ?? null;
+
+  const roleRoot: Node = {
+    id: ROLE_ROOT_ID,
+    name: "CLEVERTECH - Ruoli",
+    role: "Organigramma per ruolo",
+    department: "Ruoli",
+    location: "Globale",
+    imageUrl: "https://picsum.photos/seed/clevertech-role-root/128/128",
+    type: "root",
+    responsible: ceo?.name ?? null,
+    metadata: {
+      badge: BADGE_BY_TYPE.root,
+      qualification: ceo?.qualification ?? null,
+      mansione: ceo?.role ?? null,
+      age: ceo?.age ?? null,
+      order: ceo?.order ?? null,
+      stats: {
+        leaders: sortedRoots.length,
+        people: totalPeople,
+      },
+    },
+    isExpanded: true,
+    children: sortedRoots,
+  };
+
+  return roleRoot;
+};
+
 const updateNodeById = (node: Node, targetId: string, updater: (current: Node) => Node): Node => {
   if (node.id === targetId) {
     return updater(node);
@@ -342,7 +568,9 @@ const collapseTree = (node: Node): Node => ({
 });
 
 const App: React.FC = () => {
-  const [tree, setTree] = useState<Node | null>(null);
+  const [locationTree, setLocationTree] = useState<Node | null>(null);
+  const [roleTree, setRoleTree] = useState<Node | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>("location");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
@@ -352,6 +580,8 @@ const App: React.FC = () => {
     ufficio: null,
     ruolo: null
   });
+  
+  const tree = viewMode === "location" ? locationTree : roleTree;
   
   // Hook per la ricerca
   const {
@@ -387,7 +617,9 @@ const App: React.FC = () => {
         const text = await response.text();
         const employees = parseCsvEmployees(text);
         const orgTree = buildOrgTree(employees);
-        setTree(orgTree);
+        const roleTree = buildRoleTree(employees);
+        setLocationTree(orgTree);
+        setRoleTree(roleTree);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to load organizational data.");
       } finally {
@@ -402,36 +634,51 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!tree || !hasActiveFilters) return;
 
-    setTree(prev => {
-      if (!prev) return prev;
+    const expandNodes = (node: Node): Node => {
+      const shouldExpandFilter = shouldExpandForFilter(node.id, tree);
 
-      const expandNodes = (node: Node): Node => {
-        const shouldExpandFilter = shouldExpandForFilter(node.id, tree);
-
-        return {
-          ...node,
-          isExpanded: shouldExpandFilter ? true : node.isExpanded,
-          children: node.children?.map(child => expandNodes(child))
-        };
+      return {
+        ...node,
+        isExpanded: shouldExpandFilter ? true : node.isExpanded,
+        children: node.children?.map(child => expandNodes(child))
       };
+    };
 
-      return expandNodes(prev);
-    });
-  }, [tree, hasActiveFilters, shouldExpandForFilter]);
+    if (viewMode === "location") {
+      setLocationTree((prev) => (prev ? expandNodes(prev) : prev));
+    } else {
+      setRoleTree((prev) => (prev ? expandNodes(prev) : prev));
+    }
+  }, [tree, hasActiveFilters, shouldExpandForFilter, viewMode]);
   const handleToggleNode = useCallback((nodeId: string) => {
-    setTree((prev) =>
-      prev
-        ? updateNodeById(prev, nodeId, (current) => ({
-            ...current,
-            isExpanded: current.isExpanded === undefined ? false : !current.isExpanded,
-          }))
-        : prev
-    );
-  }, []);
+    if (viewMode === "location") {
+      setLocationTree((prev) =>
+        prev
+          ? updateNodeById(prev, nodeId, (current) => ({
+              ...current,
+              isExpanded: current.isExpanded === undefined ? false : !current.isExpanded,
+            }))
+          : prev
+      );
+    } else {
+      setRoleTree((prev) =>
+        prev
+          ? updateNodeById(prev, nodeId, (current) => ({
+              ...current,
+              isExpanded: current.isExpanded === undefined ? false : !current.isExpanded,
+            }))
+          : prev
+      );
+    }
+  }, [viewMode]);
 
   const handleCollapseAll = useCallback(() => {
-    setTree((prev) => (prev ? collapseTree(prev) : prev));
-  }, []);
+    if (viewMode === "location") {
+      setLocationTree((prev) => (prev ? collapseTree(prev) : prev));
+    } else {
+      setRoleTree((prev) => (prev ? collapseTree(prev) : prev));
+    }
+  }, [viewMode]);
 
   if (loading) {
     return (
@@ -492,26 +739,56 @@ const App: React.FC = () => {
 
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 flex flex-col items-center p-4 sm:p-8">
         {/* Header con menu export */}
-        <header className="w-full max-w-6xl mx-auto mb-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <header className="w-full max-w-7xl mx-auto mb-4">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
             <div className="text-center sm:text-left">
               <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600 tracking-tight">
                 CLEVERTECH
               </h1>
               <p className="text-lg text-slate-600 mt-1">Organigramma Aziendale Interattivo</p>
             </div>
-            <div className="flex gap-3">
+            <div className="w-full sm:flex-1">
+              <SearchBar 
+                onSearch={setSearchQuery}
+                resultCount={resultCount}
+                placeholder="Cerca persone, ruoli, dipartimenti o sedi..."
+                containerClassName="w-full sm:max-w-xl mx-auto sm:mx-0 mb-0"
+              />
+            </div>
+            <div className="flex gap-3 sm:justify-end">
               <ExportMenu tree={tree} />
             </div>
           </div>
         </header>
-      
-        {/* Barra di ricerca */}
-        <SearchBar 
-          onSearch={setSearchQuery}
-          resultCount={resultCount}
-          placeholder="Cerca persone, ruoli, dipartimenti o sedi..."
-        />
+
+        <div className="mb-6">
+          <div className="inline-flex rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setViewMode("location")}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                viewMode === "location"
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+              aria-pressed={viewMode === "location"}
+            >
+              Vista sedi
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("role")}
+              className={`px-4 py-2 text-sm font-medium transition-colors border-l border-slate-200 ${
+                viewMode === "role"
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+              aria-pressed={viewMode === "role"}
+            >
+              Vista ruoli
+            </button>
+          </div>
+        </div>
 
         {/* Messaggio se ci sono risultati di ricerca */}
         {searchQuery && resultCount === 0 && (
@@ -536,7 +813,7 @@ const App: React.FC = () => {
         />
 
         {/* Organigramma Navigabile */}
-        <div className="w-full max-w-7xl mx-auto mt-6 mb-10">
+        <div className="w-full max-w-7xl mx-auto mt-4 mb-10">
           <NavigableOrgChart 
             tree={tree} 
             onToggle={handleToggleNode}
@@ -548,7 +825,7 @@ const App: React.FC = () => {
         </div>
 
         {/* Statistiche (visibili solo senza filtri attivi) */}
-        {!hasActiveFilters && (
+        {viewMode === "location" && !hasActiveFilters && (
           <StatsBar tree={tree} />
         )}
       </div>

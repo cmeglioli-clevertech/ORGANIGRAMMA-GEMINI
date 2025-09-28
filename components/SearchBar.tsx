@@ -4,16 +4,20 @@ interface SearchBarProps {
   onSearch: (query: string) => void;
   resultCount?: number;
   placeholder?: string;
+  containerClassName?: string;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ 
   onSearch, 
   resultCount = 0,
-  placeholder = "Cerca persone, ruoli, dipartimenti..." 
+  placeholder = "Cerca persone, ruoli, dipartimenti...", 
+  containerClassName
 }) => {
   const [query, setQuery] = useState('');
   const [isActive, setIsActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const containerClasses = containerClassName ?? "w-full max-w-2xl mx-auto mb-8";
 
   // Keyboard shortcut per aprire la ricerca con "/"
   useEffect(() => {
@@ -45,7 +49,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-8">
+    <div className={containerClasses}>
       <div className={`relative transition-all duration-300 ${isActive ? 'scale-105' : ''}`}>
         {/* Icona di ricerca */}
         <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400">

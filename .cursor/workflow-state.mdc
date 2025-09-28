@@ -84,6 +84,14 @@ Miglioramento di una webapp React/TypeScript esistente per visualizzare l'organi
   - Hint interattivo per guidare l'utente
   - Eliminazione barre di scorrimento
 
+### 2025-09-28 - SESSIONE 2 (Hotfix Codifica)
+- ✅ **CORREZIONE CODIFICA UTF-8**: Risolto problema caratteri accentati mal codificati
+  - Identificate 13 occorrenze di caratteri "�" nel file CSV
+  - Corretti tutti i caratteri: Età, Qualità, Rombolà, Canchó, Attività, Nicolò, Gaël
+  - Applicata correzione sistematica con MultiEdit
+  - Validazione completata: 0 errori di codifica rimasti
+  - File CSV ora completamente compatibile UTF-8
+
 ## Next Steps
 1. Iniziare implementazione ricerca globale
 2. Setup librerie necessarie (fuse.js per ricerca fuzzy)

@@ -1,4 +1,4 @@
-export type NodeType = "root" | "ceo" | "sede" | "department" | "office" | "person";
+export type NodeType = "root" | "ceo" | "sede" | "department" | "office" | "person" | "qualification" | "role-group";
 
 export interface NodeMetadata {
   badge?: string;
@@ -9,6 +9,8 @@ export interface NodeMetadata {
   mansione?: string | null;
   age?: number | null;
   order?: number | null;
+  stats?: Record<string, number>;
+  officePurpose?: string;
 }
 
 export interface Node {
