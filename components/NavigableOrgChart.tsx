@@ -7,17 +7,23 @@ interface NavigableOrgChartProps {
   tree: Node;
   onToggle: (nodeId: string) => void;
   highlightedNodes: Set<string>;
+  visibleNodes?: Set<string> | null;
+  isSearchNarrowed?: boolean;
+  onCollapseAll: () => void;
 }
 
 const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   tree,
   onToggle,
-  highlightedNodes
+  highlightedNodes,
+  visibleNodes = null,
+  isSearchNarrowed = false,
+  onCollapseAll
 }) => {
   return (
-    <div className="w-full h-[80vh] border-2 border-slate-300 rounded-xl bg-white shadow-lg overflow-hidden">
+    <div className="relative w-full h-[85vh] border-2 border-slate-300 rounded-2xl bg-white shadow-xl overflow-hidden">
       <TransformWrapper
-        initialScale={0.8}
+        initialScale={1}
         minScale={0.3}
         maxScale={2}
         centerZoomedOut={true}
@@ -46,6 +52,17 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
           <>
             {/* Controlli di navigazione */}
             <div className="absolute top-4 right-4 z-50 flex flex-col gap-2">
+              <button
+                onClick={onCollapseAll}
+                className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-slate-400 transition-colors text-slate-700 hover:text-slate-900"
+                type="button"
+                title="Comprimi tutti i rami"
+                aria-label="Comprimi tutti i rami"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4M16 15l-4 4-4-4" />
+                </svg>
+              </button>
               <button
                 onClick={() => zoomIn(0.2)}
                 className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-blue-400 transition-colors text-slate-700 hover:text-blue-600"
@@ -91,26 +108,6 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
               </button>
             </div>
 
-            {/* Istruzioni utente */}
-            <div className="absolute bottom-4 left-4 z-50 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2 shadow-md border border-slate-200">
-              <div className="flex items-center gap-4 text-xs text-slate-600">
-                <div className="flex items-center gap-1">
-                  <div className="w-4 h-3 border border-slate-400 rounded-sm flex items-center justify-center">
-                    <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
-                  </div>
-                  <span>Rotellina: Zoom</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-4 h-3 border border-slate-400 rounded-sm bg-slate-100"></div>
-                  <span>Trascina: Pan</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-blue-600">2×</span>
-                  <span>click: Zoom</span>
-                </div>
-              </div>
-            </div>
-
             {/* Organigramma navigabile */}
             <TransformComponent
               wrapperClass="!w-full !h-full"
@@ -122,6 +119,8 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
                   onToggle={onToggle} 
                   depth={0}
                   highlightedNodes={highlightedNodes}
+                  visibleNodes={visibleNodes}
+                  isSearchNarrowed={isSearchNarrowed}
                 />
               </div>
             </TransformComponent>

@@ -23,11 +23,33 @@ const flattenTree = (node: Node, path: string[] = []): Array<{ node: Node; path:
   return results;
 };
 
+const findPathById = (node: Node, targetId: string, path: string[] = []): string[] | null => {
+  const currentPath = [...path, node.id];
+
+  if (node.id === targetId) {
+    return currentPath;
+  }
+
+  if (!node.children) {
+    return null;
+  }
+
+  for (const child of node.children) {
+    const result = findPathById(child, targetId, currentPath);
+    if (result) {
+      return result;
+    }
+  }
+
+  return null;
+};
+
 // Hook personalizzato per la ricerca nell'organigramma
 export const useOrgSearch = (tree: Node | null) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [highlightedNodes, setHighlightedNodes] = useState<Set<string>>(new Set());
+  const [visibleNodes, setVisibleNodes] = useState<Set<string> | null>(null);
 
   // Appiattisci l'albero e crea l'indice Fuse
   const searchIndex = useMemo(() => {
@@ -59,9 +81,10 @@ export const useOrgSearch = (tree: Node | null) => {
 
   // Effettua la ricerca quando cambia la query
   useEffect(() => {
-    if (!searchIndex || !searchQuery.trim()) {
+    if (!searchIndex || !searchQuery.trim() || !tree) {
       setSearchResults([]);
       setHighlightedNodes(new Set());
+      setVisibleNodes(null);
       return;
     }
 
@@ -78,14 +101,21 @@ export const useOrgSearch = (tree: Node | null) => {
 
     setSearchResults(formattedResults);
     
-    // Crea set di nodi da evidenziare
     const nodesToHighlight = new Set<string>();
+    const nodesToReveal = new Set<string>();
+
     formattedResults.forEach(result => {
       nodesToHighlight.add(result.item.id);
+      const pathIds = findPathById(tree, result.item.id);
+      if (pathIds) {
+        pathIds.forEach(id => nodesToReveal.add(id));
+      }
     });
-    setHighlightedNodes(nodesToHighlight);
 
-  }, [searchQuery, searchIndex]);
+    setHighlightedNodes(nodesToHighlight);
+    setVisibleNodes(nodesToReveal.size > 0 ? nodesToReveal : null);
+
+  }, [searchQuery, searchIndex, tree]);
 
   // Funzione per ottenere tutti gli antenati di un nodo
   const getAncestorIds = (nodeId: string): string[] => {
@@ -149,6 +179,7 @@ export const useOrgSearch = (tree: Node | null) => {
     highlightedNodes,
     getAncestorIds,
     shouldExpandNode,
-    resultCount: searchResults.length
+    resultCount: searchResults.length,
+    visibleNodes
   };
 };

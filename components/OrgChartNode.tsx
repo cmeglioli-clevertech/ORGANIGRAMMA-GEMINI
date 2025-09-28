@@ -9,6 +9,8 @@ interface OrgChartNodeProps {
   depth?: number;
   isHighlighted?: boolean;
   highlightedNodes?: Set<string>;
+  visibleNodes?: Set<string> | null;
+  isSearchNarrowed?: boolean;
 }
 
 const badgeColours: Record<Node["type"], string> = {
@@ -34,11 +36,30 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   onToggle, 
   depth = 0,
   isHighlighted = false,
-  highlightedNodes = new Set()
+  highlightedNodes = new Set(),
+  visibleNodes = null,
+  isSearchNarrowed = false
 }) => {
   const isRoot = node.type === "root";
-  const hasChildren = Array.isArray(node.children) && node.children.length > 0;
+  const allChildren = Array.isArray(node.children) ? node.children : [];
+  const filteredChildren = isSearchNarrowed && visibleNodes
+    ? allChildren.filter(child => visibleNodes.has(child.id))
+    : allChildren;
+
+  if (isSearchNarrowed && visibleNodes && !visibleNodes.has(node.id)) {
+    return null;
+  }
+
+  const hasVisibleChildren = filteredChildren.length > 0;
+  const hasChildren = allChildren.length > 0;
+  const computedHasChildren = isSearchNarrowed ? hasVisibleChildren : hasChildren;
   const shouldHighlight = isHighlighted || highlightedNodes.has(node.id);
+  const isForcedExpanded = Boolean(isSearchNarrowed && visibleNodes && visibleNodes.has(node.id) && hasVisibleChildren);
+  const isExpandedState = node.isExpanded ?? false;
+  const effectiveIsExpanded = isForcedExpanded ? true : isExpandedState;
+  const toggleDisabled = Boolean(isSearchNarrowed && visibleNodes);
+  const childrenToRender = filteredChildren;
+  const showChildren = effectiveIsExpanded && childrenToRender.length > 0;
 
   const badge = node.metadata?.badge ?? node.type.toUpperCase();
   const badgeClass = badgeColours[node.type];
@@ -55,7 +76,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
     <div className={`flex flex-col items-center ${depth > 0 ? "tree-branch" : ""}`}>
       <div
         className={`relative w-72 max-w-xs rounded-2xl border bg-white shadow-lg transition-all duration-300 ${
-          hasChildren ? "pb-10" : "pb-6"
+          computedHasChildren ? "pb-10" : "pb-6"
         } ${borderClass} ${
           shouldHighlight 
             ? "ring-4 ring-yellow-400 ring-opacity-75 scale-105 animate-highlight" 
@@ -87,27 +108,32 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
           </p>
         </div>
 
-        {hasChildren && (
+        {computedHasChildren && (
           <button
             onClick={() => onToggle(node.id)}
-            className="absolute -bottom-4 left-1/2 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full bg-white text-blue-600 shadow-md transition-colors hover:bg-blue-50"
-            aria-label={node.isExpanded ? "Collapse" : "Expand"}
+            className={`absolute -bottom-4 left-1/2 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full bg-white text-blue-600 shadow-md transition-colors hover:bg-blue-50 ${
+              toggleDisabled ? "pointer-events-none cursor-not-allowed opacity-60 hover:bg-white" : ""
+            }`}
+            aria-label={effectiveIsExpanded ? "Comprimi sezione" : "Espandi sezione"}
             type="button"
+            disabled={toggleDisabled}
           >
-            {node.isExpanded ? <MinusIcon /> : <PlusIcon />}
+            {effectiveIsExpanded ? <MinusIcon /> : <PlusIcon />}
           </button>
         )}
       </div>
 
-      {node.isExpanded && hasChildren && (
+      {showChildren && (
         <div className="flex justify-center pt-10 children-container">
-          {node.children!.map((childNode) => (
+          {childrenToRender.map((childNode) => (
             <div key={childNode.id} className="px-4 tree-node-wrapper">
               <OrgChartNode 
                 node={childNode} 
                 onToggle={onToggle} 
                 depth={depth + 1}
                 highlightedNodes={highlightedNodes}
+                visibleNodes={visibleNodes}
+                isSearchNarrowed={isSearchNarrowed}
               />
             </div>
           ))}

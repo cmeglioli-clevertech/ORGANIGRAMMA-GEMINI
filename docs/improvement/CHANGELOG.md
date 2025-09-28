@@ -1,5 +1,17 @@
 # CHANGELOG - Miglioramenti Organigramma Clevertech
 
+## Versione 2.1.0 - 29 Settembre 2025
+
+### Migliorie su ricerca e visualizzazione
+- Durante una ricerca vengono mostrati solo i rami e le schede pertinenti ai risultati.
+- I nodi non correlati alla query vengono nascosti per facilitare l'analisi.
+- I percorsi rilevanti vengono aperti automaticamente per mettere in evidenza i risultati.
+
+### Controlli di navigazione
+- Introdotto il pulsante "Comprimi tutto" per richiudere l'intero organigramma con un click.
+- Il comando di compressione e accessibile dalla toolbar della mappa insieme ai controlli di zoom.
+- La ricerca mantiene visibili soltanto i percorsi rilevanti anche dopo una compressione totale.
+
 ## Versione 2.0.0 - 28 Settembre 2025
 
 ### 🎯 Obiettivo Raggiunto

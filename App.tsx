@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Toaster } from 'react-hot-toast';
 import NavigableOrgChart from "./components/NavigableOrgChart";
-import NavigationHint from "./components/NavigationHint";
 import SearchBar from "./components/SearchBar";
 import FilterPanel from "./components/FilterPanel";
 import StatsBar from "./components/StatsBar";
@@ -336,6 +335,12 @@ const updateNodeById = (node: Node, targetId: string, updater: (current: Node) =
   };
 };
 
+const collapseTree = (node: Node): Node => ({
+  ...node,
+  isExpanded: false,
+  children: node.children?.map((child) => collapseTree(child)),
+});
+
 const App: React.FC = () => {
   const [tree, setTree] = useState<Node | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -352,10 +357,9 @@ const App: React.FC = () => {
   const {
     searchQuery,
     setSearchQuery,
-    searchResults,
     highlightedNodes,
-    shouldExpandNode,
-    resultCount
+    resultCount,
+    visibleNodes
   } = useOrgSearch(tree);
 
   // Hook per i filtri
@@ -367,6 +371,10 @@ const App: React.FC = () => {
 
   // Combina i nodi evidenziati da ricerca e filtri
   const combinedHighlightedNodes = new Set([...highlightedNodes, ...filteredNodes]);
+
+  // Limita la visibilita dell'albero quando una ricerca produce risultati
+  const searchVisibilitySet = visibleNodes && searchQuery.trim().length > 0 && resultCount > 0 ? visibleNodes : null;
+  const isSearchNarrowed = Boolean(searchVisibilitySet);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -390,28 +398,26 @@ const App: React.FC = () => {
     fetchData();
   }, []);
 
-  // Espandi automaticamente i nodi quando ci sono risultati di ricerca o filtri attivi
+  // Espandi automaticamente i nodi coinvolti quando sono attivi i filtri
   useEffect(() => {
-    if (!tree || (searchResults.length === 0 && !hasActiveFilters)) return;
+    if (!tree || !hasActiveFilters) return;
 
     setTree(prev => {
       if (!prev) return prev;
 
       const expandNodes = (node: Node): Node => {
-        const shouldExpandSearch = shouldExpandNode(node.id);
         const shouldExpandFilter = shouldExpandForFilter(node.id, tree);
-        const shouldExpand = shouldExpandSearch || shouldExpandFilter;
-        
+
         return {
           ...node,
-          isExpanded: shouldExpand ? true : node.isExpanded,
+          isExpanded: shouldExpandFilter ? true : node.isExpanded,
           children: node.children?.map(child => expandNodes(child))
         };
       };
 
       return expandNodes(prev);
     });
-  }, [searchResults, shouldExpandNode, hasActiveFilters, shouldExpandForFilter, tree]);
+  }, [tree, hasActiveFilters, shouldExpandForFilter]);
   const handleToggleNode = useCallback((nodeId: string) => {
     setTree((prev) =>
       prev
@@ -421,6 +427,10 @@ const App: React.FC = () => {
           }))
         : prev
     );
+  }, []);
+
+  const handleCollapseAll = useCallback(() => {
+    setTree((prev) => (prev ? collapseTree(prev) : prev));
   }, []);
 
   if (loading) {
@@ -496,9 +506,6 @@ const App: React.FC = () => {
           </div>
         </header>
       
-        {/* Statistiche */}
-        <StatsBar tree={tree} />
-
         {/* Barra di ricerca */}
         <SearchBar 
           onSearch={setSearchQuery}
@@ -528,17 +535,22 @@ const App: React.FC = () => {
           onToggle={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
         />
 
-        {/* Hint navigazione (si nasconde dopo 8 sec) */}
-        <NavigationHint />
-
         {/* Organigramma Navigabile */}
-        <div className="w-full max-w-7xl mx-auto">
+        <div className="w-full max-w-7xl mx-auto mt-6 mb-10">
           <NavigableOrgChart 
             tree={tree} 
             onToggle={handleToggleNode}
             highlightedNodes={combinedHighlightedNodes}
+            visibleNodes={searchVisibilitySet}
+            isSearchNarrowed={isSearchNarrowed}
+            onCollapseAll={handleCollapseAll}
           />
         </div>
+
+        {/* Statistiche (visibili solo senza filtri attivi) */}
+        {!hasActiveFilters && (
+          <StatsBar tree={tree} />
+        )}
       </div>
     </>
   );
