@@ -1,0 +1,108 @@
+# Workflow State - Organigramma Clevertech
+
+## State
+**Current Phase**: VALIDATE  
+**Last Updated**: 2025-09-28  
+**Project**: Interactive Organizational Chart for Clevertech - ENHANCED
+
+## Context
+Miglioramento di una webapp React/TypeScript esistente per visualizzare l'organigramma aziendale. Il progetto legge dati da CSV e costruisce una gerarchia interattiva (sedi → dipartimenti → uffici → persone).
+
+## Analysis Summary
+
+### Architettura Attuale
+- **Stack**: React 19, TypeScript, Vite, Tailwind CSS
+- **Struttura dati**: Parsing CSV → Tree gerarchico → Componenti React ricorsivi
+- **Componenti principali**:
+  - `App.tsx`: Logica principale, parsing CSV, costruzione albero
+  - `OrgChartNode.tsx`: Componente ricorsivo per nodi dell'organigramma
+  - `types.ts`: Definizioni TypeScript per Node e metadati
+
+### Funzionalità Esistenti
+1. ✅ Parsing file CSV con dati dipendenti
+2. ✅ Costruzione gerarchia multi-livello
+3. ✅ Nodi espandibili/collassabili
+4. ✅ Badge colorati per tipo di nodo
+5. ✅ Immagini placeholder automatiche
+6. ✅ Informazioni dettagliate (mansione, età, ordinamento)
+
+### Aree di Miglioramento Identificate
+1. **Interattività**: Mancano ricerca, filtri e navigazione avanzata
+2. **UX**: Interfaccia basica, manca zoom/pan per grandi organigrammi
+3. **Performance**: Nessuna ottimizzazione per dataset grandi
+4. **Export**: Impossibile esportare o condividere l'organigramma
+5. **Responsiveness**: Layout non ottimale su mobile
+
+## Plan
+
+### Fase 1: Miglioramenti Core UI/UX
+1. [ ] Implementare barra di ricerca globale con highlighting risultati
+2. [ ] Aggiungere pannello filtri laterale (sede, dipartimento, ufficio, ruolo)
+3. [ ] Migliorare design card con animazioni fluide
+4. [ ] Aggiungere breadcrumb per navigazione contestuale
+
+### Fase 2: Navigazione Avanzata
+1. [ ] Implementare zoom/pan con libreria react-zoom-pan-pinch
+2. [ ] Aggiungere mini-mappa per orientamento
+3. [ ] Implementare focus automatico su nodo selezionato
+4. [ ] Aggiungere shortcuts keyboard (/, Esc, frecce)
+
+### Fase 3: Funzionalità Export
+1. [ ] Export PDF con html2canvas
+2. [ ] Export PNG dell'organigramma
+3. [ ] Export JSON dei dati filtrati
+4. [ ] Condivisione link con stato preservato
+
+### Fase 4: Ottimizzazione Performance
+1. [ ] Virtualizzazione per grandi dataset
+2. [ ] Lazy loading dei sotto-alberi
+3. [ ] Memoization componenti React
+4. [ ] Web Workers per parsing CSV
+
+### Fase 5: Testing e Documentazione
+1. [ ] Unit test per logica parsing e filtri
+2. [ ] Integration test per interazioni UI
+3. [ ] Documentazione API componenti
+4. [ ] Guida utente interattiva
+
+## Log
+
+### 2025-09-28 - SESSIONE 1
+- ✅ Analizzata codebase esistente
+- ✅ Identificate aree di miglioramento principali
+- ✅ Creato piano di sviluppo in 5 fasi
+- ✅ Implementata ricerca globale con Fuse.js
+- ✅ Aggiunto pannello filtri avanzati (sede, dipartimento, ufficio, ruolo)
+- ✅ Migliorata UI con statistiche, animazioni e design moderno
+- ✅ Implementate funzionalità export (JSON, CSV, stampa)
+- ✅ Aggiunto sistema di notifiche con react-hot-toast
+- ✅ Migliorato layout responsive e accessibilità
+- ✅ **NAVIGAZIONE ZOOM/PAN**: Implementata navigazione mouse completa
+  - Zoom con rotellina del mouse
+  - Pan con drag del mouse
+  - Controlli UI per zoom in/out, reset vista, centra
+  - Hint interattivo per guidare l'utente
+  - Eliminazione barre di scorrimento
+
+## Next Steps
+1. Iniziare implementazione ricerca globale
+2. Setup librerie necessarie (fuse.js per ricerca fuzzy)
+3. Creare componente SearchBar
+4. Integrare ricerca con highlighting nei nodi
+
+## Dependencies
+```json
+{
+  "new": [
+    "fuse.js",           // Ricerca fuzzy
+    "react-zoom-pan-pinch", // Zoom/pan
+    "html2canvas",       // Export PDF/PNG
+    "react-hot-toast"    // Notifiche UI
+  ]
+}
+```
+
+## Notes
+- Mantenere retrocompatibilità con formato CSV esistente
+- Priorità su mobile-first design
+- Focus su performance con dataset 500+ dipendenti

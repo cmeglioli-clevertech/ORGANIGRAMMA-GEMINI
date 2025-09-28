@@ -1,5 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
-import OrgChartNode from "./components/OrgChartNode";
+import { Toaster } from 'react-hot-toast';
+import NavigableOrgChart from "./components/NavigableOrgChart";
+import NavigationHint from "./components/NavigationHint";
+import SearchBar from "./components/SearchBar";
+import FilterPanel from "./components/FilterPanel";
+import StatsBar from "./components/StatsBar";
+import ExportMenu from "./components/ExportMenu";
+import { useOrgSearch } from "./hooks/useOrgSearch";
+import { useFilters } from "./hooks/useFilters";
 import type { Node, NodeMetadata, NodeType } from "./types";
 
 interface Employee {
@@ -332,6 +340,33 @@ const App: React.FC = () => {
   const [tree, setTree] = useState<Node | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({
+    sede: null,
+    dipartimento: null,
+    ufficio: null,
+    ruolo: null
+  });
+  
+  // Hook per la ricerca
+  const {
+    searchQuery,
+    setSearchQuery,
+    searchResults,
+    highlightedNodes,
+    shouldExpandNode,
+    resultCount
+  } = useOrgSearch(tree);
+
+  // Hook per i filtri
+  const {
+    filteredNodes,
+    shouldExpandForFilter,
+    hasActiveFilters
+  } = useFilters(tree, activeFilters);
+
+  // Combina i nodi evidenziati da ricerca e filtri
+  const combinedHighlightedNodes = new Set([...highlightedNodes, ...filteredNodes]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -354,6 +389,29 @@ const App: React.FC = () => {
 
     fetchData();
   }, []);
+
+  // Espandi automaticamente i nodi quando ci sono risultati di ricerca o filtri attivi
+  useEffect(() => {
+    if (!tree || (searchResults.length === 0 && !hasActiveFilters)) return;
+
+    setTree(prev => {
+      if (!prev) return prev;
+
+      const expandNodes = (node: Node): Node => {
+        const shouldExpandSearch = shouldExpandNode(node.id);
+        const shouldExpandFilter = shouldExpandForFilter(node.id, tree);
+        const shouldExpand = shouldExpandSearch || shouldExpandFilter;
+        
+        return {
+          ...node,
+          isExpanded: shouldExpand ? true : node.isExpanded,
+          children: node.children?.map(child => expandNodes(child))
+        };
+      };
+
+      return expandNodes(prev);
+    });
+  }, [searchResults, shouldExpandNode, hasActiveFilters, shouldExpandForFilter, tree]);
   const handleToggleNode = useCallback((nodeId: string) => {
     setTree((prev) =>
       prev
@@ -367,10 +425,13 @@ const App: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-100 flex justify-center items-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex justify-center items-center">
         <div className="text-center">
-          <p className="text-xl text-slate-600">Loading organizational data...</p>
-          <p className="text-sm text-slate-500 mt-2">Please wait while we build the hierarchy.</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 mb-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+          <p className="text-xl text-slate-600">Caricamento dati organizzativi...</p>
+          <p className="text-sm text-slate-500 mt-2">Costruzione della gerarchia in corso.</p>
         </div>
       </div>
     );
@@ -378,9 +439,12 @@ const App: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-100 flex justify-center items-center">
-        <div className="text-center p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-          <p className="text-xl font-semibold">Errore</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex justify-center items-center">
+        <div className="text-center p-6 bg-red-100 border-2 border-red-400 text-red-700 rounded-xl shadow-lg max-w-md">
+          <svg className="w-12 h-12 mx-auto mb-3 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-xl font-semibold mb-2">Errore di Caricamento</p>
           <p className="text-md">{error}</p>
         </div>
       </div>
@@ -392,15 +456,91 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col items-center p-4 sm:p-8 overflow-x-auto">
-      <header className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-slate-900 tracking-tight">CLEVERTECH</h1>
-        <p className="text-lg text-slate-600 mt-2">Organigramma per sedi, dipartimenti, uffici e persone</p>
-      </header>
-      <div className="flex justify-center">
-        <OrgChartNode node={tree} onToggle={handleToggleNode} depth={0} />
+    <>
+      {/* Sistema di notifiche */}
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+            borderRadius: '8px',
+          },
+          success: {
+            style: {
+              background: 'rgb(34 197 94)',
+            },
+          },
+          error: {
+            style: {
+              background: 'rgb(239 68 68)',
+            },
+          },
+        }}
+      />
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 flex flex-col items-center p-4 sm:p-8">
+        {/* Header con menu export */}
+        <header className="w-full max-w-6xl mx-auto mb-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-center sm:text-left">
+              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600 tracking-tight">
+                CLEVERTECH
+              </h1>
+              <p className="text-lg text-slate-600 mt-1">Organigramma Aziendale Interattivo</p>
+            </div>
+            <div className="flex gap-3">
+              <ExportMenu tree={tree} />
+            </div>
+          </div>
+        </header>
+      
+        {/* Statistiche */}
+        <StatsBar tree={tree} />
+
+        {/* Barra di ricerca */}
+        <SearchBar 
+          onSearch={setSearchQuery}
+          resultCount={resultCount}
+          placeholder="Cerca persone, ruoli, dipartimenti o sedi..."
+        />
+
+        {/* Messaggio se ci sono risultati di ricerca */}
+        {searchQuery && resultCount === 0 && (
+          <div className="mb-6 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg max-w-md mx-auto">
+            <p className="text-center">Nessun risultato trovato per "{searchQuery}"</p>
+          </div>
+        )}
+
+        {/* Messaggio se ci sono filtri attivi */}
+        {hasActiveFilters && filteredNodes.size === 0 && !searchQuery && (
+          <div className="mb-6 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg max-w-md mx-auto">
+            <p className="text-center">Nessun risultato con i filtri selezionati</p>
+          </div>
+        )}
+
+        {/* Pannello filtri */}
+        <FilterPanel
+          tree={tree}
+          onFilterChange={setActiveFilters}
+          isOpen={isFilterPanelOpen}
+          onToggle={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
+        />
+
+        {/* Hint navigazione (si nasconde dopo 8 sec) */}
+        <NavigationHint />
+
+        {/* Organigramma Navigabile */}
+        <div className="w-full max-w-7xl mx-auto">
+          <NavigableOrgChart 
+            tree={tree} 
+            onToggle={handleToggleNode}
+            highlightedNodes={combinedHighlightedNodes}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

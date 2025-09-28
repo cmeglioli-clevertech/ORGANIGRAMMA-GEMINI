@@ -7,6 +7,8 @@ interface OrgChartNodeProps {
   node: Node;
   onToggle: (nodeId: string) => void;
   depth?: number;
+  isHighlighted?: boolean;
+  highlightedNodes?: Set<string>;
 }
 
 const badgeColours: Record<Node["type"], string> = {
@@ -27,9 +29,16 @@ const borderColours: Record<Node["type"], string> = {
   person: "border-slate-300",
 };
 
-const OrgChartNode: React.FC<OrgChartNodeProps> = ({ node, onToggle, depth = 0 }) => {
+const OrgChartNode: React.FC<OrgChartNodeProps> = ({ 
+  node, 
+  onToggle, 
+  depth = 0,
+  isHighlighted = false,
+  highlightedNodes = new Set()
+}) => {
   const isRoot = node.type === "root";
   const hasChildren = Array.isArray(node.children) && node.children.length > 0;
+  const shouldHighlight = isHighlighted || highlightedNodes.has(node.id);
 
   const badge = node.metadata?.badge ?? node.type.toUpperCase();
   const badgeClass = badgeColours[node.type];
@@ -47,7 +56,11 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({ node, onToggle, depth = 0 }
       <div
         className={`relative w-72 max-w-xs rounded-2xl border bg-white shadow-lg transition-all duration-300 ${
           hasChildren ? "pb-10" : "pb-6"
-        } ${borderClass}`}
+        } ${borderClass} ${
+          shouldHighlight 
+            ? "ring-4 ring-yellow-400 ring-opacity-75 scale-105 animate-highlight" 
+            : ""
+        }`}
       >
         <span className={`absolute -top-4 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest shadow ${badgeClass}`}>
           {badge}
@@ -90,7 +103,12 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({ node, onToggle, depth = 0 }
         <div className="flex justify-center pt-10 children-container">
           {node.children!.map((childNode) => (
             <div key={childNode.id} className="px-4 tree-node-wrapper">
-              <OrgChartNode node={childNode} onToggle={onToggle} depth={depth + 1} />
+              <OrgChartNode 
+                node={childNode} 
+                onToggle={onToggle} 
+                depth={depth + 1}
+                highlightedNodes={highlightedNodes}
+              />
             </div>
           ))}
         </div>
