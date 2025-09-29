@@ -11,6 +11,8 @@ export interface NodeMetadata {
   order?: number | null;
   stats?: Record<string, number>;
   officePurpose?: string;
+  flag?: string | null;
+  reportsTo?: string | null;
 }
 
 export interface Node {

@@ -21,7 +21,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   onCollapseAll
 }) => {
   return (
-    <div className="relative w-full h-[85vh] border-2 border-slate-300 rounded-2xl bg-white shadow-xl overflow-hidden">
+    <div className="relative w-full h-full bg-transparent overflow-hidden">
       <TransformWrapper
         initialScale={1}
         minScale={0.3}

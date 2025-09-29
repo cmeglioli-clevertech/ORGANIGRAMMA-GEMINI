@@ -124,24 +124,16 @@ const ExportMenu: React.FC<ExportMenuProps> = ({ tree }) => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg shadow-lg border-2 border-slate-200 hover:border-green-400 transition-all duration-300"
+        className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
+          isOpen
+            ? "bg-green-600 text-white"
+            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+        }`}
         type="button"
         disabled={isExporting}
+        title="Menu export dati"
       >
-        <svg 
-          className="w-5 h-5 text-slate-600" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth={2} 
-            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" 
-          />
-        </svg>
-        <span className="text-slate-700 font-medium">Esporta</span>
+        📤 Esporta
       </button>
 
       {isOpen && (

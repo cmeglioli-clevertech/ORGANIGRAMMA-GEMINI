@@ -19,9 +19,26 @@ const badgeColours: Record<Node["type"], string> = {
   sede: "bg-blue-100 text-blue-700",
   department: "bg-emerald-100 text-emerald-700",
   office: "bg-indigo-100 text-indigo-700",
-  person: "bg-slate-200 text-slate-600",
+  person: "bg-slate-200 text-slate-600", // Override dinamico per qualifiche
   qualification: "bg-amber-100 text-amber-700",
   "role-group": "bg-emerald-100 text-emerald-700",
+};
+
+// Colori specifici per qualifiche (13 livelli)
+const qualificationColors: Record<string, string> = {
+  "dirigente": "bg-red-100 text-red-800 border-red-200",
+  "quadro / direttore": "bg-orange-100 text-orange-800 border-orange-200",
+  "responsabile di team/area": "bg-yellow-100 text-yellow-800 border-yellow-200",
+  "impiegato direttivo": "bg-blue-100 text-blue-800 border-blue-200",
+  "specialista (impiegatizio/tecnico)": "bg-green-100 text-green-800 border-green-200",
+  "impiegato qualificato": "bg-purple-100 text-purple-800 border-purple-200",
+  "impiegato esecutivo": "bg-cyan-100 text-cyan-800 border-cyan-200",
+  "apprendista impiegato": "bg-lime-100 text-lime-800 border-lime-200",
+  "operaio specializzato": "bg-amber-100 text-amber-800 border-amber-200",
+  "operaio qualificato": "bg-rose-100 text-rose-800 border-rose-200",
+  "operaio comune": "bg-gray-100 text-gray-800 border-gray-200",
+  "operaio generico": "bg-slate-100 text-slate-700 border-slate-200",
+  "apprendista operaio": "bg-stone-100 text-stone-800 border-stone-200",
 };
 
 const borderColours: Record<Node["type"], string> = {
@@ -66,14 +83,35 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   const childrenToRender = filteredChildren;
   const showChildren = effectiveIsExpanded && childrenToRender.length > 0;
 
-  const badge = node.metadata?.badge ?? node.type.toUpperCase();
-  const badgeClass = badgeColours[node.type] ?? "bg-slate-200 text-slate-600";
+  // Badge con colori specifici per qualifiche
+  const badge = (node.type === "person" || node.type === "ceo") 
+    ? (node.metadata?.qualification ?? "N/D")
+    : (node.metadata?.badge ?? node.type.toUpperCase());
+  
+  // Usa colori specifici per qualifiche se è una persona
+  let badgeClass: string;
+  if ((node.type === "person" || node.type === "ceo") && node.metadata?.qualification) {
+    const qualificationKey = node.metadata.qualification.toLowerCase();
+    badgeClass = qualificationColors[qualificationKey] ?? "bg-slate-200 text-slate-600 border-slate-200";
+  } else {
+    badgeClass = badgeColours[node.type] ?? "bg-slate-200 text-slate-600";
+  }
+  
   const borderClass = borderColours[node.type] ?? "border-slate-300";
 
+  // Layout per persone: Nome, Mansione, Ufficio
   const title = node.name;
-  const subtitle = node.metadata?.qualification ?? (node.role || "N/D");
-  const highlightName =
-    (node.type === "person" || node.type === "ceo" ? node.name : node.responsible) ?? "N/D";
+  let subtitle: string;
+  let highlightName: string;
+
+  if (node.type === "person" || node.type === "ceo") {
+    // Mostra: Nome, Mansione, Ufficio
+    subtitle = node.metadata?.mansione ?? (node.role || "N/D"); // Mansione
+    highlightName = node.metadata?.office ?? "N/D"; // Ufficio
+  } else {
+    subtitle = node.metadata?.qualification ?? (node.role || "N/D");
+    highlightName = node.responsible ?? "N/D";
+  }
   const mansione = node.metadata?.mansione ?? (node.role || "N/D");
   const age = node.metadata?.age != null ? String(node.metadata?.age) : "N/D";
   const order = node.metadata?.order != null ? String(node.metadata?.order) : node.order != null ? String(node.order) : "N/D";
@@ -95,111 +133,171 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
     infoItems.push({ label, value: formatCount(value) });
   };
 
-  if (node.type === "root" && stats) {
-    if (stats.sites !== undefined) {
-      addStat("Sedi", stats.sites);
-      addStat("Dipartimenti", stats.departments);
-      addStat("Uffici", stats.offices);
-      addStat("Persone", stats.people);
-    } else if (stats.qualifications !== undefined) {
-      addStat("Qualifiche", stats.qualifications);
-      addStat("Ruoli", stats.roles);
-      addStat("Persone", stats.people);
-    } else if (stats.leaders !== undefined) {
-      addStat("Leader", stats.leaders);
-      addStat("Persone", stats.people);
-    }
-  } else if (node.type === "sede") {
-    infoItems.push({ label: "Direttore", value: highlightName });
-    if (stats) {
-      addStat("Dipartimenti", stats.departments);
-      addStat("Uffici", stats.offices);
-      addStat("Persone", stats.people);
-    }
-  } else if (node.type === "department") {
-    if (highlightName !== "N/D") {
-      infoItems.push({ label: "Responsabile", value: highlightName });
-    }
-    if (stats) {
-      addStat("Uffici", stats.offices);
-      addStat("Persone", stats.people);
-    }
-  } else if (node.type === "office") {
-    if (highlightName !== "N/D") {
-      infoItems.push({ label: "Responsabile", value: highlightName });
-    }
-    if (officePurpose) {
-      infoItems.push({ label: "Scopo", value: officePurpose });
-    }
-    addStat("Persone", stats?.people);
-  } else if (node.type === "qualification") {
-    if (highlightName !== "N/D") {
-      infoItems.push({ label: "Responsabile", value: highlightName });
-    }
-    if (stats) {
-      addStat("Ruoli", stats.roles);
-      addStat("Persone", stats.people);
-    }
-  } else if (node.type === "role-group") {
-    if (highlightName !== "N/D") {
-      infoItems.push({ label: "Responsabile", value: highlightName });
-    }
-    addStat("Persone", stats?.people);
-  } else if (node.type === "person" || node.type === "ceo") {
-    infoItems.push({ label: "Qualifica", value: subtitle });
-    infoItems.push({ label: "Mansione", value: mansione });
-    infoItems.push({ label: "Et\u00E0", value: age });
-    infoItems.push({ label: "Ordinamento", value: order });
-    if (reportsTo && reportsTo !== "N/D") {
-      infoItems.push({ label: "Riporta a", value: reportsTo });
-    }
-    if (stats?.directs !== undefined && stats.directs > 0) {
-      addStat("Diretti", stats.directs);
-    }
-    if (stats?.totalReports !== undefined && stats.totalReports > 0) {
-      addStat("Report totali", stats.totalReports);
-    }
-  } else {
-    if (mansione !== "N/D") {
-      infoItems.push({ label: "Mansione", value: mansione });
-    }
-    if (stats?.people !== undefined) {
-      addStat("Persone", stats.people);
-    }
+  // Informazioni specifiche per tipo di scheda
+  switch (node.type) {
+    case "root":
+      // Root: Overview globale dell'organizzazione
+      infoItems.push({ label: "Responsabile", value: node.responsible || "Giuseppe Reggiani" });
+      if (stats) {
+        if (stats.sites !== undefined) {
+          addStat("Sedi", stats.sites);
+          addStat("Dipartimenti", stats.departments);
+          addStat("Uffici", stats.offices);
+        } else if (stats.leaders !== undefined) {
+          addStat("Leader", stats.leaders);
+        }
+        addStat("Persone", stats.people);
+      }
+      break;
+
+    case "ceo":
+      // CEO: Informazioni executive + responsabilità globali
+      infoItems.push({ label: "Qualifica", value: node.metadata?.qualification || "Dirigente" });
+      infoItems.push({ label: "Sede principale", value: node.metadata?.sede || "CTH_ITALY" });
+      if (stats?.directs !== undefined) {
+        addStat("Diretti", stats.directs);
+        addStat("Report totali", stats.totalReports);
+      }
+      infoItems.push({ label: "Responsabilità", value: "Strategia aziendale globale" });
+      break;
+
+    case "sede":
+      // Sede: Informazioni geografiche e responsabile locale
+      infoItems.push({ label: "Direttore", value: highlightName || "Non assegnato" });
+      infoItems.push({ label: "Paese", value: node.location });
+      if (stats) {
+        addStat("Dipartimenti", stats.departments);
+        addStat("Uffici", stats.offices);
+        addStat("Persone", stats.people);
+      }
+      break;
+
+    case "department":
+      // Dipartimento: Focus su struttura organizzativa e obiettivi
+      if (highlightName !== "N/D") {
+        infoItems.push({ label: "Direttore", value: highlightName });
+      }
+      infoItems.push({ label: "Sede principale", value: node.location });
+      if (stats) {
+        addStat("Uffici", stats.offices);
+        addStat("Persone", stats.people);
+      }
+      infoItems.push({ label: "Obiettivi", value: "Operatività dipartimentale" });
+      break;
+
+    case "office":
+      // Ufficio: Dettagli operativi e progetti
+      if (highlightName !== "N/D") {
+        infoItems.push({ label: "Responsabile", value: highlightName });
+      }
+      infoItems.push({ label: "Dipartimento", value: node.department });
+      if (officePurpose) {
+        infoItems.push({ label: "Specializzazione", value: officePurpose });
+      }
+      addStat("Persone", stats?.people);
+      infoItems.push({ label: "Progetti attivi", value: "Da definire" });
+      break;
+
+    case "person":
+      // Persona: Informazioni complete dipendente
+      infoItems.push({ label: "Qualifica", value: node.metadata?.qualification || "N/D" });
+      infoItems.push({ label: "Età", value: age });
+      infoItems.push({ label: "Sede", value: node.metadata?.sede || "N/D" });
+      if (stats?.directs !== undefined) {
+        addStat("Diretti", stats.directs);
+        addStat("Report totali", stats.totalReports);
+      } else {
+        infoItems.push({ label: "Diretti", value: "0" });
+        infoItems.push({ label: "Report totali", value: "0" });
+      }
+      infoItems.push({ label: "Compiti", value: "" }); // Placeholder per future implementazioni
+      break;
+
+    case "qualification":
+      // Qualifica: Informazioni sul livello gerarchico
+      if (highlightName !== "N/D") {
+        infoItems.push({ label: "Responsabile", value: highlightName });
+      }
+      if (stats) {
+        addStat("Ruoli", stats.roles);
+        addStat("Persone", stats.people);
+      }
+      infoItems.push({ label: "Livello", value: node.role });
+      break;
+
+    case "role-group":
+      // Gruppo ruoli: Informazioni aggregate
+      if (highlightName !== "N/D") {
+        infoItems.push({ label: "Responsabile", value: highlightName });
+      }
+      addStat("Persone", stats?.people);
+      infoItems.push({ label: "Tipo gruppo", value: node.role });
+      break;
+
+    default:
+      // Fallback per tipi non gestiti
+      if (mansione !== "N/D") {
+        infoItems.push({ label: "Mansione", value: mansione });
+      }
+      if (stats?.people !== undefined) {
+        addStat("Persone", stats.people);
+      }
   }
 
   return (
     <div className={`flex flex-col items-center ${depth > 0 ? "tree-branch" : ""}`}>
       <div
-        className={`relative flex flex-col w-72 max-w-xs min-h-[26rem] rounded-2xl border bg-white shadow-lg transition-all duration-300 ${
-          computedHasChildren ? "pb-10" : "pb-6"
-        } ${borderClass} ${
+        className={`relative flex flex-col w-80 h-[30rem] rounded-2xl border bg-white shadow-lg transition-all duration-300 pb-10 ${borderClass} ${
           shouldHighlight
             ? "ring-4 ring-amber-300 ring-offset-2 ring-offset-white"
             : "ring-1 ring-slate-100"
         }`}
       >
-        <span className={`absolute -top-4 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-widest shadow ${badgeClass}`}>
+        <span className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-0.5 text-xs font-bold uppercase tracking-tight shadow border ${badgeClass}`}>
           {badge}
         </span>
 
-        <div className="flex flex-col items-center px-6 pt-6 pb-4 text-center flex-1">
-          <div className="w-24 h-24 overflow-hidden rounded-full border-4 border-white shadow-inner">
-            <img className="h-full w-full object-cover" src={node.imageUrl} alt={node.name} loading="lazy" />
+        <div className="flex flex-col items-center px-6 pt-6 pb-4 text-center h-60">
+          <div className="w-32 h-32 overflow-hidden rounded-full border-4 border-white shadow-inner bg-slate-100 flex items-center justify-center">
+            {/* Placeholder omino per ora */}
+            <svg className="w-16 h-16 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+            </svg>
           </div>
+          
+          {/* Nome */}
           <h3 className="mt-4 text-lg font-semibold text-slate-900">{title}</h3>
+          
+          {/* Mansione */}
           {subtitle && subtitle !== "N/D" && (
-            <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+            <p className="mt-1 text-sm font-medium text-blue-600">{subtitle}</p>
           )}
+          
+          {/* Ufficio */}
           {highlightName !== "N/D" && (
-            <p className="mt-2 text-lg font-semibold text-emerald-700">{highlightName}</p>
+            <p className="mt-1 text-sm text-slate-600">Ufficio: {highlightName}</p>
+          )}
+          
+          {/* Bandierina sede per le persone */}
+          {(node.type === "person" || node.type === "ceo") && node.metadata?.flag && (
+            <div className="mt-2 flex items-center justify-center gap-2">
+              <img 
+                src={`https://flagcdn.com/w40/${node.metadata.flag.toLowerCase().replace('.png', '')}.png`}
+                alt={node.metadata?.sede || "Sede"}
+                className="w-6 h-4 rounded shadow-sm border border-slate-200"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+              <span className="text-xs text-slate-500">{node.metadata?.sede}</span>
+            </div>
           )}
         </div>
 
         {infoItems.length > 0 && (
-          <div className="mx-6 mb-4 space-y-1 border-t border-slate-200 pt-3 text-left text-xs text-slate-600 flex-none">
+          <div className="mx-6 mb-4 min-h-[6rem] border-t border-slate-200 pt-3 text-left text-xs text-slate-600">
             {infoItems.map((item) => (
-              <p key={`${node.id}-${item.label}`}>
+              <p key={`${node.id}-${item.label}`} className="mb-1 leading-relaxed">
                 <span className="font-semibold text-slate-700">{item.label}:</span> {item.value}
               </p>
             ))}
@@ -209,7 +307,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
         {computedHasChildren && (
           <button
             onClick={() => onToggle(node.id)}
-            className={`absolute -bottom-4 left-1/2 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full bg-white text-blue-600 shadow-md transition-colors hover:bg-blue-50 ${
+            className={`absolute -bottom-6 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full bg-white text-blue-600 shadow-md transition-colors hover:bg-blue-50 border-2 border-blue-200 ${
               toggleDisabled ? "pointer-events-none cursor-not-allowed opacity-60 hover:bg-white" : ""
             }`}
             aria-label={effectiveIsExpanded ? "Comprimi sezione" : "Espandi sezione"}
@@ -222,7 +320,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
       </div>
 
       {showChildren && (
-        <div className="flex justify-center pt-10 children-container">
+        <div className="flex justify-center pt-20 children-container">
           {childrenToRender.map((childNode) => (
             <div key={childNode.id} className="px-4 tree-node-wrapper">
               <OrgChartNode

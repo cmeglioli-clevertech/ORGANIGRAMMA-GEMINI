@@ -3,7 +3,6 @@ import { Toaster } from 'react-hot-toast';
 import NavigableOrgChart from "./components/NavigableOrgChart";
 import SearchBar from "./components/SearchBar";
 import FilterPanel from "./components/FilterPanel";
-import StatsBar from "./components/StatsBar";
 import ExportMenu from "./components/ExportMenu";
 import { useOrgSearch } from "./hooks/useOrgSearch";
 import { useFilters } from "./hooks/useFilters";
@@ -49,18 +48,21 @@ const BADGE_BY_TYPE: Record<NodeType, string> = {
 
 const ROLE_ROOT_ID = "clevertech-role-root";
 const DEFAULT_BRANCH_DIRECTOR = "Giuseppe Reggiani";
-const FALLBACK_QUALIFICATION = "Qualifica non specificata";
-const FALLBACK_MANSIONE = "Ruolo non specificato";
 
 const QUALIFICATION_ORDER: Record<string, number> = {
-  dirigente: 1,
-  direttore: 2,
-  manager: 3,
-  "impiegato senior": 4,
-  "impiegato generico": 5,
-  "operaio specializzato": 6,
-  "operaio generico": 7,
-  apprendista: 8,
+  "dirigente": 1,
+  "quadro / direttore": 2,
+  "responsabile di team/area": 3,
+  "impiegato direttivo": 4,
+  "specialista (impiegatizio/tecnico)": 5,
+  "impiegato qualificato": 6,
+  "impiegato esecutivo": 7,
+  "apprendista impiegato": 8,
+  "operaio specializzato": 9,
+  "operaio qualificato": 10,
+  "operaio comune": 11,
+  "operaio generico": 12,
+  "apprendista operaio": 13,
 };
 
 const getQualificationOrder = (qualification: string) =>
@@ -453,73 +455,229 @@ const buildOrgTree = (employees: Employee[]): Node => {
 
 
 const buildRoleTree = (employees: Employee[]): Node => {
-  const employeeByName = new Map<string, Employee>();
-  employees.forEach((emp) => employeeByName.set(emp.name, emp));
-
-  const personNodeByName = new Map<string, Node>();
-  employees.forEach((emp) => {
-    const node = createPersonNode(emp, {
-      location: emp.sede || FALLBACK_SEDE,
-      sede: emp.sede || FALLBACK_SEDE,
-      department: emp.department || FALLBACK_DEPARTMENT,
-      office: emp.office || FALLBACK_OFFICE,
-      manager: emp.manager ?? null,
-    });
-    node.children = [];
-    personNodeByName.set(emp.name, node);
-  });
-
-  const roots: Node[] = [];
   const sortNodes = (nodes: Node[]): Node[] =>
     [...nodes].sort((a, b) => {
+      // Primo criterio: ordinamento per qualifica (livello gerarchico)
+      const qualificationA = a.metadata?.qualification || '';
+      const qualificationB = b.metadata?.qualification || '';
+      const qualOrderA = getQualificationOrder(qualificationA);
+      const qualOrderB = getQualificationOrder(qualificationB);
+      
+      if (qualOrderA !== qualOrderB) {
+        return qualOrderA - qualOrderB;
+      }
+      
+      // Secondo criterio: ordinamento numerico del dipendente
       const orderA = a.metadata?.order ?? 99;
       const orderB = b.metadata?.order ?? 99;
       if (orderA !== orderB) return orderA - orderB;
+      
+      // Terzo criterio: ordinamento alfabetico
       return a.name.localeCompare(b.name, "it", { sensitivity: "base" });
     });
 
-  personNodeByName.forEach((node, name) => {
-    const managerName = employeeByName.get(name)?.manager ?? "";
-    if (managerName && managerName !== name && personNodeByName.has(managerName)) {
-      const managerNode = personNodeByName.get(managerName)!;
-      managerNode.children = [...(managerNode.children ?? []), node];
-    } else {
-      roots.push(node);
+  // Trova il CEO (Giuseppe Reggiani - Dirigente)
+  const ceo = employees.find((emp) => 
+    emp.qualification.toLowerCase() === 'dirigente' || emp.order === 1
+  ) ?? null;
+
+  // Raggruppa dipendenti per DIPARTIMENTO (non sede)
+  const employeesByDepartment = new Map<string, Employee[]>();
+  employees.forEach((emp) => {
+    if (emp.name === ceo?.name) return; // Salta il CEO
+    
+    const department = emp.department || FALLBACK_DEPARTMENT;
+    if (!employeesByDepartment.has(department)) {
+      employeesByDepartment.set(department, []);
     }
+    employeesByDepartment.get(department)!.push(emp);
   });
 
-  const computeReportStats = (node: Node): number => {
-    const children = node.children ?? [];
-    if (children.length === 0) {
-      node.children = undefined;
-      return 0;
+  // Costruisce la gerarchia per ogni dipartimento
+  const buildDepartmentHierarchy = (deptEmployees: Employee[]): Node[] => {
+    // Ordina tutti i dipendenti del dipartimento per qualifica + order + nome
+    const sortedDeptEmployees = [...deptEmployees].sort((a, b) => {
+      const qualOrderA = getQualificationOrder(a.qualification);
+      const qualOrderB = getQualificationOrder(b.qualification);
+      
+      if (qualOrderA !== qualOrderB) return qualOrderA - qualOrderB;
+      if (a.order !== b.order) return a.order - b.order;
+      return a.name.localeCompare(b.name, "it", { sensitivity: "base" });
+    });
+
+    // Raggruppa per livello di qualifica
+    const employeesByLevel = new Map<number, Employee[]>();
+    sortedDeptEmployees.forEach(emp => {
+      const level = getQualificationOrder(emp.qualification);
+      if (!employeesByLevel.has(level)) {
+        employeesByLevel.set(level, []);
+      }
+      employeesByLevel.get(level)!.push(emp);
+    });
+
+    // Costruisce l'albero gerarchico dal livello più alto al più basso
+    const nodesByEmployee = new Map<string, Node>();
+    const levelNumbers = Array.from(employeesByLevel.keys()).sort((a, b) => a - b);
+
+    // Crea tutti i nodi
+    levelNumbers.forEach(level => {
+      const levelEmployees = employeesByLevel.get(level)!;
+      levelEmployees.forEach(emp => {
+        const node = createPersonNode(emp, {
+          location: emp.sede || FALLBACK_SEDE,
+          sede: emp.sede || FALLBACK_SEDE,
+          department: emp.department || FALLBACK_DEPARTMENT,
+          office: emp.office || FALLBACK_OFFICE,
+        });
+        node.children = [];
+        nodesByEmployee.set(emp.name, node);
+      });
+    });
+
+    // Assegna figli ai genitori PER UFFICIO (dal livello più basso al più alto)
+    for (let i = levelNumbers.length - 1; i > 0; i--) {
+      const currentLevel = levelNumbers[i];
+      const parentLevel = levelNumbers[i - 1];
+      
+      const currentLevelEmployees = employeesByLevel.get(currentLevel)!;
+      const parentLevelEmployees = employeesByLevel.get(parentLevel)!;
+
+      if (parentLevelEmployees.length > 0) {
+        // Raggruppa dipendenti correnti per ufficio
+        const employeesByOffice = new Map<string, Employee[]>();
+        currentLevelEmployees.forEach(emp => {
+          const office = emp.office || 'Non specificato';
+          if (!employeesByOffice.has(office)) {
+            employeesByOffice.set(office, []);
+          }
+          employeesByOffice.get(office)!.push(emp);
+        });
+
+        // Raggruppa genitori per ufficio
+        const parentsByOffice = new Map<string, Employee[]>();
+        parentLevelEmployees.forEach(emp => {
+          const office = emp.office || 'Non specificato';
+          if (!parentsByOffice.has(office)) {
+            parentsByOffice.set(office, []);
+          }
+          parentsByOffice.get(office)!.push(emp);
+        });
+
+        // Assegna dipendenti ai genitori per SEDE + UFFICIO + ORDINAMENTO
+        employeesByOffice.forEach((officeEmployees, office) => {
+          officeEmployees.forEach(emp => {
+            // Trova il miglior genitore per questo dipendente
+            let bestParent = null;
+            let bestScore = -1;
+
+            parentLevelEmployees.forEach(parentEmp => {
+              let score = 0;
+              
+              // +3 punti se stessa sede
+              if (emp.sede === parentEmp.sede) {
+                score += 3;
+              }
+              
+              // +2 punti se stesso ufficio
+              if (emp.office === parentEmp.office) {
+                score += 2;
+              }
+              
+              // +1 punto se ordinamento del genitore è minore (gerarchicamente superiore)
+              if (parentEmp.order < emp.order) {
+                score += 1;
+              }
+              
+              if (score > bestScore) {
+                bestScore = score;
+                bestParent = parentEmp;
+              }
+            });
+
+            // Se non trova un match perfetto, usa il primo genitore disponibile
+            if (!bestParent) {
+              bestParent = parentLevelEmployees[0];
+            }
+
+            const parentNode = nodesByEmployee.get(bestParent.name)!;
+            const childNode = nodesByEmployee.get(emp.name)!;
+            parentNode.children!.push(childNode);
+          });
+        });
+      }
     }
 
-    node.children = sortNodes(children);
-    let total = 0;
-    for (const child of node.children) {
-      total += 1 + computeReportStats(child);
-    }
-    const directs = node.children.length;
-    const stats = {
-      ...(node.metadata?.stats ?? {}),
-      directs,
-      totalReports: total,
+    // Calcola statistiche ricorsivamente
+    const calculateStats = (node: Node): number => {
+      if (!node.children || node.children.length === 0) {
+        node.children = undefined;
+        return 0;
+      }
+
+      node.children = sortNodes(node.children);
+      let totalReports = 0;
+      
+      node.children.forEach(child => {
+        totalReports += 1 + calculateStats(child);
+      });
+
+      node.metadata = {
+        ...node.metadata,
+        stats: {
+          ...(node.metadata?.stats ?? {}),
+          directs: node.children.length,
+          totalReports,
+        },
+      };
+
+      return totalReports;
     };
-    node.metadata = {
-      ...node.metadata,
-      stats,
-    };
-    return total;
+
+    // Calcola statistiche per tutti i nodi
+    nodesByEmployee.forEach(node => calculateStats(node));
+
+    // Ritorna i nodi di livello più alto (direttori o responsabili se non c'è direttore)
+    const topLevel = levelNumbers[0];
+    const topLevelEmployees = employeesByLevel.get(topLevel)!;
+    
+    return topLevelEmployees.map(emp => nodesByEmployee.get(emp.name)!);
   };
 
-  const sortedRoots = sortNodes(roots);
-  sortedRoots.forEach((root) => {
-    computeReportStats(root);
-  });
+  // Costruisce nodi per ogni dipartimento
+  const departmentNodes: Node[] = [];
+  for (const [department, deptEmployees] of employeesByDepartment.entries()) {
+    const hierarchyNodes = buildDepartmentHierarchy(deptEmployees);
+    departmentNodes.push(...hierarchyNodes);
+  }
+
+  // Crea il nodo CEO con tutti i direttori di dipartimento come figli
+  let ceoNode: Node | null = null;
+  if (ceo) {
+    ceoNode = createPersonNode(ceo, {
+      location: ceo.sede || FALLBACK_SEDE,
+      sede: ceo.sede || FALLBACK_SEDE,
+      department: ceo.department || FALLBACK_DEPARTMENT,
+      office: ceo.office || FALLBACK_OFFICE,
+    });
+    
+    ceoNode.children = sortNodes(departmentNodes);
+    
+    // Calcola statistiche CEO
+    const totalReports = departmentNodes.reduce((sum, node) => 
+      sum + 1 + (node.metadata?.stats?.totalReports ?? 0), 0
+    );
+    
+    ceoNode.metadata = {
+      ...ceoNode.metadata,
+      stats: {
+        directs: departmentNodes.length,
+        totalReports,
+      },
+    };
+  }
 
   const totalPeople = employees.length;
-  const ceo = employees.find((emp) => !emp.manager || emp.manager === '' || emp.order === 1) ?? null;
+  const rootChildren = ceoNode ? [ceoNode] : sortNodes(departmentNodes);
 
   const roleRoot: Node = {
     id: ROLE_ROOT_ID,
@@ -537,12 +695,12 @@ const buildRoleTree = (employees: Employee[]): Node => {
       age: ceo?.age ?? null,
       order: ceo?.order ?? null,
       stats: {
-        leaders: sortedRoots.length,
+        leaders: departmentNodes.length,
         people: totalPeople,
       },
     },
     isExpanded: true,
-    children: sortedRoots,
+    children: rootChildren,
   };
 
   return roleRoot;
@@ -570,9 +728,10 @@ const collapseTree = (node: Node): Node => ({
 const App: React.FC = () => {
   const [locationTree, setLocationTree] = useState<Node | null>(null);
   const [roleTree, setRoleTree] = useState<Node | null>(null);
-  const [viewMode, setViewMode] = useState<ViewMode>("location");
+  const [viewMode, setViewMode] = useState<ViewMode>("role");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState({
     sede: null,
@@ -602,9 +761,16 @@ const App: React.FC = () => {
   // Combina i nodi evidenziati da ricerca e filtri
   const combinedHighlightedNodes = new Set([...highlightedNodes, ...filteredNodes]);
 
-  // Limita la visibilita dell'albero quando una ricerca produce risultati
+  // Limita la visibilità per ricerca e filtri
   const searchVisibilitySet = visibleNodes && searchQuery.trim().length > 0 && resultCount > 0 ? visibleNodes : null;
   const isSearchNarrowed = Boolean(searchVisibilitySet);
+  
+  // Non limitare la visibilità per i filtri, solo evidenziare
+  const isFilterNarrowed = false; // I filtri non nascondono nodi, solo evidenziano
+  
+  // Solo la ricerca limita la visibilità
+  const combinedVisibilitySet = searchVisibilitySet;
+  const isVisibilityNarrowed = isSearchNarrowed;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -630,33 +796,14 @@ const App: React.FC = () => {
     fetchData();
   }, []);
 
-  // Espandi automaticamente i nodi coinvolti quando sono attivi i filtri
-  useEffect(() => {
-    if (!tree || !hasActiveFilters) return;
-
-    const expandNodes = (node: Node): Node => {
-      const shouldExpandFilter = shouldExpandForFilter(node.id, tree);
-
-      return {
-        ...node,
-        isExpanded: shouldExpandFilter ? true : node.isExpanded,
-        children: node.children?.map(child => expandNodes(child))
-      };
-    };
-
-    if (viewMode === "location") {
-      setLocationTree((prev) => (prev ? expandNodes(prev) : prev));
-    } else {
-      setRoleTree((prev) => (prev ? expandNodes(prev) : prev));
-    }
-  }, [tree, hasActiveFilters, shouldExpandForFilter, viewMode]);
   const handleToggleNode = useCallback((nodeId: string) => {
+    // Forza il toggle indipendentemente dallo stato corrente
     if (viewMode === "location") {
       setLocationTree((prev) =>
         prev
           ? updateNodeById(prev, nodeId, (current) => ({
               ...current,
-              isExpanded: current.isExpanded === undefined ? false : !current.isExpanded,
+              isExpanded: !Boolean(current.isExpanded),
             }))
           : prev
       );
@@ -665,7 +812,7 @@ const App: React.FC = () => {
         prev
           ? updateNodeById(prev, nodeId, (current) => ({
               ...current,
-              isExpanded: current.isExpanded === undefined ? false : !current.isExpanded,
+              isExpanded: !Boolean(current.isExpanded),
             }))
           : prev
       );
@@ -737,72 +884,43 @@ const App: React.FC = () => {
         }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 flex flex-col items-center p-4 sm:p-8">
-        {/* Header con menu export */}
-        <header className="w-full max-w-7xl mx-auto mb-4">
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
-            <div className="text-center sm:text-left">
-              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600 tracking-tight">
-                CLEVERTECH
-              </h1>
-              <p className="text-lg text-slate-600 mt-1">Organigramma Aziendale Interattivo</p>
-            </div>
-            <div className="w-full sm:flex-1">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 p-1">
+
+
+
+        {/* Pannello ricerca */}
+        {isSearchPanelOpen && (
+          <div className="fixed top-20 right-4 z-20 w-96">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xl p-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold text-slate-900">🔍 Ricerca Globale</h3>
+                <button
+                  onClick={() => setIsSearchPanelOpen(false)}
+                  className="text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
               <SearchBar 
                 onSearch={setSearchQuery}
                 resultCount={resultCount}
-                placeholder="Cerca persone, ruoli, dipartimenti o sedi..."
-                containerClassName="w-full sm:max-w-xl mx-auto sm:mx-0 mb-0"
+                placeholder="Cerca persone, ruoli, dipartimenti..."
+                containerClassName="w-full"
               />
+              {searchQuery && resultCount > 0 && (
+                <p className="mt-2 text-sm text-emerald-600">
+                  ✅ {resultCount} risultati trovati
+                </p>
+              )}
+              {searchQuery && resultCount === 0 && (
+                <p className="mt-2 text-sm text-amber-600">
+                  ⚠️ Nessun risultato per "{searchQuery}"
+                </p>
+              )}
             </div>
-            <div className="flex gap-3 sm:justify-end">
-              <ExportMenu tree={tree} />
-            </div>
-          </div>
-        </header>
-
-        <div className="mb-6">
-          <div className="inline-flex rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setViewMode("location")}
-              className={`px-4 py-2 text-sm font-medium transition-colors ${
-                viewMode === "location"
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-600 hover:bg-slate-100"
-              }`}
-              aria-pressed={viewMode === "location"}
-            >
-              Vista sedi
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode("role")}
-              className={`px-4 py-2 text-sm font-medium transition-colors border-l border-slate-200 ${
-                viewMode === "role"
-                  ? "bg-blue-600 text-white"
-                  : "text-slate-600 hover:bg-slate-100"
-              }`}
-              aria-pressed={viewMode === "role"}
-            >
-              Vista ruoli
-            </button>
-          </div>
-        </div>
-
-        {/* Messaggio se ci sono risultati di ricerca */}
-        {searchQuery && resultCount === 0 && (
-          <div className="mb-6 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-lg max-w-md mx-auto">
-            <p className="text-center">Nessun risultato trovato per "{searchQuery}"</p>
           </div>
         )}
 
-        {/* Messaggio se ci sono filtri attivi */}
-        {hasActiveFilters && filteredNodes.size === 0 && !searchQuery && (
-          <div className="mb-6 p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded-lg max-w-md mx-auto">
-            <p className="text-center">Nessun risultato con i filtri selezionati</p>
-          </div>
-        )}
 
         {/* Pannello filtri */}
         <FilterPanel
@@ -812,22 +930,91 @@ const App: React.FC = () => {
           onToggle={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
         />
 
-        {/* Organigramma Navigabile */}
-        <div className="w-full max-w-7xl mx-auto mt-4 mb-10">
-          <NavigableOrgChart 
-            tree={tree} 
-            onToggle={handleToggleNode}
-            highlightedNodes={combinedHighlightedNodes}
-            visibleNodes={searchVisibilitySet}
-            isSearchNarrowed={isSearchNarrowed}
-            onCollapseAll={handleCollapseAll}
-          />
+        {/* Organigramma massimizzato con tutto integrato */}
+        <div className="w-full h-screen p-2">
+          <div className="relative w-full h-full border-2 border-slate-300 rounded-2xl bg-white shadow-xl overflow-hidden">
+            {/* Header e controlli integrati dentro l'organigramma */}
+            <div className="absolute top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 z-10">
+              <div className="flex items-center justify-between px-6 py-4">
+                {/* Lato sinistro: Titolo */}
+                <div>
+                  <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600 tracking-tight">
+                    CLEVERTECH
+                  </h1>
+                  <p className="text-sm text-slate-600">Organigramma Aziendale Interattivo</p>
+                </div>
+
+                {/* Lato destro: Fila di controlli proporzionati */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("location")}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
+                      viewMode === "location"
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                    aria-pressed={viewMode === "location"}
+                    title="Vista per sedi geografiche"
+                  >
+                    🏢 Sedi
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("role")}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
+                      viewMode === "role"
+                        ? "bg-blue-600 text-white"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                    aria-pressed={viewMode === "role"}
+                    title="Vista per gerarchia ruoli"
+                  >
+                    👥 Ruoli
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsSearchPanelOpen(!isSearchPanelOpen)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
+                      isSearchPanelOpen
+                        ? "bg-emerald-600 text-white"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                    title="Apri ricerca globale"
+                  >
+                    🔍 Cerca
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
+                      isFilterPanelOpen
+                        ? "bg-purple-600 text-white"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                    title="Apri pannello filtri"
+                  >
+                    🎛️ Filtri
+                  </button>
+                  <ExportMenu tree={tree} />
+                </div>
+              </div>
+            </div>
+
+            {/* Organigramma a schermo pieno */}
+            <div className="pt-20 h-full w-full">
+              <NavigableOrgChart 
+                tree={tree} 
+                onToggle={handleToggleNode}
+                highlightedNodes={combinedHighlightedNodes}
+                visibleNodes={combinedVisibilitySet}
+                isSearchNarrowed={isVisibilityNarrowed}
+                onCollapseAll={handleCollapseAll}
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Statistiche (visibili solo senza filtri attivi) */}
-        {viewMode === "location" && !hasActiveFilters && (
-          <StatsBar tree={tree} />
-        )}
       </div>
     </>
   );

@@ -62,27 +62,26 @@
       .tree-node-wrapper {
         position: relative;
       }
-      /* Vertical line going up to the horizontal line */
+      /* Vertical line going up to the horizontal line - Allineata con nuova posizione */
       .tree-node-wrapper::before {
         content: '';
         position: absolute;
-        bottom: 100%;
+        top: -2rem; /* Allineata con la linea orizzontale */
         left: 50%;
         width: 1px;
-        height: 1.5rem; /* 24px */
+        height: 2rem; /* Connette al nodo */
         background-color: #9ca3af; /* gray-400 */
         transform: translateX(-50%);
       }
-      /* Horizontal line connecting siblings */
+      /* Horizontal line connecting siblings - Spostata per evitare badge */
       .tree-node-wrapper::after {
         content: '';
         position: absolute;
-        bottom: 100%;
+        top: -2rem; /* Spostata più in basso per evitare sovrapposizione badge */
         left: 0;
         width: 100%;
         height: 1px;
         background-color: #9ca3af; /* gray-400 */
-        margin-bottom: -1px; /* To align with vertical line */
       }
       /* Remove left part of horizontal line for the first child */
       .tree-node-wrapper:first-child::after {
