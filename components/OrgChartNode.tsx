@@ -112,13 +112,21 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
     subtitle = node.metadata?.mansione ?? (node.role || "N/D");
     highlightName = node.metadata?.office ?? "N/D";
     highlightLabel = "Ufficio";
+  } else if (node.type === "department") {
+    // Dipartimenti: non mostrare qualifica/ruolo come sottotitolo
+    subtitle = "";
+    highlightName = node.responsible ?? "N/D";
+    highlightLabel = "Direttore";
+  } else if (node.type === "office") {
+    // Uffici: non mostrare qualifica/ruolo come sottotitolo  
+    subtitle = "";
+    highlightName = node.responsible ?? "N/D";
+    highlightLabel = "Responsabile";
   } else {
     subtitle = node.metadata?.qualification ?? (node.role || "N/D");
     highlightName = node.responsible ?? "N/D";
-    if (node.type === "sede" || node.type === "department") {
+    if (node.type === "sede") {
       highlightLabel = "Direttore";
-    } else if (node.type === "office") {
-      highlightLabel = "Responsabile";
     } else if (node.type === "root") {
       highlightLabel = "Responsabile";
     }
@@ -147,8 +155,8 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   // Informazioni specifiche per tipo di scheda
   switch (node.type) {
     case "root":
-      // Root: Overview globale dell'organizzazione
-      infoItems.push({ label: "Responsabile", value: node.responsible || "Giuseppe Reggiani" });
+      // Root: REFA - Holding con presidente e statistiche
+      infoItems.push({ label: "Presidente", value: "Giuseppe Reggiani" });
       if (stats) {
         if (stats.sites !== undefined) {
           addStat("Sedi", stats.sites);
@@ -174,7 +182,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
 
     case "sede":
       // Sede: Informazioni geografiche e responsabile locale
-      infoItems.push({ label: "Direttore", value: highlightName || "Non assegnato" });
+      infoItems.push({ label: "Direttore", value: highlightName && highlightName !== "N/D" ? highlightName : "REFA" });
       infoItems.push({ label: "Sede", value: node.location });
       if (stats) {
         addStat("Dipartimenti", stats.departments);
@@ -187,6 +195,8 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
       // Dipartimento: Focus su struttura organizzativa e obiettivi
       if (highlightName !== "N/D") {
         infoItems.push({ label: "Direttore", value: highlightName });
+      } else {
+        infoItems.push({ label: "Direttore", value: "REFA" });
       }
       infoItems.push({ label: "Sede principale", value: node.location });
       if (stats) {
@@ -203,7 +213,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
       }
       infoItems.push({ label: "Dipartimento", value: node.department });
       if (officePurpose) {
-        infoItems.push({ label: "Specializzazione", value: officePurpose });
+        infoItems.push({ label: "Scopo", value: officePurpose });
       }
       addStat("Persone", stats?.people);
       infoItems.push({ label: "Progetti attivi", value: "Da definire" });

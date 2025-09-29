@@ -301,6 +301,25 @@ const buildOrgTree = (employees: Employee[]): Node => {
               const peopleCount = personNodes.length;
               const officePurpose = responsiblePerson?.metadata?.mansione ?? departmentName;
 
+              // Gerarchia corretta: responsabile con subordinati
+              let officeChildren: Node[] = [];
+              if (responsiblePerson && personNodes.length > 1) {
+                // Trova tutti i subordinati (escludi il responsabile)
+                const subordinates = personNodes.filter(person => person.id !== responsiblePerson.id);
+                
+                // Il responsabile ha i subordinati come figli
+                const managerWithSubordinates = {
+                  ...responsiblePerson,
+                  children: subordinates,
+                  isExpanded: false
+                };
+                
+                officeChildren = [managerWithSubordinates];
+              } else {
+                // Se c'è solo una persona nell'ufficio, è sia responsabile che unico membro
+                officeChildren = personNodes;
+              }
+
               return {
                 id: `office-${slugify(sedeName)}-${slugify(departmentName)}-${slugify(officeName)}`,
                 name: officeName,
@@ -325,7 +344,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
                   officePurpose,
                 },
                 isExpanded: false,
-                children: personNodes,
+                children: officeChildren,
               } as Node;
             });
           const departmentResponsible = selectResponsible(departmentPersons);
@@ -580,6 +599,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
 
 
 const buildRoleTree = (employees: Employee[]): Node => {
+  // Funzione di ordinamento per nodi
   const sortNodes = (nodes: Node[]): Node[] =>
     [...nodes].sort((a, b) => {
       // Primo criterio: ordinamento per qualifica (livello gerarchico)
@@ -601,151 +621,186 @@ const buildRoleTree = (employees: Employee[]): Node => {
       return a.name.localeCompare(b.name, "it", { sensitivity: "base" });
     });
 
-  // Trova il CEO (Giuseppe Reggiani - Dirigente)
-  const ceo = employees.find((emp) => 
-    emp.qualification.toLowerCase() === 'dirigente' || emp.order === 1
-  ) ?? null;
-
-  // Raggruppa dipendenti per DIPARTIMENTO (non sede)
-  const employeesByDepartment = new Map<string, Employee[]>();
-  employees.forEach((emp) => {
-    if (emp.name === ceo?.name) return; // Salta il CEO
-    
-    const department = emp.department || FALLBACK_DEPARTMENT;
-    if (!employeesByDepartment.has(department)) {
-      employeesByDepartment.set(department, []);
-    }
-    employeesByDepartment.get(department)!.push(emp);
-  });
-
-  // Costruisce la gerarchia per ogni dipartimento
-  const buildDepartmentHierarchy = (deptEmployees: Employee[]): Node[] => {
-    // Ordina tutti i dipendenti del dipartimento per qualifica + order + nome
-    const sortedDeptEmployees = [...deptEmployees].sort((a, b) => {
-      const qualOrderA = getQualificationOrder(a.qualification);
-      const qualOrderB = getQualificationOrder(b.qualification);
-      
-      if (qualOrderA !== qualOrderB) return qualOrderA - qualOrderB;
-      if (a.order !== b.order) return a.order - b.order;
-      return a.name.localeCompare(b.name, "it", { sensitivity: "base" });
-    });
-
-    // Raggruppa per livello di qualifica
-    const employeesByLevel = new Map<number, Employee[]>();
-    sortedDeptEmployees.forEach(emp => {
-      const level = getQualificationOrder(emp.qualification);
-      if (!employeesByLevel.has(level)) {
-        employeesByLevel.set(level, []);
-      }
-      employeesByLevel.get(level)!.push(emp);
-    });
-
-    // Costruisce l'albero gerarchico dal livello più alto al più basso
-    const nodesByEmployee = new Map<string, Node>();
-    const levelNumbers = Array.from(employeesByLevel.keys()).sort((a, b) => a - b);
-
-    // Crea tutti i nodi
-    levelNumbers.forEach(level => {
-      const levelEmployees = employeesByLevel.get(level)!;
-      levelEmployees.forEach(emp => {
+  // ==========================================
+  // NUOVA LOGICA: Usa manager diretti dal CSV
+  // ==========================================
+  
+  // 1. Crea una mappa di tutti i nodi persona
+  const nodesByName = new Map<string, Node>();
+  employees.forEach(emp => {
         const node = createPersonNode(emp, {
           location: emp.sede || FALLBACK_SEDE,
           sede: emp.sede || FALLBACK_SEDE,
           department: emp.department || FALLBACK_DEPARTMENT,
           office: emp.office || FALLBACK_OFFICE,
+      manager: emp.manager || null,
         });
         node.children = [];
-        nodesByEmployee.set(emp.name, node);
-      });
-    });
+    nodesByName.set(emp.name, node);
+  });
 
-    // Assegna figli ai genitori PER UFFICIO (dal livello più basso al più alto)
-    for (let i = levelNumbers.length - 1; i > 0; i--) {
-      const currentLevel = levelNumbers[i];
-      const parentLevel = levelNumbers[i - 1];
-      
-      const currentLevelEmployees = employeesByLevel.get(currentLevel)!;
-      const parentLevelEmployees = employeesByLevel.get(parentLevel)!;
+  // 2. Costruisci gerarchia basata sui manager diretti
+  const rootCandidates: Node[] = [];
+  
+  employees.forEach(emp => {
+    const employeeNode = nodesByName.get(emp.name);
+    if (!employeeNode) return;
 
-      if (parentLevelEmployees.length > 0) {
-        // Raggruppa dipendenti correnti per ufficio
-        const employeesByOffice = new Map<string, Employee[]>();
-        currentLevelEmployees.forEach(emp => {
-          const office = emp.office || 'Non specificato';
-          if (!employeesByOffice.has(office)) {
-            employeesByOffice.set(office, []);
-          }
-          employeesByOffice.get(office)!.push(emp);
-        });
-
-        // Raggruppa genitori per ufficio
-        const parentsByOffice = new Map<string, Employee[]>();
-        parentLevelEmployees.forEach(emp => {
-          const office = emp.office || 'Non specificato';
-          if (!parentsByOffice.has(office)) {
-            parentsByOffice.set(office, []);
-          }
-          parentsByOffice.get(office)!.push(emp);
-        });
-
-        // Assegna dipendenti ai genitori per SEDE + UFFICIO + ORDINAMENTO
-        employeesByOffice.forEach((officeEmployees, office) => {
-          officeEmployees.forEach(emp => {
-            // Trova il miglior genitore per questo dipendente
-            let bestParent = null;
-            let bestScore = -1;
-
-            parentLevelEmployees.forEach(parentEmp => {
-              let score = 0;
-              
-              // +3 punti se stessa sede
-              if (emp.sede === parentEmp.sede) {
-                score += 3;
-              }
-              
-              // +2 punti se stesso ufficio
-              if (emp.office === parentEmp.office) {
-                score += 2;
-              }
-              
-              // +1 punto se ordinamento del genitore è minore (gerarchicamente superiore)
-              if (parentEmp.order < emp.order) {
-                score += 1;
-              }
-              
-              if (score > bestScore) {
-                bestScore = score;
-                bestParent = parentEmp;
-              }
-            });
-
-            // Se non trova un match perfetto, usa il primo genitore disponibile
-            if (!bestParent) {
-              bestParent = parentLevelEmployees[0];
-            }
-
-            const parentNode = nodesByEmployee.get(bestParent.name)!;
-            const childNode = nodesByEmployee.get(emp.name)!;
-            parentNode.children!.push(childNode);
-          });
-        });
+    const managerName = emp.manager?.trim();
+    
+    if (!managerName || managerName === '') {
+      // Nessun manager = è un root (CEO o dirigente)
+      rootCandidates.push(employeeNode);
+    } else {
+      // Ha un manager: trova il nodo del manager e aggiungiti come figlio
+      const managerNode = nodesByName.get(managerName);
+      if (managerNode) {
+        managerNode.children!.push(employeeNode);
+      } else {
+        // Manager non trovato (potrebbe essere esterno o errore dati)
+        // Aggiungi come root candidate
+        rootCandidates.push(employeeNode);
       }
     }
+  });
 
-    // Calcola statistiche ricorsivamente
+  // 3. Correggi gerarchie anomale: se dipendente e manager hanno stesso livello, sposta al livello superiore
+  employees.forEach(emp => {
+    const employeeNode = nodesByName.get(emp.name);
+    if (!employeeNode || !emp.manager) return;
+
+    const managerNode = nodesByName.get(emp.manager);
+    if (!managerNode) return;
+
+    const employeeLevel = getQualificationOrder(emp.qualification);
+    const managerQual = managerNode.metadata?.qualification || '';
+    const managerLevel = getQualificationOrder(managerQual);
+
+    // Se dipendente e manager hanno lo stesso livello gerarchico (es: entrambi livello 3)
+    if (employeeLevel === managerLevel) {
+      // Trova il manager del manager
+      const managerManagerName = employees.find(e => e.name === emp.manager)?.manager;
+      
+      if (managerManagerName) {
+        const managerManagerNode = nodesByName.get(managerManagerName);
+        
+        if (managerManagerNode) {
+          // Rimuovi il dipendente dal manager corrente
+          if (managerNode.children) {
+            managerNode.children = managerNode.children.filter(
+              child => child.id !== employeeNode.id
+            );
+            if (managerNode.children.length === 0) {
+              managerNode.children = undefined;
+            }
+          }
+
+          // Aggiungi il dipendente al manager del manager
+          if (!managerManagerNode.children) {
+            managerManagerNode.children = [];
+          }
+          if (!managerManagerNode.children.some(child => child.id === employeeNode.id)) {
+            managerManagerNode.children.push(employeeNode);
+          }
+        }
+      }
+    }
+  });
+
+  // 4. Crea sotto-gerarchie intelligenti per uffici
+  // Logica: Responsabile → [Impiegato direttivo, Specialista, Impiegato qualificato, Impiegato esecutivo] sulla stessa riga
+  //         Operai (livelli 8+) vanno sotto il più alto disponibile tra 4-7, o direttamente sotto responsabile
+  nodesByName.forEach(managerNode => {
+    if (!managerNode.children || managerNode.children.length <= 1) return;
+
+    const managerQual = managerNode.metadata?.qualification || '';
+    const managerLevel = getQualificationOrder(managerQual);
+
+    // Se il manager è un Responsabile di team/area (livello 3) o simile
+    if (managerLevel <= 3) {
+      // Raggruppa i figli per ufficio
+      const childrenByOffice = new Map<string, Node[]>();
+      managerNode.children.forEach(child => {
+        const office = child.metadata?.office || 'Non specificato';
+        if (!childrenByOffice.has(office)) {
+          childrenByOffice.set(office, []);
+        }
+        childrenByOffice.get(office)!.push(child);
+      });
+
+      // Per ogni ufficio, organizza la gerarchia
+      childrenByOffice.forEach((officeChildren, office) => {
+        if (officeChildren.length <= 1) return;
+
+        // Separa i livelli 4-7 (impiegati) dai livelli 8+ (operai)
+        const supervisors: Node[] = []; // Livelli 4-7: Impiegato direttivo, Specialista, Qualificato, Esecutivo
+        const workers: Node[] = [];     // Livelli 8+: Operai
+
+        officeChildren.forEach(child => {
+          const childQual = child.metadata?.qualification || '';
+          const childLevel = getQualificationOrder(childQual);
+          
+          if (childLevel >= 4 && childLevel <= 7) {
+            supervisors.push(child);
+          } else if (childLevel >= 8) {
+            workers.push(child);
+          }
+        });
+
+        // Se ci sono operai e supervisori
+        if (workers.length > 0 && supervisors.length > 0) {
+          // Rimuovi tutti i figli di questo ufficio dal manager
+          managerNode.children = managerNode.children!.filter(
+            child => !officeChildren.includes(child)
+          );
+
+          // Ordina i supervisori per livello
+          const sortedSupervisors = supervisors.sort((a, b) => {
+            const levelA = getQualificationOrder(a.metadata?.qualification || '');
+            const levelB = getQualificationOrder(b.metadata?.qualification || '');
+            return levelA - levelB;
+          });
+
+          // Aggiungi tutti i supervisori (4-7) come figli diretti del manager (stessa riga)
+          managerNode.children!.push(...sortedSupervisors);
+
+          // Trova il supervisore più alto (livello più basso numericamente)
+          const topSupervisor = sortedSupervisors[0];
+
+          // Aggiungi gli operai sotto il supervisore più alto
+          if (!topSupervisor.children) {
+            topSupervisor.children = [];
+          }
+          topSupervisor.children.push(...workers);
+        }
+      });
+    }
+  });
+
+  // 5. Trova il vero CEO (dirigente con order=1 o Giuseppe Reggiani)
+  const ceo = employees.find((emp) => 
+    emp.qualification.toLowerCase() === 'dirigente' || 
+    emp.order === 1 ||
+    emp.name.toLowerCase().includes('giuseppe reggiani')
+  ) ?? null;
+
+  // 6. Calcola statistiche ricorsivamente per tutti i nodi
     const calculateStats = (node: Node): number => {
       if (!node.children || node.children.length === 0) {
         node.children = undefined;
         return 0;
       }
 
+    // Ordina i figli
       node.children = sortNodes(node.children);
       let totalReports = 0;
       
+    // Calcola ricorsivamente per ogni figlio
       node.children.forEach(child => {
         totalReports += 1 + calculateStats(child);
       });
 
+    // Aggiungi statistiche al nodo
       node.metadata = {
         ...node.metadata,
         stats: {
@@ -756,59 +811,29 @@ const buildRoleTree = (employees: Employee[]): Node => {
       };
 
       return totalReports;
-    };
-
-    // Calcola statistiche per tutti i nodi
-    nodesByEmployee.forEach(node => calculateStats(node));
-
-    // Ritorna i nodi di livello più alto (direttori o responsabili se non c'è direttore)
-    const topLevel = levelNumbers[0];
-    const topLevelEmployees = employeesByLevel.get(topLevel)!;
-    
-    return topLevelEmployees.map(emp => nodesByEmployee.get(emp.name)!);
   };
 
-  // Costruisce nodi per ogni dipartimento
-  const departmentNodes: Node[] = [];
-  for (const [department, deptEmployees] of employeesByDepartment.entries()) {
-    const hierarchyNodes = buildDepartmentHierarchy(deptEmployees);
-    departmentNodes.push(...hierarchyNodes);
-  }
+  // Calcola statistiche per tutti i nodi
+  nodesByName.forEach(node => calculateStats(node));
 
-  // Crea il nodo CEO con tutti i direttori di dipartimento come figli
+  // 7. Trova e restituisci il nodo root (CEO)
   let ceoNode: Node | null = null;
   if (ceo) {
-    ceoNode = createPersonNode(ceo, {
-      location: ceo.sede || FALLBACK_SEDE,
-      sede: ceo.sede || FALLBACK_SEDE,
-      department: ceo.department || FALLBACK_DEPARTMENT,
-      office: ceo.office || FALLBACK_OFFICE,
-    });
-    
-    ceoNode.children = sortNodes(departmentNodes);
-    
-    // Calcola statistiche CEO
-    const totalReports = departmentNodes.reduce((sum, node) => 
-      sum + 1 + (node.metadata?.stats?.totalReports ?? 0), 0
-    );
-    
-    ceoNode.metadata = {
-      ...ceoNode.metadata,
-      stats: {
-        directs: departmentNodes.length,
-        totalReports,
-      },
-    };
+    ceoNode = nodesByName.get(ceo.name) ?? null;
   }
 
-  const totalPeople = employees.length;
-  // Mostra direttamente il dirigente (CEO) come root della vista ruoli
+  // Se non c'è CEO, trova il primo root candidate
+  if (!ceoNode && rootCandidates.length > 0) {
+    ceoNode = rootCandidates[0];
+  }
+
   if (ceoNode) {
     ceoNode.isExpanded = true;
     return ceoNode;
   }
 
-  // Fallback: se non si trova il dirigente, mostra i capi dipartimento come radici
+  // Fallback: crea un pseudo-root con tutti i root candidates
+  const totalPeople = employees.length;
   const pseudoRoot: Node = {
     id: ROLE_ROOT_ID,
     name: "Dirigenza",
@@ -821,12 +846,12 @@ const buildRoleTree = (employees: Employee[]): Node => {
     metadata: {
       badge: BADGE_BY_TYPE.root,
       stats: {
-        leaders: departmentNodes.length,
+        leaders: rootCandidates.length,
         people: totalPeople,
       },
     },
     isExpanded: true,
-    children: sortNodes(departmentNodes),
+    children: sortNodes(rootCandidates),
   };
 
   return pseudoRoot;
