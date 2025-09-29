@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { Node } from '../types';
 import OrgChartNode from './OrgChartNode';
@@ -20,6 +20,17 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   isSearchNarrowed = false,
   onCollapseAll
 }) => {
+  const nodeElemsRef = useRef<Map<string, HTMLElement>>(new Map());
+
+  const registerNodeElem = useCallback((id: string, el: HTMLElement | null) => {
+    const map = nodeElemsRef.current;
+    if (el) {
+      map.set(id, el);
+    } else {
+      map.delete(id);
+    }
+  }, []);
+
   return (
     <div className="relative w-full h-full bg-transparent overflow-hidden">
       <TransformWrapper
@@ -48,7 +59,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
         limitToBounds={false}
         centerContent={true}
       >
-        {({ zoomIn, zoomOut, resetTransform, centerView }) => (
+        {({ zoomIn, zoomOut, resetTransform, centerView, zoomToElement }) => (
           <>
             {/* Controlli di navigazione */}
             <div className="absolute top-4 right-4 z-50 flex flex-col gap-2">
@@ -114,14 +125,36 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
               contentClass="!cursor-grab active:!cursor-grabbing"
             >
               <div className="flex justify-center items-center min-h-full p-12">
-                <OrgChartNode 
-                  node={tree} 
-                  onToggle={onToggle} 
-                  depth={0}
-                  highlightedNodes={highlightedNodes}
-                  visibleNodes={visibleNodes}
-                  isSearchNarrowed={isSearchNarrowed}
-                />
+                {(() => {
+                  const handleToggleAndCenter = (id: string) => {
+                    onToggle(id);
+                    // Centra la vista sulla scheda appena interagita
+                    requestAnimationFrame(() => {
+                      const el = nodeElemsRef.current.get(id);
+                      if (el && typeof zoomToElement === 'function') {
+                        try {
+                          zoomToElement(el as unknown as HTMLElement, 1, 300, 'easeOut');
+                        } catch {
+                          centerView && centerView();
+                        }
+                      } else if (centerView) {
+                        centerView();
+                      }
+                    });
+                  };
+
+                  return (
+                    <OrgChartNode 
+                      node={tree} 
+                      onToggle={handleToggleAndCenter} 
+                      depth={0}
+                      highlightedNodes={highlightedNodes}
+                      visibleNodes={visibleNodes}
+                      isSearchNarrowed={isSearchNarrowed}
+                      registerNodeElem={registerNodeElem}
+                    />
+                  );
+                })()}
               </div>
             </TransformComponent>
           </>

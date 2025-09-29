@@ -11,6 +11,7 @@ interface OrgChartNodeProps {
   highlightedNodes?: Set<string>;
   visibleNodes?: Set<string> | null;
   isSearchNarrowed?: boolean;
+  registerNodeElem?: (id: string, el: HTMLElement | null) => void;
 }
 
 const badgeColours: Record<Node["type"], string> = {
@@ -60,6 +61,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   highlightedNodes = new Set(),
   visibleNodes = null,
   isSearchNarrowed = false,
+  registerNodeElem,
 }) => {
   const allChildren = Array.isArray(node.children) ? node.children : [];
   const filteredChildren = isSearchNarrowed && visibleNodes
@@ -103,14 +105,23 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   const title = node.name;
   let subtitle: string;
   let highlightName: string;
+  let highlightLabel: string = "Ufficio";
 
   if (node.type === "person" || node.type === "ceo") {
     // Mostra: Nome, Mansione, Ufficio
-    subtitle = node.metadata?.mansione ?? (node.role || "N/D"); // Mansione
-    highlightName = node.metadata?.office ?? "N/D"; // Ufficio
+    subtitle = node.metadata?.mansione ?? (node.role || "N/D");
+    highlightName = node.metadata?.office ?? "N/D";
+    highlightLabel = "Ufficio";
   } else {
     subtitle = node.metadata?.qualification ?? (node.role || "N/D");
     highlightName = node.responsible ?? "N/D";
+    if (node.type === "sede" || node.type === "department") {
+      highlightLabel = "Direttore";
+    } else if (node.type === "office") {
+      highlightLabel = "Responsabile";
+    } else if (node.type === "root") {
+      highlightLabel = "Responsabile";
+    }
   }
   const mansione = node.metadata?.mansione ?? (node.role || "N/D");
   const age = node.metadata?.age != null ? String(node.metadata?.age) : "N/D";
@@ -164,7 +175,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
     case "sede":
       // Sede: Informazioni geografiche e responsabile locale
       infoItems.push({ label: "Direttore", value: highlightName || "Non assegnato" });
-      infoItems.push({ label: "Paese", value: node.location });
+      infoItems.push({ label: "Sede", value: node.location });
       if (stats) {
         addStat("Dipartimenti", stats.departments);
         addStat("Uffici", stats.offices);
@@ -247,6 +258,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   return (
     <div className={`flex flex-col items-center ${depth > 0 ? "tree-branch" : ""}`}>
       <div
+        ref={(el) => registerNodeElem?.(node.id, el)}
         className={`relative flex flex-col w-80 h-[30rem] rounded-2xl border bg-white shadow-lg transition-all duration-300 pb-10 ${borderClass} ${
           shouldHighlight
             ? "ring-4 ring-amber-300 ring-offset-2 ring-offset-white"
@@ -257,12 +269,37 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
           {badge}
         </span>
 
-        <div className="flex flex-col items-center px-6 pt-6 pb-4 text-center h-60">
-          <div className="w-32 h-32 overflow-hidden rounded-full border-4 border-white shadow-inner bg-slate-100 flex items-center justify-center">
-            {/* Placeholder omino per ora */}
-            <svg className="w-16 h-16 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-            </svg>
+        <div className="flex flex-col items-center px-6 pt-6 pb-4 text-center h-72">
+          <div 
+            className="overflow-hidden rounded-full border-6 border-white shadow-inner bg-slate-100 flex items-center justify-center"
+            style={{ width: '8rem', height: '8rem', minWidth: '8rem', minHeight: '8rem' }}
+          >
+            {node.type === "sede" ? (
+              <img
+                src={node.imageUrl}
+                alt={node.name}
+                className="w-full h-full object-cover"
+                style={{ aspectRatio: '1/1' }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            ) : (node.imageUrl ? (
+              <img
+                src={node.imageUrl}
+                alt={node.name}
+                className="w-full h-full object-cover"
+                style={{ aspectRatio: '1/1' }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            ) : (
+              // Placeholder
+              <svg className="w-16 h-16 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+              </svg>
+            ))}
           </div>
           
           {/* Nome */}
@@ -273,9 +310,9 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
             <p className="mt-1 text-sm font-medium text-blue-600">{subtitle}</p>
           )}
           
-          {/* Ufficio */}
+          {/* Campo dinamico (Direttore/Responsabile/Ufficio) */}
           {highlightName !== "N/D" && (
-            <p className="mt-1 text-sm text-slate-600">Ufficio: {highlightName}</p>
+            <p className="mt-1 text-sm text-slate-600">{highlightLabel}: {highlightName}</p>
           )}
           
           {/* Bandierina sede per le persone */}
@@ -330,6 +367,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
                 highlightedNodes={highlightedNodes}
                 visibleNodes={visibleNodes}
                 isSearchNarrowed={isSearchNarrowed}
+                registerNodeElem={registerNodeElem}
               />
             </div>
           ))}

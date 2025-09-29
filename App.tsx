@@ -30,7 +30,7 @@ interface NodeWithParent {
 
 type ViewMode = "location" | "role";
 
-const ROOT_ID = "clevertech-root";
+const ROOT_ID = "refa-root";
 const FALLBACK_SEDE = "Non specificata";
 const FALLBACK_DEPARTMENT = "Non specificato";
 const FALLBACK_OFFICE = "Non specificato";
@@ -67,6 +67,30 @@ const QUALIFICATION_ORDER: Record<string, number> = {
 
 const getQualificationOrder = (qualification: string) =>
   QUALIFICATION_ORDER[qualification.toLowerCase()] ?? 999;
+
+// Mappa immagini dipendenti (docs/IMMAGINI/*.png) caricata a build-time
+const employeeImageModules = import.meta.glob("./docs/IMMAGINI/**/*.png", { eager: true, as: "url" }) as Record<string, string>;
+
+const normalizeImageKey = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "")
+    .trim();
+
+const EMPLOYEE_IMAGE_MAP: Map<string, string> = (() => {
+  const map = new Map<string, string>();
+  Object.entries(employeeImageModules).forEach(([path, url]) => {
+    const file = path.split(/[/\\]/).pop() || "";
+    const base = file.replace(/\.[^.]+$/g, "");
+    const key = normalizeImageKey(base);
+    if (key) {
+      map.set(key, url as unknown as string);
+    }
+  });
+  return map;
+})();
 
 const slugify = (value: string) =>
   value
@@ -127,13 +151,28 @@ const sortEmployees = (list: Employee[]) =>
   });
 
 const getEmployeeImage = (emp: Employee) => {
+  // 1) Prova mappa immagini locale (docs/IMMAGINI)
+  const key = normalizeImageKey(emp.name);
+  const localUrl = EMPLOYEE_IMAGE_MAP.get(key);
+  if (localUrl) {
+    return localUrl;
+  }
+
+  // 2) Prova valore nel CSV (URL assoluto o percorso .png)
   const candidate = emp.photo?.trim();
   if (candidate && /^https?:\/\//i.test(candidate)) {
     return candidate;
   }
-  if (candidate && candidate.endsWith(".png")) {
-    return candidate;
+  if (candidate && candidate.toLowerCase().endsWith(".png")) {
+    try {
+      const url = new URL(candidate, import.meta.url).toString();
+      return url;
+    } catch {
+      // ignora
+    }
   }
+
+  // 3) Fallback placeholder
   return `https://picsum.photos/seed/${encodeURIComponent(emp.name)}/128/128`;
 };
 
@@ -358,7 +397,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
       const sedePersons = departmentEntries.flatMap((entry) => entry.persons);
 
       const sedeResponsible = selectResponsible(sedePersons);
-      const sedeFlag = sedePersons.find((person) => person.metadata?.flag)?.metadata?.flag ?? null;
+      const sedeFlag = sedePersons.find((person) => person.metadata?.flag)?.metadata?.flag ?? 'it';
 
       const sedeStats = {
         departments: departmentNodes.length,
@@ -415,7 +454,15 @@ const buildOrgTree = (employees: Employee[]): Node => {
 
     });
 
-  const ceo = employees.find((emp) => emp.order === 1 || !emp.manager) ?? null;
+  // Seleziona il CEO in modo robusto: preferisci qualifica 'dirigente', poi order=1
+  const dirigentes = employees.filter(e => (e.qualification || '').toLowerCase() === 'dirigente');
+  let ceo: Employee | null = null;
+  if (dirigentes.length > 0) {
+    // Se esiste Giuseppe Reggiani tra i dirigenti, preferiscilo
+    ceo = dirigentes.find(e => e.name.toLowerCase().includes('giuseppe reggiani')) || dirigentes[0];
+  } else {
+    ceo = employees.find((emp) => emp.order === 1) || null;
+  }
 
   const rootChildren = sedeNodes;
   const locationStats = {
@@ -430,23 +477,101 @@ const buildOrgTree = (employees: Employee[]): Node => {
 
   const rootNode: Node = {
     id: ROOT_ID,
-    name: "CLEVERTECH GLOBAL",
-    role: "Organigramma aziendale",
-    department: "Azienda",
+    name: "REFA",
+    role: "Holding di controllo",
+    department: "REFA Board",
     location: "Globale",
-    imageUrl: "https://picsum.photos/seed/clevertech-root/128/128",
+    imageUrl: "https://picsum.photos/seed/refa-root/128/128",
     type: "root",
-    responsible: ceo?.name ?? null,
+    responsible: ceo?.name ?? "Giuseppe Reggiani",
     metadata: {
       badge: BADGE_BY_TYPE.root,
       qualification: ceo?.qualification ?? null,
-      mansione: ceo?.role ?? "Organigramma aziendale",
+      mansione: ceo?.role ?? "Holding di controllo delle sedi",
       age: ceo?.age ?? null,
       order: ceo?.order ?? null,
       stats: locationStats,
     },
     isExpanded: true,
-    children: rootChildren,
+    children: [
+      // Board REFA in cima, poi le sedi
+      {
+        id: `refa-board`,
+        name: "REFA Board",
+        role: "Consiglio di amministrazione",
+        department: "REFA",
+        location: "Globale",
+        imageUrl: "https://picsum.photos/seed/refa-board/128/128",
+        type: "department",
+        responsible: "Giuseppe Reggiani",
+        metadata: {
+          badge: BADGE_BY_TYPE.department,
+          sede: "Globale",
+          department: "REFA",
+          stats: { offices: 0, people: 4 },
+        },
+        isExpanded: false,
+        children: [
+          createPersonNode({
+            id: "giuseppe-reggiani-refa",
+            name: "Giuseppe Reggiani",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Presidente",
+            qualification: "dirigente",
+            manager: null,
+            order: 1,
+            sede: "CTH_ITALY",
+            age: null,
+          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: null }),
+          createPersonNode({
+            id: "simone-cervi-refa",
+            name: "Simone Cervi",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Consigliere",
+            qualification: "dirigente",
+            manager: "Giuseppe Reggiani",
+            order: 1,
+            sede: "CTH_ITALY",
+            age: null,
+          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: "Giuseppe Reggiani" }),
+          createPersonNode({
+            id: "enrico-reggiani-refa",
+            name: "Enrico Reggiani",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Consigliere",
+            qualification: "dirigente",
+            manager: "Giuseppe Reggiani",
+            order: 1,
+            sede: "CTH_ITALY",
+            age: null,
+          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: "Giuseppe Reggiani" }),
+          createPersonNode({
+            id: "umberto-reggiani-refa",
+            name: "Umberto Reggiani",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Consigliere",
+            qualification: "dirigente",
+            manager: "Giuseppe Reggiani",
+            order: 1,
+            sede: "CTH_ITALY",
+            age: null,
+          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: "Giuseppe Reggiani" }),
+        ]
+      },
+      ...rootChildren
+    ],
   };
 
   return rootNode;
@@ -677,33 +802,34 @@ const buildRoleTree = (employees: Employee[]): Node => {
   }
 
   const totalPeople = employees.length;
-  const rootChildren = ceoNode ? [ceoNode] : sortNodes(departmentNodes);
+  // Mostra direttamente il dirigente (CEO) come root della vista ruoli
+  if (ceoNode) {
+    ceoNode.isExpanded = true;
+    return ceoNode;
+  }
 
-  const roleRoot: Node = {
+  // Fallback: se non si trova il dirigente, mostra i capi dipartimento come radici
+  const pseudoRoot: Node = {
     id: ROLE_ROOT_ID,
-    name: "CLEVERTECH - Ruoli",
-    role: "Organigramma per ruolo",
+    name: "Dirigenza",
+    role: "Struttura gerarchica",
     department: "Ruoli",
     location: "Globale",
-    imageUrl: "https://picsum.photos/seed/clevertech-role-root/128/128",
+    imageUrl: "https://picsum.photos/seed/dirigenza-root/128/128",
     type: "root",
-    responsible: ceo?.name ?? null,
+    responsible: null,
     metadata: {
       badge: BADGE_BY_TYPE.root,
-      qualification: ceo?.qualification ?? null,
-      mansione: ceo?.role ?? null,
-      age: ceo?.age ?? null,
-      order: ceo?.order ?? null,
       stats: {
         leaders: departmentNodes.length,
         people: totalPeople,
       },
     },
     isExpanded: true,
-    children: rootChildren,
+    children: sortNodes(departmentNodes),
   };
 
-  return roleRoot;
+  return pseudoRoot;
 };
 
 const updateNodeById = (node: Node, targetId: string, updater: (current: Node) => Node): Node => {
