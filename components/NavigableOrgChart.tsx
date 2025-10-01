@@ -32,7 +32,15 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-transparent overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden">
+      {/* Sfondo con immagine dell'edificio Clevertech */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: 'url(/building-background.jpg)',
+          filter: 'blur(0px)'
+        }}
+      />
       <TransformWrapper
         initialScale={1}
         minScale={0.3}
