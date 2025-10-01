@@ -17,10 +17,19 @@ interface Employee {
   office: string;
   role: string;
   qualification: string;
+  qualificationKey: string;
+  qualificationOrder: number;
+  qualificationDescription: string | null;
+  qualificationColor: string;
+  levelShort: string | null;
+  levelCode: string | null;
+  levelHypothetical: string | null;
   manager: string | null;
   order: number;
   sede: string;
   age: number | null;
+  gender: string | null;
+  company: string | null;
 }
 
 interface NodeWithParent {
@@ -49,24 +58,299 @@ const BADGE_BY_TYPE: Record<NodeType, string> = {
 const ROLE_ROOT_ID = "clevertech-role-root";
 const DEFAULT_BRANCH_DIRECTOR = "Giuseppe Reggiani";
 
-const QUALIFICATION_ORDER: Record<string, number> = {
-  "dirigente": 1,
-  "quadro / direttore": 2,
-  "responsabile di team/area": 3,
-  "impiegato direttivo": 4,
-  "specialista (impiegatizio/tecnico)": 5,
-  "impiegato qualificato": 6,
-  "impiegato esecutivo": 7,
-  "apprendista impiegato": 8,
-  "operaio specializzato": 9,
-  "operaio qualificato": 10,
-  "operaio comune": 11,
-  "operaio generico": 12,
-  "apprendista operaio": 13,
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    || "non-specificato";
+
+const stripPipePrefix = (value: string) => value.replace(/^\|+/, "").trim();
+
+const normalizeHierarchyValue = (value: string) => {
+  if (!value) return "";
+  const cleaned = value.replace(/\r/g, "");
+  const segments = cleaned
+    .split("|")
+    .map((segment) => stripPipePrefix(segment))
+    .filter(Boolean);
+  if (segments.length === 0) {
+    return stripPipePrefix(cleaned);
+  }
+  return segments[segments.length - 1];
+};
+
+const normalizeQualificationLabel = (value: string) => stripPipePrefix(value).replace(/\s+/g, " ").trim();
+
+const normalizeGender = (value: string) => {
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const upper = trimmed.toUpperCase();
+  if (upper === "M" || upper === "F") {
+    return upper;
+  }
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+};
+
+const normalizeCompany = (value: string) => {
+  const trimmed = value.trim();
+  return trimmed ? trimmed : null;
+};
+
+const normalizeLevelCode = (value: string) => {
+  const trimmed = value.trim();
+  return trimmed ? trimmed.toUpperCase() : null;
+};
+
+interface QualificationDefinitionSeed {
+  label: string;
+  shortLabel: string;
+  order: number;
+  newLevel: string | null;
+  oldCode: string | null;
+  description: string | null;
+  colorClass: string;
+  synonyms?: string[];
+}
+
+interface QualificationDefinition extends QualificationDefinitionSeed {
+  key: string;
+}
+
+interface ResolvedQualification {
+  key: string;
+  label: string;
+  shortLabel: string;
+  order: number;
+  colorClass: string;
+  newLevel: string | null;
+  oldCode: string | null;
+  description: string | null;
+  isFallback: boolean;
+}
+
+const QUALIFICATION_DEFINITION_SEEDS: QualificationDefinitionSeed[] = [
+  {
+    label: "Dirigente",
+    shortLabel: "Dirigente",
+    order: 1,
+    newLevel: "DIR",
+    oldCode: "DIR",
+    description: "Direzione aziendale; autonomia strategica e responsabilità sui risultati complessivi. (CCNL distinto).",
+    colorClass: "bg-red-100 text-red-800 border-red-200",
+    synonyms: ["dirigente"],
+  },
+  {
+    label: "Direttivo (Quadro / Gestione del cambiamento)",
+    shortLabel: "Quadro / Gestione del cambiamento",
+    order: 2,
+    newLevel: "A1",
+    oldCode: "8",
+    description: "Guida di funzioni/aree e impulso all’innovazione; ampia autonomia e responsabilità su processi e risultati.",
+    colorClass: "bg-orange-100 text-orange-800 border-orange-200",
+    synonyms: [
+      "quadro / direttore",
+      "quadro-direttore",
+      "quadro direttore",
+      "direttivo quadro / gestione del cambiamento",
+      "direttivo quadro",
+      "quadro",
+    ],
+  },
+  {
+    label: "Direttivo (Responsabile di team/processi)",
+    shortLabel: "Responsabile di team/processi",
+    order: 3,
+    newLevel: "B3",
+    oldCode: "7",
+    description: "Coordinamento di team/processi e responsabilità di risultati con ampia autonomia operativa; non quadro.",
+    colorClass: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    synonyms: [
+      "responsabile di team/area",
+      "responsabile di team / area",
+      "responsabile di team",
+    ],
+  },
+  {
+    label: "Direttivo (Tecnico/organizzativo)",
+    shortLabel: "Direttivo tecnico/organizzativo",
+    order: 4,
+    newLevel: "B2",
+    oldCode: "6",
+    description: "Autonomia tecnico-organizzativa su attività complesse; presidio di obiettivi e risorse, senza perimetro da quadro.",
+    colorClass: "bg-blue-100 text-blue-800 border-blue-200",
+    synonyms: [
+      "impiegato direttivo",
+      "direttivo tecnico",
+      "direttivo organizzativo",
+    ],
+  },
+  {
+    label: "Tecnico Specializzato",
+    shortLabel: "Tecnico specializzato",
+    order: 5,
+    newLevel: "B1",
+    oldCode: "5S",
+    description: "Elevato know-how; presidio di procedure critiche e supporto/guida operativa non gerarchica.",
+    colorClass: "bg-green-100 text-green-800 border-green-200",
+    synonyms: [
+      "specialista (impiegatizio/tecnico)",
+      "specialista impiegatizio",
+      "specialista tecnico",
+      "specialista",
+    ],
+  },
+  {
+    label: "Tecnico qualificato",
+    shortLabel: "Tecnico qualificato",
+    order: 6,
+    newLevel: "C3",
+    oldCode: "5",
+    description: "Attività qualificate con autonomia ordinaria (es. set-up, diagnosi base, controlli di processo).",
+    colorClass: "bg-purple-100 text-purple-800 border-purple-200",
+    synonyms: ["impiegato qualificato"],
+  },
+  {
+    label: "Tecnico esecutivo",
+    shortLabel: "Tecnico esecutivo",
+    order: 7,
+    newLevel: "C2",
+    oldCode: "4",
+    description: "Esecuzione strutturata di procedure/standard con supervisione e responsabilità limitate.",
+    colorClass: "bg-cyan-100 text-cyan-800 border-cyan-200",
+    synonyms: ["impiegato esecutivo"],
+  },
+  {
+    label: "Operativo specializzato",
+    shortLabel: "Operativo specializzato",
+    order: 8,
+    newLevel: "C1",
+    oldCode: "3S",
+    description: "Conduzione/attrezzaggio di impianti o lavorazioni complesse; diagnosi e ottimizzazione su perimetro definito.",
+    colorClass: "bg-amber-100 text-amber-800 border-amber-200",
+    synonyms: ["operaio specializzato"],
+  },
+  {
+    label: "Operativo qualificato",
+    shortLabel: "Operativo qualificato",
+    order: 9,
+    newLevel: "D2",
+    oldCode: "3",
+    description: "Lavorazioni qualificate con strumenti/attrezzature comuni; autonomia limitata.",
+    colorClass: "bg-rose-100 text-rose-800 border-rose-200",
+    synonyms: ["operaio qualificato"],
+  },
+  {
+    label: "Operativo base",
+    shortLabel: "Operativo base",
+    order: 10,
+    newLevel: "D1",
+    oldCode: "2",
+    description: "Attività elementari o semi-qualificate con addestramento breve; ex 1ª categoria riclassificata in D1 dal 1/6/2021.",
+    colorClass: "bg-gray-100 text-gray-800 border-gray-200",
+    synonyms: ["operaio comune", "operaio generico"],
+  },
+  {
+    label: "Apprendista impiegato",
+    shortLabel: "Apprendista impiegato",
+    order: 11,
+    newLevel: "Appr.",
+    oldCode: "Appr.",
+    description: "Percorso formativo per ruoli tecnico-gestionali; retribuzione percentuale del livello di sbocco.",
+    colorClass: "bg-lime-100 text-lime-800 border-lime-200",
+    synonyms: ["apprendista impiegato"],
+  },
+  {
+    label: "Apprendista operaio",
+    shortLabel: "Apprendista operaio",
+    order: 12,
+    newLevel: "Appr.",
+    oldCode: "Appr.",
+    description: "Percorso formativo per ruoli operativi/tecnici di officina; progressione secondo schemi di apprendistato.",
+    colorClass: "bg-stone-100 text-stone-800 border-stone-200",
+    synonyms: ["apprendista operaio"],
+  },
+];
+
+const createQualificationDefinitions = (seeds: QualificationDefinitionSeed[]) => {
+  const lookup = new Map<string, QualificationDefinition>();
+  const definitions = seeds.map((seed) => {
+    const definition: QualificationDefinition = {
+      ...seed,
+      key: slugify(seed.label),
+    };
+
+    const register = (label: string | undefined) => {
+      if (!label) return;
+      const normalized = normalizeQualificationLabel(label);
+      if (!normalized) return;
+      lookup.set(slugify(normalized), definition);
+    };
+
+    register(seed.label);
+    register(seed.shortLabel);
+    seed.synonyms?.forEach(register);
+
+    return definition;
+  });
+
+  return { definitions, lookup };
+};
+
+const { lookup: QUALIFICATION_LOOKUP } = createQualificationDefinitions(QUALIFICATION_DEFINITION_SEEDS);
+
+const FALLBACK_QUALIFICATION: ResolvedQualification = {
+  key: "livello-non-definito",
+  label: "Livello non definito",
+  shortLabel: "Livello non definito",
+  order: 999,
+  colorClass: "bg-slate-200 text-slate-600 border-slate-200",
+  newLevel: null,
+  oldCode: null,
+  description: null,
+  isFallback: true,
+};
+
+const resolveQualification = (value: string): ResolvedQualification => {
+  const normalizedLabel = normalizeQualificationLabel(value);
+  if (!normalizedLabel) {
+    return { ...FALLBACK_QUALIFICATION };
+  }
+
+  const key = slugify(normalizedLabel);
+  const definition = QUALIFICATION_LOOKUP.get(key);
+
+  if (definition) {
+    return {
+      key: definition.key,
+      label: definition.label,
+      shortLabel: definition.shortLabel,
+      order: definition.order,
+      colorClass: definition.colorClass,
+      newLevel: definition.newLevel,
+      oldCode: definition.oldCode,
+      description: definition.description,
+      isFallback: false,
+    };
+  }
+
+  return {
+    key,
+    label: normalizedLabel,
+    shortLabel: normalizedLabel,
+    order: 999,
+    colorClass: FALLBACK_QUALIFICATION.colorClass,
+    newLevel: null,
+    oldCode: null,
+    description: null,
+    isFallback: true,
+  };
 };
 
 const getQualificationOrder = (qualification: string) =>
-  QUALIFICATION_ORDER[qualification.toLowerCase()] ?? 999;
+  resolveQualification(qualification).order;
 
 // Mappa immagini dipendenti (docs/IMMAGINI/*.png) caricata a build-time
 const employeeImageModules = import.meta.glob("./docs/IMMAGINI/**/*.png", { eager: true, as: "url" }) as Record<string, string>;
@@ -91,15 +375,6 @@ const EMPLOYEE_IMAGE_MAP: Map<string, string> = (() => {
   });
   return map;
 })();
-
-const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    || "non-specificato";
 const parseCsvEmployees = (csvText: string): Employee[] => {
   const lines = csvText.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").slice(1);
   const employees: Employee[] = [];
@@ -107,37 +382,54 @@ const parseCsvEmployees = (csvText: string): Employee[] => {
   lines.forEach((line, index) => {
     if (!line || !line.trim()) return;
     const parts = line.split(";");
-    const name = (parts[0] || "").trim();
+
+    const getPart = (idx: number) => (parts[idx] ?? "").trim();
+
+    const name = getPart(0);
     if (!name) return;
 
-    const flag = (parts[1] || "").trim();
-    const sede = (parts[2] || "").trim();
-    const photo = (parts[3] || "").trim();
-    const department = (parts[4] || "").trim().replace(/^\|/, "").trim();
-    const office = (parts[5] || "").trim().replace(/^\|/, "").trim();
-    const role = (parts[6] || "").trim().replace(/^\|/, "").trim();
-    const qualification = (parts[7] || "").trim();
-    const hasManagerColumn = parts.length >= 12;
-    const managerName = hasManagerColumn ? (parts[8] || "").trim() : "";
-    const orderStr = (parts[hasManagerColumn ? 9 : 8] || "99").trim();
-    const ageStr = (parts[hasManagerColumn ? 10 : 9] || "").trim();
+    const orderStr = getPart(1) || "99";
+    const photo = stripPipePrefix(getPart(2));
+    const flag = stripPipePrefix(getPart(3));
+    const sede = stripPipePrefix(getPart(4)) || FALLBACK_SEDE;
+    const department = normalizeHierarchyValue(parts[5] ?? "");
+    const office = normalizeHierarchyValue(parts[6] ?? "");
+    const role = normalizeHierarchyValue(parts[7] ?? "");
+    const qualificationRaw = parts[8] ?? "";
+    const levelHypotheticalRaw = getPart(9);
+    const ageStr = getPart(10);
+    const genderRaw = parts[11] ?? "";
+    const managerName = stripPipePrefix(parts[12] ?? "");
+    const companyRaw = parts[13] ?? "";
 
+    const resolvedQualification = resolveQualification(qualificationRaw);
     const orderVal = Number.parseInt(orderStr, 10);
     const ageVal = Number.parseInt(ageStr, 10);
 
+    const levelCode = resolvedQualification.newLevel ?? normalizeLevelCode(levelHypotheticalRaw);
+
     employees.push({
-      id: `${name.replace(/\s/g, "-")}-${index}`,
+      id: `${slugify(name)}-${index}`,
       name,
       photo,
       flag,
       department: department || FALLBACK_DEPARTMENT,
       office: office || FALLBACK_OFFICE,
       role: role || "-",
-      qualification,
+      qualification: resolvedQualification.label,
+      qualificationKey: resolvedQualification.key,
+      qualificationOrder: resolvedQualification.order,
+      qualificationDescription: resolvedQualification.description,
+      qualificationColor: resolvedQualification.colorClass,
+      levelShort: resolvedQualification.shortLabel,
+      levelCode,
+      levelHypothetical: levelHypotheticalRaw ? levelHypotheticalRaw : null,
       manager: managerName ? managerName : null,
       order: Number.isNaN(orderVal) ? 99 : orderVal,
-      sede: sede || FALLBACK_SEDE,
+      sede,
       age: Number.isNaN(ageVal) ? null : ageVal,
+      gender: normalizeGender(stripPipePrefix(genderRaw ?? "")),
+      company: normalizeCompany(stripPipePrefix(companyRaw ?? "")),
     });
   });
 
@@ -210,18 +502,68 @@ const createPersonNode = (emp: Employee, context: {
   type: "person",
   metadata: {
     badge: BADGE_BY_TYPE.person,
+    badgeColorClass: emp.qualificationColor,
     sede: context.sede ?? emp.sede ?? FALLBACK_SEDE,
     department: context.department ?? emp.department ?? FALLBACK_DEPARTMENT,
     office: context.office ?? emp.office ?? FALLBACK_OFFICE,
     qualification: emp.qualification || null,
+    qualificationKey: emp.qualificationKey,
+    qualificationDescription: emp.qualificationDescription,
     mansione: emp.role || null,
     age: emp.age,
     order: emp.order,
     flag: emp.flag || null,
-    reportsTo: context.manager ?? null,
+    reportsTo: context.manager ?? emp.manager ?? null,
+    company: emp.company ?? null,
+    gender: emp.gender ?? null,
+    level: emp.levelShort ?? emp.qualification ?? null,
+    levelCode: emp.levelCode,
+    levelHypothetical: emp.levelHypothetical,
   },
   children: undefined,
 });
+
+const createManualEmployee = (data: {
+  id: string;
+  name: string;
+  photo?: string;
+  flag?: string;
+  department: string;
+  office: string;
+  role: string;
+  qualification: string;
+  manager: string | null;
+  order: number;
+  sede: string;
+  age?: number | null;
+  company?: string | null;
+}): Employee => {
+  const resolvedQualification = resolveQualification(data.qualification);
+
+  return {
+    id: data.id,
+    name: data.name,
+    photo: data.photo ?? "",
+    flag: data.flag ?? "",
+    department: data.department,
+    office: data.office,
+    role: data.role,
+    qualification: resolvedQualification.label,
+    qualificationKey: resolvedQualification.key,
+    qualificationOrder: resolvedQualification.order,
+    qualificationDescription: resolvedQualification.description,
+    qualificationColor: resolvedQualification.colorClass,
+    levelShort: resolvedQualification.shortLabel,
+    levelCode: resolvedQualification.newLevel,
+    levelHypothetical: null,
+    manager: data.manager,
+    order: data.order,
+    sede: data.sede,
+    age: data.age ?? null,
+    gender: null,
+    company: data.company ?? null,
+  };
+};
 
 const applyMetadata = (node: Node, updates: Partial<NodeMetadata>): Node => ({
   ...node,
@@ -293,6 +635,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
                   sede: sedeName,
                   department: departmentName,
                   office: officeName,
+                  manager: emp.manager ?? null,
                 })
               );
 
@@ -494,6 +837,65 @@ const buildOrgTree = (employees: Employee[]): Node => {
     people: employees.length,
   };
 
+  const boardMembers: Employee[] = [
+    createManualEmployee({
+            id: "giuseppe-reggiani-refa",
+            name: "Giuseppe Reggiani",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Presidente",
+            qualification: "dirigente",
+            manager: null,
+            order: 1,
+            sede: "CTH_ITALY",
+      company: "REFA",
+    }),
+    createManualEmployee({
+            id: "simone-cervi-refa",
+            name: "Simone Cervi",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Consigliere",
+            qualification: "dirigente",
+            manager: "Giuseppe Reggiani",
+            order: 1,
+            sede: "CTH_ITALY",
+      company: "REFA",
+    }),
+    createManualEmployee({
+            id: "enrico-reggiani-refa",
+            name: "Enrico Reggiani",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Consigliere",
+            qualification: "dirigente",
+            manager: "Giuseppe Reggiani",
+            order: 1,
+            sede: "CTH_ITALY",
+      company: "REFA",
+    }),
+    createManualEmployee({
+            id: "umberto-reggiani-refa",
+            name: "Umberto Reggiani",
+            photo: "",
+            flag: "it",
+            department: "REFA",
+            office: "Board",
+            role: "Consigliere",
+            qualification: "dirigente",
+            manager: "Giuseppe Reggiani",
+            order: 1,
+            sede: "CTH_ITALY",
+      company: "REFA",
+    }),
+  ];
+
   const rootNode: Node = {
     id: ROOT_ID,
     name: "REFA",
@@ -530,64 +932,15 @@ const buildOrgTree = (employees: Employee[]): Node => {
           stats: { offices: 0, people: 4 },
         },
         isExpanded: false,
-        children: [
-          createPersonNode({
-            id: "giuseppe-reggiani-refa",
-            name: "Giuseppe Reggiani",
-            photo: "",
-            flag: "it",
+        children: boardMembers.map((member) =>
+          createPersonNode(member, {
+            location: "Globale",
+            sede: "Globale",
             department: "REFA",
             office: "Board",
-            role: "Presidente",
-            qualification: "dirigente",
-            manager: null,
-            order: 1,
-            sede: "CTH_ITALY",
-            age: null,
-          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: null }),
-          createPersonNode({
-            id: "simone-cervi-refa",
-            name: "Simone Cervi",
-            photo: "",
-            flag: "it",
-            department: "REFA",
-            office: "Board",
-            role: "Consigliere",
-            qualification: "dirigente",
-            manager: "Giuseppe Reggiani",
-            order: 1,
-            sede: "CTH_ITALY",
-            age: null,
-          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: "Giuseppe Reggiani" }),
-          createPersonNode({
-            id: "enrico-reggiani-refa",
-            name: "Enrico Reggiani",
-            photo: "",
-            flag: "it",
-            department: "REFA",
-            office: "Board",
-            role: "Consigliere",
-            qualification: "dirigente",
-            manager: "Giuseppe Reggiani",
-            order: 1,
-            sede: "CTH_ITALY",
-            age: null,
-          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: "Giuseppe Reggiani" }),
-          createPersonNode({
-            id: "umberto-reggiani-refa",
-            name: "Umberto Reggiani",
-            photo: "",
-            flag: "it",
-            department: "REFA",
-            office: "Board",
-            role: "Consigliere",
-            qualification: "dirigente",
-            manager: "Giuseppe Reggiani",
-            order: 1,
-            sede: "CTH_ITALY",
-            age: null,
-          }, { location: "Globale", sede: "Globale", department: "REFA", office: "Board", manager: "Giuseppe Reggiani" }),
-        ]
+            manager: member.manager,
+          })
+        )
       },
       ...rootChildren
     ],
@@ -707,75 +1060,17 @@ const buildRoleTree = (employees: Employee[]): Node => {
     }
   });
 
-  // 4. Crea sotto-gerarchie intelligenti per uffici
-  // Logica: Responsabile → [Impiegato direttivo, Specialista, Impiegato qualificato, Impiegato esecutivo] sulla stessa riga
-  //         Operai (livelli 8+) vanno sotto il più alto disponibile tra 4-7, o direttamente sotto responsabile
-  nodesByName.forEach(managerNode => {
-    if (!managerNode.children || managerNode.children.length <= 1) return;
-
-    const managerQual = managerNode.metadata?.qualification || '';
-    const managerLevel = getQualificationOrder(managerQual);
-
-    // Se il manager è un Responsabile di team/area (livello 3) o simile
-    if (managerLevel <= 3) {
-      // Raggruppa i figli per ufficio
-      const childrenByOffice = new Map<string, Node[]>();
-      managerNode.children.forEach(child => {
-        const office = child.metadata?.office || 'Non specificato';
-        if (!childrenByOffice.has(office)) {
-          childrenByOffice.set(office, []);
-        }
-        childrenByOffice.get(office)!.push(child);
-      });
-
-      // Per ogni ufficio, organizza la gerarchia
-      childrenByOffice.forEach((officeChildren, office) => {
-        if (officeChildren.length <= 1) return;
-
-        // Separa i livelli 4-7 (impiegati) dai livelli 8+ (operai)
-        const supervisors: Node[] = []; // Livelli 4-7: Impiegato direttivo, Specialista, Qualificato, Esecutivo
-        const workers: Node[] = [];     // Livelli 8+: Operai
-
-        officeChildren.forEach(child => {
-          const childQual = child.metadata?.qualification || '';
-          const childLevel = getQualificationOrder(childQual);
-          
-          if (childLevel >= 4 && childLevel <= 7) {
-            supervisors.push(child);
-          } else if (childLevel >= 8) {
-            workers.push(child);
-          }
-        });
-
-        // Se ci sono operai e supervisori
-        if (workers.length > 0 && supervisors.length > 0) {
-          // Rimuovi tutti i figli di questo ufficio dal manager
-          managerNode.children = managerNode.children!.filter(
-            child => !officeChildren.includes(child)
-          );
-
-          // Ordina i supervisori per livello
-          const sortedSupervisors = supervisors.sort((a, b) => {
-            const levelA = getQualificationOrder(a.metadata?.qualification || '');
-            const levelB = getQualificationOrder(b.metadata?.qualification || '');
-            return levelA - levelB;
-          });
-
-          // Aggiungi tutti i supervisori (4-7) come figli diretti del manager (stessa riga)
-          managerNode.children!.push(...sortedSupervisors);
-
-          // Trova il supervisore più alto (livello più basso numericamente)
-          const topSupervisor = sortedSupervisors[0];
-
-          // Aggiungi gli operai sotto il supervisore più alto
-          if (!topSupervisor.children) {
-            topSupervisor.children = [];
-          }
-          topSupervisor.children.push(...workers);
-        }
-      });
-    }
-  });
+  // 4. DISABILITATO: Rispettiamo esattamente i manager dal CSV
+  // La logica di riorganizzazione automatica è stata disabilitata per rispettare
+  // le assegnazioni manager-dipendente esattamente come specificate nel file CSV.
+  // Ogni dipendente resta sotto il suo manager diretto come indicato nella colonna "RESPONSABILE ASSEGNATO".
+  
+  // Codice precedente commentato per riferimento:
+  // nodesByName.forEach(managerNode => {
+  //   if (!managerNode.children || managerNode.children.length <= 1) return;
+  //   ...
+  //   // Logica che riorganizzava automaticamente gli operai sotto i supervisori
+  // });
 
   // 5. Trova il vero CEO (dirigente con order=1 o Giuseppe Reggiani)
   const ceo = employees.find((emp) => 

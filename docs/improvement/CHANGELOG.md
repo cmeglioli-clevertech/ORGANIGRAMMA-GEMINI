@@ -1,5 +1,67 @@
 # CHANGELOG - Miglioramenti Organigramma Clevertech
 
+## Versione 4.1.6 - 1 Ottobre 2025 🐛 FIX CSV DATA
+
+### 🔧 Correzione dati CSV
+- **Fix nome manager**: Corretto "Cristian Bisogni" → "Christian Bisogni" nel campo RESPONSABILE ASSEGNATO
+- **Ripristinati sottoposti**: Mohamed Kouki, Davide Salsi e John Feeley ora correttamente assegnati
+- **Consistenza dati**: Allineamento nome manager con nome persona nel CSV
+
+## Versione 4.1.5 - 1 Ottobre 2025 🔧 FIELD OPTIMIZATION
+
+### 📋 Ottimizzazione campi informativi
+- **Rimossa sede dalle info**: Eliminata ridondanza, la sede è già visibile con bandiera e nome sopra
+- **Aggiunto campo "Competenze chiave"**: Predisposto campo vuoto per futura implementazione
+- **Layout più pulito**: Riduzione ridondanze per interfaccia più snella
+
+## Versione 4.1.4 - 1 Ottobre 2025 🔤 BADGE REFINEMENT
+
+### 📏 Ottimizzazione dimensione testo badge
+- **Qualifica completa nel badge**: Ripristinata la visualizzazione della qualifica completa
+- **Font ridotto a 10px**: Dimensione carattere ottimizzata per contenere qualifiche lunghe
+- **Rimozione dal sottotitolo**: La qualifica non appare più sotto il nome, solo la mansione
+- **Font-weight semibold**: Ridotto da bold per migliorare la leggibilità a dimensioni ridotte
+
+## Versione 4.1.3 - 1 Ottobre 2025 🏷️ BADGE OPTIMIZATION
+
+### 🎨 Ottimizzazione badge e layout
+- **Badge abbreviati**: Utilizzate etichette corte (es. "QUADRO" invece di "DIRETTIVO (QUADRO / GESTIONE DEL CAMBIAMENTO)")
+- **Qualifica completa nel sottotitolo**: La qualifica estesa ora appare sotto il nome della persona
+- **Rimozione ridondanza**: Eliminata la qualifica dalle info della scheda poiché già visibile nel sottotitolo
+- **Badge responsive**: Aggiunto `whitespace-nowrap` e padding ottimizzato per evitare overflow
+
+## Versione 4.1.2 - 1 Ottobre 2025 📦 CSV COMPLIANCE
+
+### 🔄 Ripristino gerarchia da CSV
+- **Disabilitata la riorganizzazione automatica**: La vista Ruoli ora rispetta esattamente i manager assegnati nel CSV
+- **Rimossa logica intelligente**: Gli operai restano sotto il loro manager diretto, non vengono più spostati automaticamente sotto i supervisori
+- **Allineamento con dati HR**: La gerarchia riflette ora esattamente la struttura formale aziendale dal file CSV
+
+## Versione 4.1.1 - 1 Ottobre 2025 🆙 UI OPTIMIZATION
+
+### 📏 Ottimizzazione layout schede
+- Aumentata altezza schede da 480px a **528px** (h-[33rem]) per contenere correttamente tutte le informazioni
+- Rimosse ridondanze: eliminati "Livello", "Livello ipotetico" e "Descrizione livello" (informazioni già presenti in "Qualifica")
+- Semplificato "Responsabile assegnato" in "Responsabile"
+
+## Versione 4.1.0 - 1 Ottobre 2025 🗂️ DATA REFRESH
+
+### 📊 Integrazione nuovi dataset HR
+- Parsing CSV aggiornato ai file `docs/New_files` con supporto per **Responsabile assegnato**, **Azienda**, **Sesso** e livello ipotetico (`LV.`).
+- Normalizzazione automatica dei valori con rimozione dei prefissi `|` e gestione fallback per campi mancanti.
+
+### 🏷️ Tassonomia 2021 delle qualifiche
+- Mappatura ufficiale dei **12 livelli** (Dirigente → Apprendista operaio) con ordine, codice CCNL e descrizioni aggiornate.
+- Badge e colori allineati alla nuova tassonomia, inclusi sinonimi legacy per retrocompatibilità.
+
+### 🧾 Card persona arricchite
+- Visualizzazione di **Livello** (codice), **Azienda**, **Sesso**, **Responsabile** per ogni dipendente.
+- Informazioni essenziali senza ridondanza.
+
+### 🔄 Coerenza gerarchica
+- Uniformata la logica di ordinamento e di assegnazione manageriale utilizzando la nuova tassonomia.
+- Board REFA adeguato con metadata completi e colori coerenti.
+
 ## Versione 4.0.0 - 29 Settembre 2025 🎨 FINAL PRODUCTION RELEASE
 
 ### 🎨 Sistema Schede Professionale Implementato

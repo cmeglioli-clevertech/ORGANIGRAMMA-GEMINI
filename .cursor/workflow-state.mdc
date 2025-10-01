@@ -1,10 +1,18 @@
 # Workflow State - Organigramma Clevertech
 
 ## State
+**Workflow Stage**: VALIDATE *(2025-10-01)*  
 **Current Phase**: PRODUCTION READY ✅  
-**Last Updated**: 2025-09-29  
-**Project**: Interactive Organizational Chart for Clevertech - v4.0.0 FINAL
-**Status**: Complete Implementation with Professional Card System
+**Last Updated**: 2025-10-01  
+**Project**: Interactive Organizational Chart for Clevertech - v4.1.5 FIELD OPTIMIZATION
+**Status**: Complete Implementation with Optimized Information Fields
+
+## Plan
+1. Allineare `parseCsvEmployees` e l'interfaccia `Employee` al nuovo CSV, normalizzando valori (pipe iniziali, manager assegnato, livello ipotetico, sesso, azienda) e propagando i metadati aggiuntivi nei nodi.
+2. Derivare una mappatura coerente dalle nuove qualifiche (`Livelli e Qualifiche.xlsx`) per aggiornare ordine, colori e fallback delle badge in `App.tsx` e `OrgChartNode.tsx`, mantenendo retrocompatibilità.
+3. Estendere `NodeMetadata` e le card per mostrare le informazioni aggiuntive (livello, azienda, responsabile assegnato, sesso) garantendo consistenza in ricerca, filtri e statistica dei nodi.
+4. Validare il nuovo dataset aggiornando pipeline/script se necessario e sincronizzando filtri/ricerca con i nomi normalizzati.
+5. Eseguire `npm run build` per il controllo finale e aggiornare README, changelog e questa `workflow-state.mdc` con log sintetico delle modifiche.
 
 ## Context
 Sistema organigramma interattivo **production-ready** per Clevertech con 467 dipendenti. Implementazione completa con sistema schede avanzato, badge colorati per 13 qualifiche, interfaccia integrata e massimizzata, ricerca fuzzy, filtri intelligenti e assegnazione dipendenti basata su algoritmo di punteggio.
@@ -153,6 +161,40 @@ App.tsx                    // State management + tree building
 - **add-responsabili.cjs**: Legacy script (maintained for compatibility)
 
 ## Log
+
+### 2025-10-01 - FIELD OPTIMIZATION v4.1.5 ✅
+- ✅ **SEDE RIMOSSA**: Eliminata la sede dalle info card (già visibile con bandiera sopra)
+- ✅ **COMPETENZE CHIAVE**: Aggiunto campo vuoto per futura implementazione delle competenze
+- ✅ **INTERFACCIA PULITA**: Ridotte ridondanze per un layout più snello e leggibile
+
+### 2025-10-01 - BADGE REFINEMENT v4.1.4 ✅
+- ✅ **QUALIFICA COMPLETA NEL BADGE**: Ripristinata la visualizzazione della qualifica estesa
+- ✅ **FONT 10PX**: Dimensione carattere ridotta per contenere qualifiche lunghe
+- ✅ **SOLO MANSIONE NEL SOTTOTITOLO**: Rimossa la qualifica dal sottotitolo, ora mostra solo la mansione
+- ✅ **FONT SEMIBOLD**: Peso del font ottimizzato per leggibilità a dimensioni ridotte
+
+### 2025-10-01 - BADGE OPTIMIZATION v4.1.3 ✅
+- ✅ **BADGE ABBREVIATI**: Etichette corte per evitare overflow (QUADRO, TEC. SPECIAL., OP. QUALIF. etc.)
+- ✅ **QUALIFICA NEL SOTTOTITOLO**: Qualifica completa spostata sotto il nome della persona
+- ✅ **INFO CARD OTTIMIZZATE**: Rimossa la qualifica dalle info della scheda (ridondanza eliminata)
+- ✅ **LAYOUT BADGE RESPONSIVE**: Padding e whitespace-nowrap per badge sempre leggibili
+
+### 2025-10-01 - CSV COMPLIANCE v4.1.2 ✅
+- ✅ **GERARCHIA RISPETTATA**: Disabilitata la riorganizzazione automatica degli operai sotto i supervisori
+- ✅ **MANAGER DA CSV**: Ogni dipendente resta sotto il manager specificato nella colonna "RESPONSABILE ASSEGNATO"
+- ✅ **STRUTTURA FORMALE**: La vista Ruoli ora riflette esattamente la gerarchia aziendale dal CSV
+
+### 2025-10-01 - UI OPTIMIZATION v4.1.1 ✅
+- ✅ **LAYOUT SCHEDE CORRETTO**: Altezza aumentata a 528px (h-[33rem]) per contenere tutte le informazioni senza overflow
+- ✅ **RIMOSSE RIDONDANZE**: Eliminati "Livello", "Livello ipotetico" e "Descrizione livello" (info già presenti nella qualifica)
+- ✅ **RESPONSABILE SEMPLIFICATO**: Label ridotto da "Responsabile assegnato" a "Responsabile"
+
+### 2025-10-01 - DATA REFRESH v4.1.0 ✅
+- ✅ **PARSING CSV AGGIORNATO**: Supporto completo per nuovi campi (RESPONSABILE ASSEGNATO, AZIENDA, Sesso, LV.) con normalizzazione automatica
+- ✅ **TASSONOMIA QUALIFICHE 2021**: 12 livelli ufficiali con mapping codici CCNL (DIR, A1, B3...) e descrizioni dettagliate
+- ✅ **CARD PERSONA ARRICCHITE**: Visualizzazione livello, azienda, sesso, responsabile per ogni dipendente
+- ✅ **BUILD VALIDATO**: Compilazione di produzione verificata con successo (355KB JS gzippato)
+- ✅ **DOCUMENTAZIONE AGGIORNATA**: README, CHANGELOG e ARCHITECTURE allineati ai nuovi dataset
 
 ### 2025-09-29 - FINAL RELEASE v4.0.0
 - ✅ **PROFESSIONAL CARD SYSTEM**: Complete redesign with 13-color qualification badges

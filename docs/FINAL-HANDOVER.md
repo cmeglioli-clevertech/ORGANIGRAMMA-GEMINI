@@ -41,7 +41,7 @@
 ## 📁 **FINAL CODEBASE STRUCTURE**
 
 ### **🎯 Core Files (467 righe → Pulite e Ottimizzate)**
-
+```
 📄 App.tsx (1,076 righe)
 ├── ✅ Smart assignment logic (buildRoleTree)
 ├── ✅ Location hierarchy (buildOrgTree) 
@@ -58,9 +58,10 @@
 ├── ✅ Complete type definitions
 ├── ✅ NodeType (8 types)
 └── ✅ NodeMetadata (extended)
+```
 
 ### **🔧 Supporting Components**
-
+```
 📂 hooks/
 ├── useOrgSearch.ts    # Fuzzy search with <100ms performance
 └── useFilters.ts      # Multi-criteria filtering logic
@@ -75,27 +76,30 @@
 ├── update-csv-from-excel.mjs  # Excel data conversion
 ├── capture-screenshots.mjs    # Automated testing utility
 └── add-responsabili.cjs       # Legacy script (maintained)
+```
 
 ---
 
 ## 📊 **DOCUMENTATION COMPLETE**
 
 ### **📚 Documentation Set**
-
+```
 ✅ README.md                   # Complete project overview + quick start
 ✅ docs/AI-AGENT-GUIDE.md      # Specific guide for AI collaboration
 ✅ docs/ARCHITECTURE.md        # Technical implementation details
 ✅ docs/PROJECT-STATUS.md      # Final project status and achievements  
 ✅ .cursor/workflow-state.mdc  # Latest workflow state for AI agents
 ✅ docs/improvement/CHANGELOG.md # Complete version history
+```
 
 ### **🧹 Cleaned Codebase**
-
+```
 ❌ REMOVED: 20+ temporary test/analysis scripts
 ❌ REMOVED: Duplicate CSV/Excel files from docs/
 ❌ REMOVED: Obsolete image files and unused constants  
 ❌ REMOVED: Dead code and unused imports
 ✅ KEPT: Only essential utilities and documentation
+```
 
 ---
 

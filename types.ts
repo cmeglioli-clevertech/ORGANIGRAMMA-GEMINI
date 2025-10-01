@@ -2,10 +2,13 @@ export type NodeType = "root" | "ceo" | "sede" | "department" | "office" | "pers
 
 export interface NodeMetadata {
   badge?: string;
+  badgeColorClass?: string | null;
   sede?: string;
   department?: string;
   office?: string;
   qualification?: string | null;
+  qualificationKey?: string | null;
+  qualificationDescription?: string | null;
   mansione?: string | null;
   age?: number | null;
   order?: number | null;
@@ -13,6 +16,11 @@ export interface NodeMetadata {
   officePurpose?: string;
   flag?: string | null;
   reportsTo?: string | null;
+  company?: string | null;
+  gender?: string | null;
+  level?: string | null;
+  levelCode?: string | null;
+  levelHypothetical?: string | null;
 }
 
 export interface Node {

@@ -2,15 +2,15 @@
 
 ## 📋 **System Overview - Final Implementation**
 
-Sistema **production-ready** che trasforma dati Excel/CSV in organigramma interattivo con **sistema professionale di schede**, **badge colorati per 13 qualifiche**, **interfaccia massimizzata** e **assegnazione intelligente dipendenti**.
+Sistema **production-ready** che trasforma dati Excel/CSV in organigramma interattivo con **sistema professionale di schede**, **badge colorati per 12 qualifiche**, **interfaccia massimizzata** e **assegnazione intelligente dipendenti**.
 
 **Performance**: 467 dipendenti, <2s caricamento, <100ms ricerca  
-**UI**: 99% utilizzo schermo, schede uniformi 320×480px, badge centrati  
+**UI**: 99% utilizzo schermo, schede uniformi 320×528px, badge centrati  
 **Features**: Ricerca fuzzy + filtri + zoom/pan + export + smart assignment
 
 ## 🎨 **Professional Card System Architecture**
 
-### **Badge Color System (13 Qualifications)**
+### **Badge Color System (12 Qualifications)**
 ```typescript
 // Sistema colori distintivi per qualifiche
 const qualificationColors: Record<string, string> = {
@@ -40,10 +40,10 @@ if ((node.type === "person" || node.type === "ceo") && node.metadata?.qualificat
 ```typescript
 // All cards exactly same dimensions
 const CardLayout = {
-  dimensions: "w-80 h-[30rem]",     // 320px × 480px uniform
+  dimensions: "w-80 h-[33rem]",     // 320px × 528px uniform
   badge: "absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2", // Centered on border
-  content: "h-60",                  // Fixed content area
-  info: "min-h-[6rem]",            // Expandable info area (no scroll)
+  content: "h-72",                  // Fixed content area
+  info: "min-h-[6rem]",            // Optimized info area
   spacing: "pt-20",                // Tree branch spacing to avoid overlaps
 };
 
@@ -275,7 +275,7 @@ export default defineConfig({
 **Implementation**: `w-80 h-[30rem]` with fixed content areas
 
 ### **2. Badge Color Coding**
-**Decision**: 13 distinctive colors for qualifications  
+**Decision**: 12 distinctive colors for qualifications  
 **Rationale**: Immediate visual recognition of hierarchy levels  
 **Implementation**: `qualificationColors` mapping with Tailwind color classes
 
@@ -338,7 +338,6 @@ const fuseOptions = {
 ## 📊 **Data Architecture**
 
 ### **Complete Data Flow**
-
 ```
 Excel Files (.xlsx)                    [HR Source Data]
     ↓ scripts/update-csv-from-excel.mjs
@@ -356,15 +355,25 @@ Professional Card System               [Visual Implementation]
 interface Employee {
   id: string;              // Generated unique identifier
   name: string;            // Full employee name
-  qualification: string;   // One of 13 qualification levels
-  order: number;          // Hierarchy order (1-99)
-  department: string;     // Department assignment
-  office: string;         // Office/team assignment  
-  sede: string;           // Physical location (CTH_ITALY, CTH_CHINA, etc.)
-  mansione: string;       // Specific job function
-  age: number | null;     // Employee age
-  flag: string;           // Country flag identifier
-  photo: string;          // Photo URL (currently placeholder)
+  photo: string;           // Photo filename or URL
+  flag: string;            // Country flag identifier
+  department: string;      // Department assignment
+  office: string;          // Office/team assignment  
+  role: string;            // Specific job function
+  qualification: string;   // One of 12 qualification levels (tassonomia 2021)
+  qualificationKey: string; // Slug/lookup key for colors & ordering
+  qualificationOrder: number; // Hierarchy order from qualification
+  qualificationDescription: string | null; // Description from reference
+  qualificationColor: string; // Tailwind classes for badge style
+  levelShort: string | null;  // Short label (e.g. "Tecnico specializzato")
+  levelCode: string | null;   // CCNL code (es. DIR, A1, B3...)
+  levelHypothetical: string | null; // Legacy "LV." value from dataset
+  manager: string | null;     // Assigned manager
+  order: number;              // Numeric ordering column from CSV
+  sede: string;               // Physical location (CTH_ITALY, CTH_CHINA, ...)
+  age: number | null;         // Employee age
+  gender: string | null;      // Gender (M/F/Altro)
+  company: string | null;     // Azienda/gruppo di appartenenza
 }
 
 // Converted to Node structure for UI
@@ -423,7 +432,7 @@ const ViewModes = {
   },
   role: {
     purpose: "Managerial hierarchy with smart assignment", 
-    hierarchy: "CEO → Direttori → Responsabili → 13 qualification levels",
+    hierarchy: "CEO → Direttori → Responsabili → 12 qualification levels",
     builder: "buildRoleTree()",
     usage: "Reporting structure, career progression, management analysis"
   }
@@ -471,7 +480,7 @@ const isVisibilityNarrowed = isSearchNarrowed || isFilterNarrowed;
   --specialista: #bbf7d0;      /* Green - Technical expertise */
   --qualificato: #e9d5ff;      /* Purple - Skilled employees */
   --esecutivo: #a7f3d0;        /* Cyan - Operational roles */
-  /* ... continues for all 13 levels */
+  /* ... continues for all 12 levels */
 }
 
 /* Card System Consistency */
@@ -536,7 +545,7 @@ const PerformanceTargets = {
 const TestScenarios = {
   cardUniformity: "All 467 employee cards exactly 320×480px",
   badgePositioning: "All badges centered on top border with -translate-y-1/2",
-  colorDistinction: "13 qualification colors visually distinctive",
+  colorDistinction: "12 qualification colors visually distinctive",
   smartAssignment: "Popovich under Kouki (CTH_ITALY) not Feeley (CTH_NORTH_AMERICA)",
   searchPerformance: "Find any employee in < 100ms",
   filterCombination: "Search + filters work together without conflicts",
@@ -584,7 +593,7 @@ interface ExtensionPoints {
 
 ### **🏆 Technical Excellence**
 - **Smart Algorithms**: Business-logic-based employee assignment
-- **Visual System**: 13-color professional badge system with uniform cards
+- **Visual System**: 12-color professional badge system with uniform cards
 - **User Experience**: Maximized interface with integrated controls
 - **Data Processing**: Efficient Excel→CSV→Tree→UI pipeline
 - **Search Performance**: Sub-100ms fuzzy search for 467 employees

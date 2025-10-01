@@ -25,21 +25,48 @@ const badgeColours: Record<Node["type"], string> = {
   "role-group": "bg-emerald-100 text-emerald-700",
 };
 
-// Colori specifici per qualifiche (13 livelli)
+const QUALIFICATION_BADGE_FALLBACK = "bg-slate-200 text-slate-600 border-slate-200";
+
+// Colori specifici per qualifiche (nuova tassonomia + retrocompatibilità)
 const qualificationColors: Record<string, string> = {
-  "dirigente": "bg-red-100 text-red-800 border-red-200",
+  dirigente: "bg-red-100 text-red-800 border-red-200",
+  "direttivo (quadro / gestione del cambiamento)": "bg-orange-100 text-orange-800 border-orange-200",
+  "direttivo-quadro-gestione-del-cambiamento": "bg-orange-100 text-orange-800 border-orange-200",
   "quadro / direttore": "bg-orange-100 text-orange-800 border-orange-200",
+  "quadro-direttore": "bg-orange-100 text-orange-800 border-orange-200",
+  quadro: "bg-orange-100 text-orange-800 border-orange-200",
+  "direttivo (responsabile di team/processi)": "bg-yellow-100 text-yellow-800 border-yellow-200",
+  "direttivo-responsabile-di-team-processi": "bg-yellow-100 text-yellow-800 border-yellow-200",
   "responsabile di team/area": "bg-yellow-100 text-yellow-800 border-yellow-200",
+  "direttivo (tecnico/organizzativo)": "bg-blue-100 text-blue-800 border-blue-200",
+  "direttivo-tecnico-organizzativo": "bg-blue-100 text-blue-800 border-blue-200",
   "impiegato direttivo": "bg-blue-100 text-blue-800 border-blue-200",
+  "tecnico specializzato": "bg-green-100 text-green-800 border-green-200",
+  "tecnico-specializzato": "bg-green-100 text-green-800 border-green-200",
   "specialista (impiegatizio/tecnico)": "bg-green-100 text-green-800 border-green-200",
+  "specialista impiegatizio": "bg-green-100 text-green-800 border-green-200",
+  "specialista tecnico": "bg-green-100 text-green-800 border-green-200",
+  specialista: "bg-green-100 text-green-800 border-green-200",
+  "tecnico qualificato": "bg-purple-100 text-purple-800 border-purple-200",
+  "tecnico-qualificato": "bg-purple-100 text-purple-800 border-purple-200",
   "impiegato qualificato": "bg-purple-100 text-purple-800 border-purple-200",
+  "tecnico esecutivo": "bg-cyan-100 text-cyan-800 border-cyan-200",
+  "tecnico-esecutivo": "bg-cyan-100 text-cyan-800 border-cyan-200",
   "impiegato esecutivo": "bg-cyan-100 text-cyan-800 border-cyan-200",
-  "apprendista impiegato": "bg-lime-100 text-lime-800 border-lime-200",
+  "operativo specializzato": "bg-amber-100 text-amber-800 border-amber-200",
+  "operativo-specializzato": "bg-amber-100 text-amber-800 border-amber-200",
   "operaio specializzato": "bg-amber-100 text-amber-800 border-amber-200",
+  "operativo qualificato": "bg-rose-100 text-rose-800 border-rose-200",
+  "operativo-qualificato": "bg-rose-100 text-rose-800 border-rose-200",
   "operaio qualificato": "bg-rose-100 text-rose-800 border-rose-200",
+  "operativo base": "bg-gray-100 text-gray-800 border-gray-200",
+  "operativo-base": "bg-gray-100 text-gray-800 border-gray-200",
   "operaio comune": "bg-gray-100 text-gray-800 border-gray-200",
-  "operaio generico": "bg-slate-100 text-slate-700 border-slate-200",
+  "operaio generico": "bg-gray-100 text-gray-800 border-gray-200",
+  "apprendista impiegato": "bg-lime-100 text-lime-800 border-lime-200",
+  "apprendista-impiegato": "bg-lime-100 text-lime-800 border-lime-200",
   "apprendista operaio": "bg-stone-100 text-stone-800 border-stone-200",
+  "apprendista-operaio": "bg-stone-100 text-stone-800 border-stone-200",
 };
 
 const borderColours: Record<Node["type"], string> = {
@@ -86,15 +113,26 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   const showChildren = effectiveIsExpanded && childrenToRender.length > 0;
 
   // Badge con colori specifici per qualifiche
-  const badge = (node.type === "person" || node.type === "ceo") 
+  const isPersonNode = node.type === "person" || node.type === "ceo";
+
+  const badge = isPersonNode 
     ? (node.metadata?.qualification ?? "N/D")
     : (node.metadata?.badge ?? node.type.toUpperCase());
   
   // Usa colori specifici per qualifiche se è una persona
   let badgeClass: string;
-  if ((node.type === "person" || node.type === "ceo") && node.metadata?.qualification) {
-    const qualificationKey = node.metadata.qualification.toLowerCase();
-    badgeClass = qualificationColors[qualificationKey] ?? "bg-slate-200 text-slate-600 border-slate-200";
+  if (isPersonNode) {
+    if (node.metadata?.badgeColorClass) {
+      badgeClass = node.metadata.badgeColorClass;
+    } else if (node.metadata?.qualificationKey) {
+      const qualificationKey = node.metadata.qualificationKey.toLowerCase();
+      badgeClass = qualificationColors[qualificationKey] ?? QUALIFICATION_BADGE_FALLBACK;
+    } else if (node.metadata?.qualification) {
+      const qualificationKey = node.metadata.qualification.toLowerCase();
+      badgeClass = qualificationColors[qualificationKey] ?? QUALIFICATION_BADGE_FALLBACK;
+    } else {
+      badgeClass = QUALIFICATION_BADGE_FALLBACK;
+    }
   } else {
     badgeClass = badgeColours[node.type] ?? "bg-slate-200 text-slate-600";
   }
@@ -220,18 +258,36 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
       break;
 
     case "person":
-      // Persona: Informazioni complete dipendente
-      infoItems.push({ label: "Qualifica", value: node.metadata?.qualification || "N/D" });
-      infoItems.push({ label: "Età", value: age });
-      infoItems.push({ label: "Sede", value: node.metadata?.sede || "N/D" });
-      if (stats?.directs !== undefined) {
-        addStat("Diretti", stats.directs);
-        addStat("Report totali", stats.totalReports);
-      } else {
-        infoItems.push({ label: "Diretti", value: "0" });
-        infoItems.push({ label: "Report totali", value: "0" });
+      {
+        // Qualifica rimossa dalle info perché già nel badge
+        if (node.metadata?.company) {
+          infoItems.push({ label: "Azienda", value: node.metadata.company });
+        }
+
+        // Sede rimossa dalle info perché già visibile sopra con la bandiera
+        infoItems.push({ label: "Età", value: age });
+
+        const gender = node.metadata?.gender;
+        if (gender) {
+          const genderLabel = gender === "M" ? "Maschio" : gender === "F" ? "Femmina" : gender;
+          infoItems.push({ label: "Sesso", value: genderLabel });
+        }
+
+        if (stats?.directs !== undefined) {
+          addStat("Diretti", stats.directs);
+          addStat("Report totali", stats.totalReports);
+        } else {
+          infoItems.push({ label: "Diretti", value: "0" });
+          infoItems.push({ label: "Report totali", value: "0" });
+        }
+
+        if (reportsTo) {
+          infoItems.push({ label: "Responsabile", value: reportsTo });
+        }
+
+        // Campo competenze chiave (per futura implementazione)
+        infoItems.push({ label: "Competenze chiave", value: "" });
       }
-      infoItems.push({ label: "Compiti", value: "" }); // Placeholder per future implementazioni
       break;
 
     case "qualification":
@@ -269,13 +325,13 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
     <div className={`flex flex-col items-center ${depth > 0 ? "tree-branch" : ""}`}>
       <div
         ref={(el) => registerNodeElem?.(node.id, el)}
-        className={`relative flex flex-col w-80 h-[30rem] rounded-2xl border bg-white shadow-lg transition-all duration-300 pb-10 ${borderClass} ${
+        className={`relative flex flex-col w-80 h-[33rem] rounded-2xl border bg-white shadow-lg transition-all duration-300 pb-10 ${borderClass} ${
           shouldHighlight
             ? "ring-4 ring-amber-300 ring-offset-2 ring-offset-white"
             : "ring-1 ring-slate-100"
         }`}
       >
-        <span className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full px-2 py-0.5 text-xs font-bold uppercase tracking-tight shadow border ${badgeClass}`}>
+        <span className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-tight shadow border whitespace-nowrap ${badgeClass}`}>
           {badge}
         </span>
 

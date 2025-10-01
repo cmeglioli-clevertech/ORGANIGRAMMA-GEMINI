@@ -17,21 +17,20 @@ Una **webapp interattiva completa** per visualizzare e gestire l'organigramma az
 
 ## 🎨 **Sistema Schede Professionale**
 
-### **🏷️ Badge Colorati per Qualifiche (13 livelli)**
+### **🏷️ Badge Colorati per Qualifiche (12 livelli)**
 ```
-🔴 Dirigente               → Rosso intenso
-🟠 Quadro / Direttore      → Arancione
-🟡 Responsabile team/area  → Giallo
-🔵 Impiegato direttivo     → Blu
-🟢 Specialista            → Verde
-🟣 Impiegato qualificato   → Viola
-🔵 Impiegato esecutivo     → Ciano
-🟡 Apprendista impiegato   → Verde lime
-🟠 Operaio specializzato   → Ambra
-🔴 Operaio qualificato     → Rosa
-⚫ Operaio comune          → Grigio scuro
-⚫ Operaio generico        → Grigio
-🟤 Apprendista operaio     → Marrone
+🔴 Dirigente                                   → Rosso intenso
+🟠 Direttivo (Quadro / Gestione del cambiamento) → Arancione
+🟡 Direttivo (Responsabile di team/processi)   → Giallo
+🔵 Direttivo (Tecnico/organizzativo)           → Blu
+🟢 Tecnico Specializzato                       → Verde
+🟣 Tecnico qualificato                         → Viola
+🔵 Tecnico esecutivo                           → Ciano
+🟠 Operativo specializzato                     → Ambra
+🔴 Operativo qualificato                       → Rosa
+⚫ Operativo base                              → Grigio
+🟡 Apprendista impiegato                       → Verde lime
+🟤 Apprendista operaio                         → Marrone
 ```
 
 ### **📋 Informazioni Specifiche per Tipo**
@@ -39,12 +38,12 @@ Una **webapp interattiva completa** per visualizzare e gestire l'organigramma az
 - **🏢 Sede**: Direttore, Paese, Statistiche geografiche
 - **🏛️ Dipartimento**: Direttore, Sede principale, Obiettivi operativi
 - **🏪 Ufficio**: Responsabile, Specializzazione, Progetti attivi
-- **👤 Persona**: Qualifica, Età, Sede, Diretti, Report totali, Compiti
+- **👤 Persona**: Qualifica, Azienda, Sede, Età, Sesso, Diretti/Report totali, Responsabile
 
 ### **📏 Layout Uniforme**
-- **Dimensioni**: Tutte le schede **320px × 480px** (w-80 h-[30rem])
+- **Dimensioni**: Tutte le schede **320px × 528px** (w-80 h-[33rem])
 - **Badge**: Posizionati **a metà del bordo superiore** con testo grassetto
-- **Contenuto**: Area informazioni espansa senza scroll per leggibilità completa
+- **Contenuto**: Area informazioni ottimizzata senza ridondanze
 
 ## 🖼️ **Interfaccia Integrata e Massimizzata**
 
@@ -80,7 +79,7 @@ Excel → CSV → Employee[] → Node Tree → Interactive UI
 
 Viste:
 1. 🏢 Vista Sedi:  CEO → Sedi → Dipartimenti → Uffici → Persone
-2. 👥 Vista Ruoli: CEO → Direttori → Responsabili → 13 livelli qualifiche
+2. 👥 Vista Ruoli: CEO → Direttori → Responsabili → 12 livelli qualifiche
 ```
 
 ## 📊 **Componenti Core**

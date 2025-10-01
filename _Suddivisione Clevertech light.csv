@@ -1,468 +1,468 @@
-Principale;BANDIERA;SEDE;Foto;DIPARTIMENTI;UFFICIO (DESCRIZIONE);Mansione;QUALIFICA;Responsabile;Ordinamento;Et�;Sesso
-Patrick Manzini;cn.png;CTH_CHINA;image.png;Direzione Filiale;Direzione;|Direttore Filiale;Quadro / Direttore;Giuseppe Reggiani;2;44;M
-Jenny Lu;cn.png;CTH_CHINA;image.png;Direzione Filiale;Segreteria;Impiegato;Impiegato esecutivo;Patrick Manzini;7;;F
-Justin Ren;cn.png;CTH_CHINA;image.png;Supply Chain;Supply Chain;Addetto Acquisti;Impiegato esecutivo;Patrick Manzini;7;;M
-Happy Zhang;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Impiegato;Impiegato esecutivo;Patrick Manzini;7;;
-Xu Wei;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Impiegato esecutivo;Happy Zhang;7;;
-Qiu Gongsheng;cn.png;CTH_CHINA;image.png;Produzione;Magazzino;Magazziniere;Impiegato esecutivo;Happy Zhang;7;;
-Shannon Xia;cn.png;CTH_CHINA;image.png;Produzione;Magazzino;Magazziniere;Impiegato esecutivo;Qiu Gongsheng;7;;
-Guo Pengchao;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;
-Hang Zhengxian;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;M
-He Yimin;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;
-Li Pengqi;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;
-Liu Jian;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;
-Qian Kaiming;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;M
-Song xiangfeng;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;M
-Wang Zhitao;cn.png;CTH_CHINA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Happy Zhang;12;;M
-Zhang Huan;cn.png;CTH_CHINA;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Qiu Gongsheng;12;;M
-David Wen;cn.png;CTH_CHINA;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;Patrick Manzini;6;;
-Chen Yuchun;cn.png;CTH_CHINA;image.png;Facility & Servizi Generali;Facility;|Responsabile Facility;Responsabile di team/area;Patrick Manzini;3;;
-Kenny Cao;cn.png;CTH_CHINA;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato esecutivo;Patrick Manzini;7;;
-Kevin Liu;cn.png;CTH_CHINA;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato esecutivo;Kenny Cao;7;;M
-Shan Bo-Andy;cn.png;CTH_CHINA;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato esecutivo;Kevin Liu;7;;
-Aimee Luo;cn.png;CTH_CHINA;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Patrick Manzini;7;;
-Nancy Yao;cn.png;CTH_CHINA;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Aimee Luo;7;;F
-Alice Li;cn.png;CTH_CHINA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Patrick Manzini;7;;F
-Alin Stan;pl.png;CTH_EAST_EUROPE;image.png;Direzione Filiale;Direzione;|Direttore Filiale;Quadro / Direttore;Giuseppe Reggiani;2;;M
-Mariusz Blazejewicz;pl.png;CTH_EAST_EUROPE;image.png;Produzione;Produzione Meccanica;Trasfertisti/ Esterni;Operaio Generico;Alin Stan;12;;M
-Krzysztof Laszczak;pl.png;CTH_EAST_EUROPE;image.png;Meccatronica;Tecnico Software;|Responsabile Tecnico Software;Responsabile di team/area;Alin Stan;3;;M
-Damian Rodzonek;pl.png;CTH_EAST_EUROPE;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;Krzysztof Laszczak;6;;M
-Jakub Radziwonka;pl.png;CTH_EAST_EUROPE;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;Krzysztof Laszczak;6;;M
-Kamil Kecki;pl.png;CTH_EAST_EUROPE;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;Krzysztof Laszczak;6;;M
-Rafal Bligier;pl.png;CTH_EAST_EUROPE;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;Krzysztof Laszczak;6;;M
-Damian Kulgawiuk;pl.png;CTH_EAST_EUROPE;image.png;Meccatronica;Tecnico Documentale;Manualista;Impiegato qualificato;Krzysztof Laszczak;6;;M
-Mohamad Ibrahim;pl.png;CTH_EAST_EUROPE;image.png;Meccatronica;Tecnico Documentale;Manualista;Impiegato qualificato;Damian Kulgawiuk;6;;M
-Tomasz Siepetowski;pl.png;CTH_EAST_EUROPE;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato qualificato;Alin Stan;6;;M
-Tomasz Kaczorowski;pl.png;CTH_EAST_EUROPE;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato esecutivo;Tomasz Siepetowski;7;;M
-Remigiusz Golinski;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Softwarista;Impiegato qualificato;Alin Stan;6;;M
-Agnieszka Glowacka;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Remigiusz Golinski;7;;F
-Dawid Glowacki;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Remigiusz Golinski;7;;M
-Magda Szurnicka;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Remigiusz Golinski;7;;F
-Marek Strzelczyk;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Remigiusz Golinski;7;;M
-Rafal Markowski;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Remigiusz Golinski;7;;M
-Maciej Kulig;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Remigiusz Golinski;7;;M
-Bartek Galek;pl.png;CTH_EAST_EUROPE;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Remigiusz Golinski;7;;M
-Gaël Seguin;fr.png;CTH_FRANCE;image.png;Commerciale e Marketing;Vendite;|Responsabile Vendite;Responsabile di team/area;Giuseppe Reggiani;3;;M
-Simon Pasco;fr.png;CTH_FRANCE;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato esecutivo;Gaël Seguin;7;;M
-Ray Remillard;fr.png;CTH_FRANCE;image.png;Commerciale e Marketing;Non specificato;;Impiegato esecutivo;Gaël Seguin;7;;M
-Valerie Seguin;fr.png;CTH_FRANCE;image.png;Commerciale e Marketing;Non specificato;;Impiegato esecutivo;Ray Remillard;7;;F
-Nicolas Barazeur;fr.png;CTH_FRANCE;image.png;After Sales & Service;After Sales;Trasfertisti/ Esterni;Impiegato esecutivo;Gaël Seguin;7;;M
-Jens Gesterkamp;de.png;CTH_GERMANY;image.png;Commerciale e Marketing;Vendite;|Responsabile Vendite;Responsabile di team/area;Giuseppe Reggiani;3;;M
-Dominic Stein;de.png;CTH_GERMANY;image.png;After Sales & Service;Service;Field Service Engineer;Impiegato qualificato;Jens Gesterkamp;6;;M
-Kathrin Gesterkamp;de.png;CTH_GERMANY;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;Dominic Stein;7;;F
-Amit Khadilkar;in.png;CTH_INDIA;image.png;Direzione Filiale;Direzione;|Direttore Filiale;Quadro / Direttore;Giuseppe Reggiani;2;;M
-Abhijit Salunkhe;in.png;CTH_INDIA;image.png;Supply Chain;Acquisti;|Responsabile Acquisti;Impiegato direttivo;Amit Khadilkar;4;;M
-Sunil Patil;in.png;CTH_INDIA;image.png;Supply Chain;Acquisti;Addetto Acquisti;Impiegato qualificato;Abhijit Salunkhe;6;;M
-Sachin Dhavan;in.png;CTH_INDIA;image.png;Supply Chain;Supply Chain;Addetto Acquisti;Impiegato esecutivo;Abhijit Salunkhe;7;;M
-Astren Belly;in.png;CTH_INDIA;image.png;Supply Chain;Acquisti;Addetto Acquisti;Impiegato esecutivo;Abhijit Salunkhe;7;;M
-Suyasha Jadhav;in.png;CTH_INDIA;image.png;Risorse Umane & HSE;Risorse Umane;|Responsabile Risorse Umane;Responsabile di team/area;Amit Khadilkar;3;;F
-Vinay Shinde;in.png;CTH_INDIA;image.png;Qualità & Procedure;Qualità;Addetto Qualità;Impiegato esecutivo;Amit Khadilkar;7;;M
-Mangesh Mate;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;Deepak Singh;6;;M
-Deepak Singh;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Amit Khadilkar;6;;M
-Omkar Chougule;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Deepak Singh;6;;M
-Shiddham Sharma;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Deepak Singh;6;24;M
-Shishir Pednekar;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Deepak Singh;6;42;M
-Suhas Gosavi;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Deepak Singh;6;;M
-Sunil Jugale;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Deepak Singh;6;;M
-Vishal Savant;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Deepak Singh;6;;M
-Shrusthi Ambiger;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Deepak Singh;6;;F
-Sushila Junjarwad;in.png;CTH_INDIA;image.png;Meccatronica;Tecnico Documentale;Manualista;Impiegato qualificato;Deepak Singh;6;25;F
-Dhruva Waikar;in.png;CTH_INDIA;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato qualificato;Amit Khadilkar;6;;M
-Aanchal Khadilkar;in.png;CTH_INDIA;image.png;Amministrazione Finanza e Controllo;Amministrazione;|Responsabile Amministrazione;Responsabile di team/area;Amit Khadilkar;3;;F
-Prabhat Pandey;in.png;CTH_INDIA;image.png;Amministrazione Finanza e Controllo;Informatico;Proposal Engineer;Impiegato esecutivo;Aanchal Khadilkar;7;;M
-Rohit Patil;in.png;CTH_INDIA;image.png;Amministrazione Finanza e Controllo;Informatico;Impiegato;Impiegato esecutivo;Prabhat Pandey;7;;M
-Ajay Shitole;in.png;CTH_INDIA;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Aanchal Khadilkar;7;;M
-Pramod Chavan;in.png;CTH_INDIA;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Aanchal Khadilkar;7;;M
-Aaditya Pandey;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Amit Khadilkar;7;;M
-Akash Shinde;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Aaditya Pandey;7;;M
-Anil Kumar;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Aaditya Pandey;7;;M
-Chetan Kathare;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Aaditya Pandey;7;;M
-Kamalesh Das;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Aaditya Pandey;7;;M
-Mohammad Akif Ansari;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Aaditya Pandey;7;;M
-Murali Pathipati;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Aaditya Pandey;7;;M
-Shivalingppa  Ullagaddi;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Engineer;Impiegato esecutivo;Aaditya Pandey;7;;M
-Shivanand Pattar;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Aaditya Pandey;7;;M
-Soumya Patil;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Engineer;Impiegato esecutivo;Aaditya Pandey;7;;F
-Syed Hamdaan;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Aaditya Pandey;7;;M
-Vineet Naikwad;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Aaditya Pandey;7;;M
-Vinod Saptasagar;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Aaditya Pandey;7;;M
-Vivek Savant;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Aaditya Pandey;7;;M
-Dhanush Emidi;in.png;CTH_INDIA;image.png;After Sales & Service;Service;Softwarista;Impiegato esecutivo;Aaditya Pandey;7;;M
-Divakar Joshi;in.png;CTH_INDIA;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;Aaditya Pandey;7;;M
-Harish Hubballi;in.png;CTH_INDIA;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;Divakar Joshi;7;;M
-Giuseppe Reggiani;it.png;CTH_ITALY;image.png;Direzione Generale;Direzione;|Amministratore Delegato;Dirigente;;1;73;M
-Lorenzo Vezzani;it.png;CTH_ITALY;image.png;Supply Chain;Direzione;|Direttore Supply Chain;Quadro / Direttore;Giuseppe Reggiani;2;49;M
-Gennaro Lombardo;it.png;CTH_ITALY;image.png;Supply Chain;Controllo Qualità Terzisti;|Responsabile Terzisti;Impiegato direttivo;Lorenzo Vezzani;4;44;M
-Chiara Schiavone;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Supporto Amministrativo;Impiegato direttivo;Lorenzo Vezzani;4;29;F
-Sumeet Singh;it.png;CTH_ITALY;Foto Sumeet.png;Supply Chain;Tecnico Meccanico;Addetto Ottimizzazione Tecnica;Specialista (impiegatizio/tecnico);Lorenzo Vezzani;5;28;M
-Massimiliano Nizzoli;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti Meccanici;Impiegato qualificato;Chiara Schiavone;6;54;M
-Massimo Bragazzi;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti Macchine Terzi;Impiegato qualificato;Chiara Schiavone;6;52;M
-Valeria Giudici;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti Elettrici;Impiegato qualificato;Chiara Schiavone;6;45;F
-Diego Franchi;it.png;CTH_ITALY;image.png;Supply Chain;Tecnico Meccanico;Addetto Ottimizzazione Tecnica;Impiegato esecutivo;Sumeet Singh;7;20;M
-Diego Rigolini;it.png;CTH_ITALY;image.png;Supply Chain;Tecnico Meccanico;Addetto Ottimizzazione Tecnica;Impiegato esecutivo;Sumeet Singh;7;;M
-Maria Vittoria Bagni;it.png;CTH_ITALY;image.png;Supply Chain;Magazzino;Impiegato;Impiegato esecutivo;Lorenzo Vezzani;7;;F
-Alessandro Viglione;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti Gruppi;Impiegato esecutivo;Chiara Schiavone;7;32;M
-Alessia Crimi;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti After Sales;Impiegato esecutivo;Chiara Schiavone;7;37;F
-Deborah La Face;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti;Impiegato esecutivo;Chiara Schiavone;7;37;F
-Diego Panepinto;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti Meccanici;Impiegato esecutivo;Chiara Schiavone;7;47;M
-Marina Gatta;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti Macchine Terzi;Impiegato esecutivo;Chiara Schiavone;7;23;F
-Matteo Saccani;it.png;CTH_ITALY;image.png;Supply Chain;Acquisti;Addetto Acquisti Elettrici;Impiegato esecutivo;Chiara Schiavone;7;24;M
-Ciro Maviglia;it.png;CTH_ITALY;image.png;Supply Chain;Magazzino;Magazziniere;Operaio comune;Maria Vittoria Bagni;11;44;M
-Francesca Tirelli;it.png;CTH_ITALY;image.png;Risorse Umane & HSE;Risorse Umane;|Responsabile Risorse Umane;Responsabile di team/area;Augusto Melissari;3;55;F
-Augusto Melissari;it.png;CTH_ITALY;image.png;Risorse Umane & HSE;Prevenzione e Protezione / Gestione Ambientale;|Responsabile Prevenzione e Protezione / Gestione Ambientale;Responsabile di team/area;Giuseppe Reggiani;3;42;M
-Chiara Borciani;it.png;CTH_ITALY;image.png;Risorse Umane & HSE;Risorse Umane;Impiegato;Impiegato qualificato;Francesca Tirelli;6;43;F
-Raffaella Mastrandrea;it.png;CTH_ITALY;image.png;Risorse Umane & HSE;Prevenzione e Protezione / Gestione Ambientale;Impiegato;Impiegato esecutivo;Augusto Melissari;7;48;F
-Gabriele Menozzi;it.png;CTH_ITALY;image.png;Qualità & Procedure;Qualità;|Responsabile Qualità;Responsabile di team/area;Giuseppe Reggiani;3;47;M
-Andrea Fontana;it.png;CTH_ITALY;image.png;Qualità & Procedure;Qualità;Impiegato;Specialista (impiegatizio/tecnico);Gabriele Menozzi;5;26;M
-Davide Righetti;it.png;CTH_ITALY;image.png;Qualità & Procedure;Qualità;Addetto Qualità;Impiegato qualificato;Gabriele Menozzi;6;43;M
-Vincenzo Cozzolino;it.png;CTH_ITALY;image.png;Qualità & Procedure;Qualità;Quality Key Account;Impiegato qualificato;Gabriele Menozzi;6;42;M
-Stefano Giorgini;it.png;CTH_ITALY;image.png;Produzione;Direzione;|Direttore Operativo;Quadro / Direttore;Giuseppe Reggiani;2;46;M
-Demis Bussei;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;|Responsabile Produzione Meccanica;Responsabile di team/area;Stefano Giorgini;3;46;M
-Simone Mallozzi;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;|Responsabile Produzione Elettrica;Responsabile di team/area;Stefano Giorgini;3;42;M
-Alessandro Barchi;it.png;CTH_ITALY;image.png;Produzione;Magazzino;|Responsabile Magazzino;Responsabile di team/area;Stefano Giorgini;3;38;M
-Andrea Botti;it.png;CTH_ITALY;image.png;Produzione;Collaudo Software;|Responsabile Collaudo Software;Responsabile di team/area;Stefano Giorgini;3;42;M
-Stefano Bulletta;it.png;CTH_ITALY;image.png;Produzione;Attrezzeria;|Responsabile Attrezzeria;Responsabile di team/area;Stefano Giorgini;3;35;M
-Fabio Burani;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Impiegato direttivo;Alessandro Barchi;4;50;M
-Benvenuto Palmieri;it.png;CTH_ITALY;image.png;Produzione;Collaudo Software;Softwarista;Specialista (impiegatizio/tecnico);Andrea Botti;5;37;M
-Francesco Mastrosimone;it.png;CTH_ITALY;image.png;Produzione;Collaudo Software;Softwarista;Specialista (impiegatizio/tecnico);Andrea Botti;5;30;M
-Francesco Larocca;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Impiegato;Impiegato esecutivo;Demis Bussei;7;30;M
-Marco Petrocchi Barini;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Impiegato;Impiegato esecutivo;Demis Bussei;7;21;M
-Jacopo Bigi;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Impiegato;Impiegato esecutivo;Demis Bussei;7;;M
-Denise Zaccarelli;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Impiegato;Impiegato esecutivo;Alessandro Barchi;7;29;F
-Andrea Borciani;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;50;M
-Andrea Chierici;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;39;M
-Andrea Salvatore Maltesi;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;44;M
-Davide Bernardoni;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;60;M
-Domenico Tromiro;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;52;M
-Eugenio Corradi;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;61;M
-Fabrizio Santini;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;61;M
-Gianluca Foti;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;48;M
-Giovanni Zecchetti;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;36;M
-Luigi Izzo;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;53;M
-Marco Cerasola;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;59;M
-Marco Giglioli;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;56;M
-Mihail Cicanci;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;34;M
-Paolo Santini;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;56;M
-Said Mouanid;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;52;M
-Stefano Farsoni;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;48;M
-Tudorel Bogdan Varganici;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Capo Macchina;Operaio Specializzato;Demis Bussei;9;42;M
-Andrea Fiore;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;Montatore Elettrico;Operaio Specializzato;Simone Mallozzi;9;54;M
-Fabrizio Caggiati;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;Montatore Elettrico;Operaio Specializzato;Simone Mallozzi;9;54;M
-Clauco Imerio Benelli;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio specializzato;Alessandro Barchi;9;74;M
-Ermanno Paterlini;it.png;CTH_ITALY;image.png;Produzione;Attrezzeria;Tornitore;Operaio Specializzato;Stefano Bulletta;9;56;M
-Khalifa ben hamed ben hassine;it.png;CTH_ITALY;image.png;Produzione;Attrezzeria;Verniciatore;Operaio Specializzato;Stefano Bulletta;9;65;M
-Omar Bertani;it.png;CTH_ITALY;image.png;Produzione;Attrezzeria;Saldatore;Operaio Specializzato;Stefano Bulletta;9;46;M
-Taoufik Ermaidi;it.png;CTH_ITALY;image.png;Produzione;Attrezzeria;Verniciatore;Operaio Specializzato;Stefano Bulletta;9;42;M
-Malick Mame;it.png;CTH_ITALY;image.png;Produzione;Attrezzeria;Tornitore;Operaio comune;Stefano Bulletta;11;;M
-Naveed Razzaq;it.png;CTH_ITALY;image.png;Produzione;Attrezzeria;Tornitore;Operaio comune;Stefano Bulletta;11;20;M
-Abdelaziz El Haouat;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;54;M
-Andrea Lorenzani;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;47;M
-Andriy Tsvigun;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;51;M
-Aurel Grigoras;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;54;M
-Billo Gila;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;;M
-Carmine D'orsi;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;47;M
-Clementin Eugen Moisa;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;58;M
-David Anthony Pecoraro;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;49;M
-Domenico Frijio;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;29;M
-Eduard Jardas;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;57;M
-Fouad Kouki;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;55;M
-Ghia Goghidze;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;37;M
-Ivanisevic Dragan;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;;M
-Lorenzo Grigoras;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;26;M
-Mario Rento;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;60;M
-Mattia Maisano;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;24;M
-Nicolas Gareri;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;42;M
-Paolo Lusuardi;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;53;M
-Pietro Marusyk;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;55;M
-Rabii El Haouat;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;49;M
-Stepan Rudyi;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;31;M
-Victor Cebanu;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;33;M
-Vincenzo Santoro;it.png;CTH_ITALY;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Demis Bussei;12;;M
-Giulio Piluso;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;Montatore Elettrico;Operaio Generico;Simone Mallozzi;12;;M
-Hassan Anejjar;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;Montatore Elettrico;Operaio Generico;Simone Mallozzi;12;39;M
-Mino Ligorio;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;Montatore Elettrico;Operaio Generico;Simone Mallozzi;12;;M
-Raffaele Colurcio;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;Montatore Elettrico;Operaio Generico;Simone Mallozzi;12;50;M
-Silvano Lo Duca;it.png;CTH_ITALY;image.png;Produzione;Produzione Elettrica;Montatore Elettrico;Operaio Generico;Simone Mallozzi;12;56;M
-Aneamin Stephane Oulouzibo;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;34;M
-Angelo Lampis;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;41;M
-Anis Zekri;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;55;M
-Filomena Lista;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;40;F
-Gabriele Chiari;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;58;M
-Gabriele Piguzzi;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;51;M
-Gaetano Dattilo;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;34;M
-Gerson Dervishaj;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;40;M
-Hudson Guarise Dazilio;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;41;M
-Ilyas Ennaciri;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;34;M
-Marco Rosato;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;55;M
-Marco Vicedomini;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;43;M
-Nicola Venditti;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;45;M
-Paolo Ferrari;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;60;M
-Pasquale Iacobone;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;49;M
-Stefano Morari;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;54;M
-Umberto Immovilli;it.png;CTH_ITALY;image.png;Produzione;Magazzino;Magazziniere;Operaio Generico;Alessandro Barchi;12;56;M
-Simone Cervi;it.png;CTH_ITALY;image.png;Meccatronica;Direzione;|Direttore Tecnico;Quadro / Direttore;Giuseppe Reggiani;2;47;M
-Mauro Giovanelli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Standardizzazione;|Responsabile Tecnico Standardizzazione;Responsabile di team/area;Simone Cervi;3;63;M
-Stefano Falavigna;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Standardizzazione;|Responsabile Tecnico Standardizzazione;Responsabile di team/area;Mauro Giovanelli;3;27;M
-David Tabacco;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;|Responsabile Tecnico Software;Responsabile di team/area;Simone Cervi;3;38;M
-Devid Agazzi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Safety;|Responsabile Tecnico Safety;Responsabile di team/area;Simone Cervi;3;42;M
-Fernando Luzzara;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico Leantech;|Responsabile Tecnico Meccanico Leantech;Responsabile di team/area;Simone Cervi;3;;M
-Fabio Leoni;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;|Responsabile Tecnico Meccanico;Responsabile di team/area;Simone Cervi;3;45;M
-Mauro Filippi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;|Responsabile Tecnico Elettrico;Responsabile di team/area;Simone Cervi;3;55;M
-Elena Tonna;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;|Responsabile Tecnico Documentale;Responsabile di team/area;Simone Cervi;3;32;F
-Enrico Morini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Specialista (impiegatizio/tecnico);David Tabacco;5;31;M
-Esteban Paulino Vicent Sementa;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Specialista (impiegatizio/tecnico);David Tabacco;5;54;M
-Saulo Samos;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Specialista (impiegatizio/tecnico);David Tabacco;5;;M
-Carmelo Antonio Minniti;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Specialista (impiegatizio/tecnico);Fernando Luzzara;5;;M
-Alessandro Maestri;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Bordo Macchina;Impiegato qualificato;Mauro Filippi;5;38;M
-Abdelghani Essakhi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;28;M
-Adriano Tirelli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;39;M
-Alexander Prodan;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;;M
-Antonio Lettieri;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;;M
-Davide Zannini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;41;M
-Elias Emmanuel Albarracin;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;30;M
-Emanuele Romagnani;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;23;M
-Erik Simonetti;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;23;M
-Rafael Eduardo Flores Pat;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;;M
-Simone Tolu;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;;M
-Giovanni Orlandini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Safety;Addetto Sicurezza macchine;Impiegato qualificato;Devid Agazzi;6;;M
-Alberto Soprani;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;50;M
-Alessandro De Maria;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;51;M
-Amos Giampaoli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;;M
-Andrea Salvo;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;53;M
-Daniele Corradini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;35;M
-Davide Catozzi;it.png;CTH_ITALY;cato.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico Ballatoi;Impiegato qualificato;Fabio Leoni;6;53;M
-Davide Pellini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;31;M
-Faisal Bahar;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;28;M
-Gianluca Majavacchi;it.png;CTH_ITALY;Maja.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;60;M
-Lorenzo Rocchi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;50;M
-Matteo Piroli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico Trasporti;Impiegato qualificato;Fabio Leoni;6;;M
-Maurizio Ornati;it.png;CTH_ITALY;Ornati.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;58;M
-Alessandro Massaro;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;37;M
-Enrico Montanari;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;35;M
-Fabio Schiatti;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico Protezioni;Impiegato qualificato;Fabio Leoni;6;;M
-Francesco Montanari;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;32;M
-Andrea Di Puma;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;27;M
-Giuseppe Rizza;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Bordo Macchina;Impiegato qualificato;Mauro Filippi;6;56;M
-Mirco Corradini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;31;M
-Rino D'alsazia;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;35;M
-Mohammad Yaseen Siddique;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;25;M
-Roberto Callegari;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista Meccanico;Impiegato qualificato;Elena Tonna;6;54;M
-Luca Bernardi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Impiegato qualificato;Mauro Giovanelli;6;31;M
-Paolo Cocconcelli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Impiegato qualificato;Mauro Giovanelli;6;48;M
-Andrea Falciroli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Impiegato qualificato;Mauro Giovanelli;6;27;M
-Mattia Chiericati;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Impiegato qualificato;Mauro Giovanelli;6;26;M
-Andrea Filippini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;20;M
-Achraf Namli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;27;M
-Alex Gugliotta;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;;M
-Davide Baraldi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;49;M
-Matteo Manzotti;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;32;M
-Matteo Paterlini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;26;M
-Osayi Nevis Ovbiebo;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;32;M
-Paola Aprigliano;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;28;F
-Radu Stirbul;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;34;M
-Roberto Sarzola;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;50;M
-Sonia Cicatiello;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Addetto Pianificazione;Impiegato qualificato;David Tabacco;6;28;F
-Soraya Ponti;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Addetto Pianificazione;Impiegato qualificato;David Tabacco;6;25;F
-Stefano Bolognesi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Impiegato qualificato;David Tabacco;6;25;M
-Daniele Rossi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Impiegato qualificato;Fernando Luzzara;6;;M
-Federico Felloni;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Impiegato qualificato;Fernando Luzzara;6;;M
-Ilir Janushaj;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Impiegato qualificato;Fernando Luzzara;6;;M
-Matteo Grossi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Impiegato qualificato;Fernando Luzzara;6;;M
-Simone Musumarra;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Impiegato qualificato;Fernando Luzzara;6;;M
-Gabriele Sacchi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;;M
-Gianluca Cerini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;;M
-Marcello Cabassi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;22;M
-Marco Agostini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;44;M
-Massimo Tommasini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;51;M
-Nico Rossi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;30;M
-Simone Andriulo;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico Protezioni;Impiegato qualificato;Fabio Leoni;6;29;M
-Luca Cavani;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Fabio Leoni;6;;M
-Dalmazio Oddi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Meccanico;Impiegato qualificato;Mauro Filippi;6;54;M
-Daniele Risposi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;;M
-Haini Terzi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Canale;Impiegato qualificato;Mauro Filippi;6;48;M
-Alberto Maria Esposito;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Canale;Impiegato qualificato;Mauro Filippi;6;24;M
-Alex Gualtieri;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Canale;Impiegato qualificato;Mauro Filippi;6;;M
-Davide Laquaglia;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;;M
-Francesco Grisendi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;;M
-Gianni Costaggiu;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;42;M
-Karla Canché;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Bordo Macchina;Impiegato qualificato;Mauro Filippi;6;;F
-Nicolas Carracino;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Impiegato qualificato;Mauro Filippi;6;;M
-Annarita Arlotti;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista Meccanico;Impiegato qualificato;Elena Tonna;6;52;F
-Fabiana Salardi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista Software;Impiegato qualificato;Elena Tonna;6;44;F
-Gualtiero Venturelli;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista;Impiegato qualificato;Elena Tonna;6;46;M
-Lisa Aimi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista Meccanico;Impiegato qualificato;Elena Tonna;6;43;F
-Martina Longobardi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista;Impiegato qualificato;Elena Tonna;6;23;F
-Mina Faiez Bishai Said;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista Software;Impiegato qualificato;Elena Tonna;6;;M
-Laura Coppelletti;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Documentale;Manualista;Impiegato qualificato;Elena Tonna;6;;F
-Yassine El Amiri;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;David Tabacco;8;22;M
-Manuel Negrini;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;David Tabacco;8;20;M
-Lucia Fornaciari;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;David Tabacco;8;21;F
-Massimo Verri;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;David Tabacco;8;20;M
-Samuele Borghi;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;David Tabacco;8;21;M
-Browndon Tankeu;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;David Tabacco;8;28;M
-Ibara Akambo Beni;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;David Tabacco;8;21;M
-Francesco Passafiume;it.png;CTH_ITALY;image.png;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Operaio Specializzato;Mauro Filippi;9;46;M
-Fabio Giordani;it.png;CTH_ITALY;image.png;Facility & Servizi Generali;Facility;|Responsabile Facility;Responsabile di team/area;Giuseppe Reggiani;3;43;M
-Stefania Popa;it.png;CTH_ITALY;image.png;Facility & Servizi Generali;Reception;Receptionist;Impiegato qualificato;Fabio Giordani;6;41;F
-Francesco Beltrami;it.png;CTH_ITALY;image.png;E-Commerce;Direzione;|Direttore E-Commerce;Quadro / Direttore;Giuseppe Reggiani;2;46;M
-Matteo Modenese;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Meccanico;|Responsabile Tecnico Meccanico;Responsabile di team/area;Francesco Beltrami;3;57;M
-Matteo Viappiani;it.png;CTH_ITALY;image.png;E-Commerce;Supply Chain;|Responsabile Supply Chain;Responsabile di team/area;Francesco Beltrami;3;47;M
-Edmond Leci;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;|Responsabile Produzione Meccanica;Responsabile di team/area;Francesco Beltrami;3;40;M
-Luca Stafetta;it.png;CTH_ITALY;image.png;E-Commerce;Supply Chain;Addetto Acquisti;Specialista (impiegatizio/tecnico);Matteo Viappiani;5;52;M
-Daniele Gallinari;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Matteo Modenese;6;59;M
-Claudio Soliani;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Matteo Modenese;6;33;M
-Gregorio Chiarella;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Matteo Modenese;6;24;M
-Mauro Mainini;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Matteo Modenese;6;58;M
-Simone Barba;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Impiegato qualificato;Matteo Modenese;6;33;M
-Pietro Avena;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Elettrico;Progettista Elettrico Quadri;Impiegato qualificato;Francesco Beltrami;6;35;M
-Edwin Levada;it.png;CTH_ITALY;image.png;E-Commerce;Qualità;Addetto Qualità;Impiegato qualificato;Francesco Beltrami;6;40;M
-Elia Petruzzellis;it.png;CTH_ITALY;image.png;E-Commerce;Project Management Meccanico;PM;Impiegato qualificato;Francesco Beltrami;6;24;M
-Matteo Cabassi;it.png;CTH_ITALY;image.png;E-Commerce;Project Management Meccanico;PM;Impiegato qualificato;Elia Petruzzellis;6;35;M
-Nansi Radwan;it.png;CTH_ITALY;image.png;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Impiegato esecutivo;Matteo Modenese;7;34;F
-Simone Scaffardi;it.png;CTH_ITALY;image.png;E-Commerce;Project Management Automazione;PM-A;Impiegato esecutivo;Francesco Beltrami;7;;M
-Mario Rafael Rey;it.png;CTH_ITALY;image.png;E-Commerce;Collaudo Software;Montatore Elettrico;Operaio Specializzato;Francesco Beltrami;9;;M
-DORIAN MARKJA;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;29;M
-MARCO DI CRISTOFARO;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;40;M
-MARIA LUCIA FOTTICCHIO;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;25;F
-PAVEL OLARASU;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;53;M
-VINCENZO GENTILE;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;37;M
-ALESSANDRA SUMMA;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;48;F
-EMANUELA BRUNO;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;24;F
-MICHELE SABELLA;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;44;M
-TERESA SCAFA;it.png;CTH_ITALY;image.png;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operaio Generico;Edmond Leci;12;33;F
-Umberto Reggiani;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Direzione;|Direttore Commerciale;Quadro / Direttore;Giuseppe Reggiani;2;49;M
-Luca Carollo;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Vendite;|Responsabile Vendite;Responsabile di team/area;Umberto Reggiani;3;48;M
-Fabrizio Corradini;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;|Responsabile Tecnico Commerciale;Responsabile di team/area;Umberto Reggiani;3;47;M
-Emanuele Ferretti;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;|Responsabile Project Management Meccanico;Responsabile di team/area;Umberto Reggiani;3;39;M
-Fabio Spagni;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Automazione;|Responsabile Project Management Automazione;Responsabile di team/area;Umberto Reggiani;3;52;M
-Amedeo Roma;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Vendite;Venditore;Specialista (impiegatizio/tecnico);Luca Carollo;5;53;M
-Marco Rama;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Vendite;Venditore;Specialista (impiegatizio/tecnico);Luca Carollo;5;52;M
-Paolo Soliani;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Vendite;Venditore;Specialista (impiegatizio/tecnico);Luca Carollo;5;47;M
-Andrea Francavilla;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato qualificato;Fabrizio Corradini;6;36;M
-Jorge Luis Pellegrini;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato qualificato;Fabrizio Corradini;6;37;M
-Riccardo Dignatici;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato qualificato;Fabrizio Corradini;6;41;M
-Satvir Singh;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato qualificato;Fabrizio Corradini;6;29;M
-Serhiy Vakar;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato qualificato;Fabrizio Corradini;6;64;M
-Alberto Caselli Bettuzzi;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;51;M
-Alessandro Terra;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;;M
-Fabio Vaini;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;44;M
-Federico Leporati;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;38;M
-Francesco Regalino;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;27;M
-Gian Guido Ghiretti;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;36;M
-Houssem Rahmouni;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;27;M
-Michele Bertolaso;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;33;M
-Mohamed Zouhid;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;;M
-Umberto Montruccoli;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Emanuele Ferretti;6;25;M
-Alvise Fenzo;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Automazione;PM-A;Impiegato qualificato;Fabio Spagni;6;50;M
-Enrico Franzoni;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Automazione;PM-A;Impiegato qualificato;Fabio Spagni;6;31;M
-Ralf Wagner;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Automazione;PM-A;Impiegato qualificato;Fabio Spagni;6;37;M
-Daisy Dicembrini;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Segreteria;Impiegato;Impiegato esecutivo;Umberto Reggiani;7;39;F
-Marilena Bruno;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Segreteria;Impiegato;Impiegato esecutivo;Daisy Dicembrini;7;47;F
-Laura Valenti;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato esecutivo;Luca Carollo;7;56;F
-Alessandro Vezzani;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Impiegato;Impiegato esecutivo;Fabrizio Corradini;7;;M
-Antonio Anastasi;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato esecutivo;Fabrizio Corradini;7;27;M
-Antonio Laddomada;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato esecutivo;Fabrizio Corradini;7;32;M
-Davide Di Costa;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato esecutivo;Fabrizio Corradini;7;27;M
-Tanja Lugli;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato esecutivo;Fabrizio Corradini;7;38;F
-Omar Ori;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Impiegato esecutivo;Fabrizio Corradini;7;;M
-Davide Fontana;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato esecutivo;Emanuele Ferretti;7;35;M
-Riccardo Gambarelli;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato esecutivo;Emanuele Ferretti;7;;M
-Stefania De Padova;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Project Management Meccanico;Impiegato;Impiegato esecutivo;Emanuele Ferretti;7;43;F
-Anastasiya Turci Vorobyova;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Marketing;Impiegato;Impiegato esecutivo;Umberto Reggiani;7;32;F
-Federica Tagliavini;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Marketing;Impiegato;Impiegato esecutivo;Anastasiya Turci Vorobyova;7;27;F
-Sara Gariselli;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Marketing;Impiegato;Impiegato esecutivo;Anastasiya Turci Vorobyova;7;26;F
-Alice Reggiani;it.png;CTH_ITALY;image.png;Commerciale e Marketing;Addetto Spedizioni;Impiegato;Impiegato esecutivo;Umberto Reggiani;7;40;F
-Enrico Reggiani;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Direzione;|Direttore Amministrazione;Quadro / Direttore;Giuseppe Reggiani;2;47;M
-Giuliano Messori;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Informatico;|Responsabile Informatico;Responsabile di team/area;Enrico Reggiani;3;46;M
-Riccardo Orlandi;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Controllo di gestione;|Responsabile Controllo di gestione;Responsabile di team/area;Enrico Reggiani;3;51;M
-Natascia Tondi;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Business Intelligence;|Responsabile Business Intelligence;Responsabile di team/area;Enrico Reggiani;3;52;F
-Elena Minarini;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;|Responsabile Amministrazione;Responsabile di team/area;Enrico Reggiani;3;36;F
-Alessandra Baroni;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Informatico;Addetto CAD e PLM;Impiegato qualificato;Giuliano Messori;6;47;F
-Carlos Alberto Davila Torres Meglioli;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Informatico;Addetto I.A., Digitalizzazione, Gestione Attività;Impiegato qualificato;Giuliano Messori;6;;M
-Enrica Manfredini;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Business Intelligence;Impiegato;Impiegato qualificato;Natascia Tondi;6;59;F
-Cristian Reggiani;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Informatico;Addetto Sistemi informatici;Impiegato esecutivo;Giuliano Messori;7;26;M
-Nicolò Campari;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Informatico;Addetto ERP;Impiegato esecutivo;Giuliano Messori;7;;M
-Arianna Rigonat;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Elena Minarini;7;25;F
-Assunta Innamorati;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Elena Minarini;7;61;F
-Chiara De Vita;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Elena Minarini;7;33;F
-Lorella Ballotta;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Elena Minarini;7;49;F
-Massimo Di Puma;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Elena Minarini;7;32;M
-Michela Bonoretti;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Elena Minarini;7;53;F
-Veronika Ryzhak;it.png;CTH_ITALY;image.png;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Impiegato esecutivo;Elena Minarini;7;27;F
-Davide Salsi;it.png;CTH_ITALY;image.png;After Sales & Service;Service;|Responsabile Service Global;Responsabile di team/area;Giuseppe Reggiani;3;43;M
-Mohamed Kouki;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;|Responsabile After Sales;Responsabile di team/area;Davide Salsi;3;35;M
-Alfredo Malvisi;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Service Manager;Impiegato direttivo;Davide Salsi;4;58;M
-Gianpaolo Popovich;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Venditore UPG;Impiegato direttivo;Mohamed Kouki;4;51;M
-Massimiliano Bernabeni;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;|Responsabile Ricambi;Impiegato direttivo;Mohamed Kouki;4;55;M
-Christian Fallini;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Trainer AS;Impiegato direttivo;Mohamed Kouki;4;51;M
-Roberto Longo;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Venditore;Impiegato qualificato;Davide Salsi;6;41;M
-Alex Incerti;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Progettista Elettrico;Impiegato qualificato;Mohamed Kouki;6;46;M
-Daniele Ciarlini;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Softwarista;Impiegato qualificato;Mohamed Kouki;6;68;M
-Daniele Stefanutti;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Softwarista;Impiegato qualificato;Mohamed Kouki;6;39;M
-Francesco Melegari;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Softwarista;Impiegato qualificato;Mohamed Kouki;6;28;M
-Luigi Sagliocca;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Addetto Imballi;Impiegato qualificato;Mohamed Kouki;6;45;M
-Massimo Tedeschi;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Progettista Meccanico;Impiegato qualificato;Mohamed Kouki;6;47;M
-Matteo Bonori;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Progettista Meccanico;Impiegato qualificato;Mohamed Kouki;6;53;M
-Emanuele Olivieri;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Softwarista;Impiegato qualificato;Mohamed Kouki;6;40;M
-Giovanni Fantuzzi;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Davide Salsi;7;30;M
-Giuseppe Anno;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Davide Salsi;7;38;M
-Margherita Carletti;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Davide Salsi;7;28;F
-Moira Dotti;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Davide Salsi;7;47;F
-Paolo Venturelli;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Davide Salsi;7;55;M
-Sabrina Bondavalli;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Davide Salsi;7;43;F
-Yaroslav Tryhuba;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Davide Salsi;7;32;M
-Carolina Cazac;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Venditore UPG;Impiegato esecutivo;Mohamed Kouki;7;30;F
-Claudia Marzo;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;Mohamed Kouki;7;29;F
-Giorgia Montanari;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;Mohamed Kouki;7;49;F
-Lorenzo Magnani;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Progettista Meccanico;Impiegato esecutivo;Mohamed Kouki;7;37;M
-Marco Marino;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Softwarista;Impiegato esecutivo;Mohamed Kouki;7;28;M
-Nicola Galloni;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Softwarista;Impiegato esecutivo;Mohamed Kouki;7;45;M
-Ofelia Veronesi;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;Mohamed Kouki;7;49;F
-Ornella Covri;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;Mohamed Kouki;7;52;F
-Sassi Fahem;it.png;CTH_ITALY;image.png;After Sales & Service;After Sales;Softwarista;Impiegato esecutivo;Mohamed Kouki;7;40;M
-Amdy Moustapha Thiam;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;48;M
-Arturo Izzo;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;49;M
-Bruno De Gregorio;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Elettrico;Operaio qualificato;Davide Salsi;10;53;M
-Dragan Ivanisevic;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;58;M
-Fabio Caselli;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;56;M
-Giovanni Magliulo;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;;M
-Luca Bigliardi;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;42;M
-Massimo Giuberti;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Elettrico;Operaio qualificato;Davide Salsi;10;54;M
-Osvaldo Ruggiero;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;59;M
-Pietro Dallari;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;;M
-Roberto Spaggiari;it.png;CTH_ITALY;image.png;After Sales & Service;Service;Montatore Meccanico;Operaio qualificato;Davide Salsi;10;48;M
-Giorgio Zanardi;us.png;CTH_NORTH_AMERICA;image.png;Direzione Filiale;Direzione;|Direttore Filiale;Quadro / Direttore;Christian Bisogni;2;;M
-Arlet Ramirez-Longwell;us.png;CTH_NORTH_AMERICA;image.png;Direzione Filiale;Segreteria;Impiegato;Impiegato esecutivo;Adnelys Hernandez;7;;F
-Adnelys Hernandez;us.png;CTH_NORTH_AMERICA;image.png;Direzione Filiale;Segreteria;Impiegato;Impiegato esecutivo;Giorgio Zanardi;7;;F
-Julie Peterson;us.png;CTH_NORTH_AMERICA;image.png;Risorse Umane & HSE;Risorse Umane;|Responsabile Risorse Umane;Responsabile di team/area;Christian Bisogni;3;;F
-Drew Hinton;us.png;CTH_NORTH_AMERICA;image.png;Risorse Umane & HSE;Prevenzione e Protezione / Gestione Ambientale;Impiegato;Impiegato esecutivo;Julie Peterson;7;;M
-Nicole Pena;us.png;CTH_NORTH_AMERICA;image.png;Produzione;Produzione Meccanica;Montatore Meccanico;Impiegato esecutivo;Christian Bisogni;7;;F
-Beth Zarnick-Duffy;us.png;CTH_NORTH_AMERICA;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato qualificato;Christian Bisogni;6;;F
-Ildiko Nyeste;us.png;CTH_NORTH_AMERICA;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato qualificato;Beth Zarnick-Duffy;6;;F
-Jean St-Martin;us.png;CTH_NORTH_AMERICA;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato qualificato;Beth Zarnick-Duffy;6;;M
-Kevin Zarnick;us.png;CTH_NORTH_AMERICA;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato esecutivo;Beth Zarnick-Duffy;7;;M
-Abigail Maravilla;us.png;CTH_NORTH_AMERICA;image.png;Commerciale e Marketing;Marketing;Impiegato;Impiegato esecutivo;Beth Zarnick-Duffy;7;;M
-Deanna Futch;us.png;CTH_NORTH_AMERICA;image.png;Commerciale e Marketing;Addetto Spedizioni;Impiegato;Impiegato esecutivo;Beth Zarnick-Duffy;7;;F
-Franca Traversa;us.png;CTH_NORTH_AMERICA;image.png;Amministrazione Finanza e Controllo;Controllo di gestione;|Responsabile Controllo di gestione;Responsabile di team/area;Christian Bisogni;3;;F
-Christian Bisogni;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Direzione;|Direttore After Sales/Service;Quadro / Direttore;Giuseppe Reggiani;2;;M
-John Feeley;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;After Sales;|Responsabile After Sales;Responsabile di team/area;Christian Bisogni;3;;
-Anthony Yanora;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Service Manager;Impiegato qualificato;Christian Bisogni;6;;M
-Matteo Rombolà;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Service Manager;Impiegato qualificato;Anthony Yanora;6;;M
-Danjel Perndoka;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;After Sales;Progettista Meccanico;Impiegato qualificato;John Feeley;6;26;M
-Brian Ramage;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Trasfertisti/Esterni;Impiegato esecutivo;Anthony Yanora;7;;M
-Jim Artley;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Anthony Yanora;7;;M
-Jim Speed;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Anthony Yanora;7;;M
-Jorge Reynolds;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Montatore Elettrico;Impiegato esecutivo;Anthony Yanora;7;;M
-Petro Shkurhan;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Anthony Yanora;7;;M
-Santiago Lisboa;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Anthony Yanora;7;;M
-Scott Jenkins;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Anthony Yanora;7;;M
-Yvan Montauti Sanchez;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Service Manager;Impiegato esecutivo;Anthony Yanora;7;;M
-Zeb Veale;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;Service;Impiegato;Impiegato esecutivo;Anthony Yanora;7;;
-Brody Avis;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;John Feeley;7;;M
-Julio Bizama;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;After Sales;Softwarista;Impiegato esecutivo;John Feeley;7;;M
-Kurt Ulrich;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;John Feeley;7;;M
-Shawn Estes;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;John Feeley;7;;M
-Tracy Taranto;us.png;CTH_NORTH_AMERICA;image.png;After Sales & Service;After Sales;Impiegato;Impiegato esecutivo;John Feeley;7;;F
-Matthew Carey;gb.png;CTH_UK;image.png;Commerciale e Marketing;Vendite;|Responsabile Vendite;Responsabile di team/area;Giuseppe Reggiani;3;;M
-Craig Smith;gb.png;CTH_UK;image.png;Commerciale e Marketing;Project Management Meccanico;PM;Impiegato qualificato;Matthew Carey;6;;M
-Nicky Hull;gb.png;CTH_UK;image.png;Commerciale e Marketing;Vendite;Venditore;Impiegato esecutivo;Matthew Carey;7;;M
+Principale;Ordinamento;Foto;BANDIERA;SEDE;DIPARTIMENTI;UFFICIO (DESCRIZIONE);Mansione;QUALIFICA;LV. (Ipotetico);Età;Sesso;RESPONSABILE ASSEGNATO;AZIENDA
+Patrick Manzini;2;image.png;cn.png;CTH_CHINA;|Direzione Filiale;|Direzione;|Direttore Filiale;|Direttivo (Quadro / Gestione del cambiamento);8;44;M;Giuseppe Reggiani;CLEVERTECH
+Jenny Lu;6;image.png;cn.png;CTH_CHINA;|Direzione Filiale;Segreteria;Impiegato;Tecnico qualificato;5;;F;Patrik Manzini;CLEVERTECH
+Justin Ren;6;image.png;cn.png;CTH_CHINA;Supply Chain;Supply Chain;Addetto Acquisti;Tecnico qualificato;5;;M;Patrik Manzini;CLEVERTECH
+Happy Zhang;7;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Impiegato;Tecnico esecutivo;4;;M;Patrik Manzini;CLEVERTECH
+Qiu Gongsheng;8;image.png;cn.png;CTH_CHINA;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;;M;Patrik Manzini;CLEVERTECH
+Shannon Xia;8;image.png;cn.png;CTH_CHINA;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;;M;Patrik Manzini;CLEVERTECH
+Zhang Huan;8;image.png;cn.png;CTH_CHINA;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;;M;Patrik Manzini;CLEVERTECH
+Xu Wei;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+Guo Pengchao;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+Hang Zhengxian;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+He Yimin;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+Li Pengqi;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+Liu Jian;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+Qian Kaiming;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+Song xiangfeng;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+Wang Zhitao;9;image.png;cn.png;CTH_CHINA;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo qualificato;3;;M;Patrik Manzini;CLEVERTECH
+David Wen;6;image.png;cn.png;CTH_CHINA;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;Patrik Manzini;CLEVERTECH
+Chen Yuchun;4;image.png;cn.png;CTH_CHINA;HSE & Facility;Facility;|Responsabile Facility;|Direttivo (Tecnico/organizzativo);6;;F;Patrik Manzini;CLEVERTECH
+Kevin Liu;6;image.png;cn.png;CTH_CHINA;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;;M;Patrik Manzini;CLEVERTECH
+Shan Bo-Andy;6;image.png;cn.png;CTH_CHINA;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;;M;Patrik Manzini;CLEVERTECH
+Kenny Cao;6;image.png;cn.png;CTH_CHINA;Commerciale e Marketing;Commerciale;Venditore;Tecnico qualificato;5;;M;Patrik Manzini;CLEVERTECH
+Aimee Luo;7;image.png;cn.png;CTH_CHINA;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;;;Patrik Manzini;CLEVERTECH
+Nancy Yao;7;image.png;cn.png;CTH_CHINA;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;;F;Patrik Manzini;CLEVERTECH
+Alice Li;7;image.png;cn.png;CTH_CHINA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;F;Patrik Manzini;CLEVERTECH
+Alin Stan;2;image.png;pl.png;CTH_EAST_EUROPE;|Direzione Filiale;|Direzione;|Direttore Filiale;|Direttivo (Quadro / Gestione del cambiamento);8;;M;Giuseppe Reggiani;CLEVERTECH
+Mariusz Blazejewicz;9;image.png;pl.png;CTH_EAST_EUROPE;Produzione;Produzione Meccanica;Trasfertisti/ Esterni;Operativo qualificato;3;;M;Alin Stan;CLEVERTECH
+Krzysztof Laszczak;3;image.png;pl.png;CTH_EAST_EUROPE;Meccatronica;Tecnico Software;|Responsabile Tecnico Software;|Direttivo (Responsabile di team/processi);7;;M;Alin Stan;CLEVERTECH
+Damian Kulgawiuk;6;image.png;pl.png;CTH_EAST_EUROPE;Meccatronica;Tecnico Documentale;Manualista;Tecnico qualificato;5;;M;Alin Stan;CLEVERTECH
+Mohamad Ibrahim;6;image.png;pl.png;CTH_EAST_EUROPE;Meccatronica;Tecnico Documentale;Manualista;Tecnico qualificato;5;;M;Alin Stan;CLEVERTECH
+Damian Rodzonek;6;image.png;pl.png;CTH_EAST_EUROPE;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;Krzysztof Laszczak;CLEVERTECH
+Jakub Radziwonka;6;image.png;pl.png;CTH_EAST_EUROPE;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;Krzysztof Laszczak;CLEVERTECH
+Kamil Kecki;6;image.png;pl.png;CTH_EAST_EUROPE;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;Krzysztof Laszczak;CLEVERTECH
+Rafal Bligier;6;image.png;pl.png;CTH_EAST_EUROPE;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;Krzysztof Laszczak;CLEVERTECH
+Tomasz Siepetowski;6;image.png;pl.png;CTH_EAST_EUROPE;Commerciale e Marketing;Commerciale;Venditore;Tecnico qualificato;5;;M;Alin Stan;CLEVERTECH
+Tomasz Kaczorowski;7;image.png;pl.png;CTH_EAST_EUROPE;Commerciale e Marketing;Commerciale;Venditore;Tecnico esecutivo;4;;M;Alin Stan;CLEVERTECH
+Remigiusz Golinski;6;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Softwarista;Tecnico qualificato;5;;M;Alin Stan;CLEVERTECH
+Magda Szurnicka;7;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;F;Alin Stan;CLEVERTECH
+Rafal Markowski;7;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Alin Stan;CLEVERTECH
+Maciej Kulig;7;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Alin Stan;CLEVERTECH
+Agnieszka Glowacka;7;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;F;Alin Stan;CLEVERTECH
+Dawid Glowacki;7;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;M;Alin Stan;CLEVERTECH
+Marek Strzelczyk;7;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;M;Alin Stan;CLEVERTECH
+Bartek Galek;7;image.png;pl.png;CTH_EAST_EUROPE;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;M;Alin Stan;CLEVERTECH
+Gaël Seguin;3;image.png;fr.png;CTH_FRANCE;Commerciale e Marketing;Commerciale;|Responsabile Commerciale FRANCE;|Direttivo (Responsabile di team/processi);7;;M;Umberto Reggiani;CLEVERTECH
+Simon Pasco;7;image.png;fr.png;CTH_FRANCE;Commerciale e Marketing;Commerciale;Venditore;Tecnico esecutivo;4;;M;Gaël Seguin;CLEVERTECH
+Ray Remillard;7;image.png;fr.png;CTH_FRANCE;Commerciale e Marketing;Commerciale;Impiegato;Tecnico esecutivo;4;;M;Gaël Seguin;CLEVERTECH
+Valerie Seguin;7;image.png;fr.png;CTH_FRANCE;Commerciale e Marketing;Commerciale;Impiegato;Tecnico esecutivo;4;;F;Gaël Seguin;CLEVERTECH
+Nicolas Barazeur;7;image.png;fr.png;CTH_FRANCE;After Sales & Service;After Sales;Trasfertisti/ Esterni;Tecnico esecutivo;4;;M;Gaël Seguin;CLEVERTECH
+Jens Gesterkamp;3;image.png;de.png;CTH_GERMANY;Commerciale e Marketing;Commerciale;|Responsabile Commerciale GERMANY;|Direttivo (Responsabile di team/processi);7;;M;Umberto Reggiani;CLEVERTECH
+Dominic Stein;6;image.png;de.png;CTH_GERMANY;After Sales & Service;Service;Field Service Engineer;Tecnico qualificato;5;;M;Jens Gesterkamp;CLEVERTECH
+Kathrin Gesterkamp;7;image.png;de.png;CTH_GERMANY;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;;F;Jens Gesterkamp;CLEVERTECH
+Amit Khadilkar;2;image.png;in.png;CTH_INDIA;|Direzione Filiale;|Direzione;|Direttore Filiale;|Direttivo (Quadro / Gestione del cambiamento);8;;M;Giuseppe Reggiani;CLEVERTECH
+Abhijit Salunkhe;3;image.png;in.png;CTH_INDIA;Supply Chain;Acquisti;|Responsabile Acquisti;|Direttivo (Responsabile di team/processi);7;;M;Amit Khadilkar;CLEVERTECH
+Sunil Patil;6;image.png;in.png;CTH_INDIA;Supply Chain;Acquisti;Addetto Acquisti;Tecnico qualificato;5;;M;Abhijit Salunkhe;CLEVERTECH
+Astren Belly;7;image.png;in.png;CTH_INDIA;Supply Chain;Acquisti;Addetto Acquisti;Tecnico esecutivo;4;;M;Abhijit Salunkhe;CLEVERTECH
+Sachin Dhavan;7;image.png;in.png;CTH_INDIA;Supply Chain;Supply Chain;Addetto Acquisti;Tecnico esecutivo;4;;M;Abhijit Salunkhe;CLEVERTECH
+Suyasha Jadhav;4;image.png;in.png;CTH_INDIA;Risorse Umane & Servizi Generali;Risorse Umane;|Responsabile Risorse Umane;|Direttivo (Tecnico/organizzativo);6;;F;Amit Khadilkar;CLEVERTECH
+Vinay Shinde;7;image.png;in.png;CTH_INDIA;Qualità & Procedure;Qualità;Addetto Qualità;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Sushila Junjarwad;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Documentale;Manualista;Tecnico qualificato;5;25;F;Amit Khadilkar;CLEVERTECH
+Shrusthi Ambiger;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;;F;Amit Khadilkar;CLEVERTECH
+Shiddham Sharma;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;24;M;Amit Khadilkar;CLEVERTECH
+Kiran Patil;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Deepak Singh;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Omkar Chougule;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Shishir Pednekar;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;42;M;Amit Khadilkar;CLEVERTECH
+Suhas Gosavi;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Sunil Jugale;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Vishal Savant;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Mangesh Mate;6;image.png;in.png;CTH_INDIA;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Dhruva Waikar;6;image.png;in.png;CTH_INDIA;Commerciale e Marketing;Commerciale;Venditore;Tecnico qualificato;5;;M;Amit Khadilkar;CLEVERTECH
+Aanchal Khadilkar;3;image.png;in.png;CTH_INDIA;Amministrazione Finanza e Controllo;Amministrazione;|Responsabile Amministrazione;|Direttivo (Responsabile di team/processi);7;;F;Amit Khadilkar;CLEVERTECH
+Ajay Shitole;7;image.png;in.png;CTH_INDIA;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;;M;Aanchal Khadilkar;CLEVERTECH
+Pramod Chavan;7;image.png;in.png;CTH_INDIA;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;;M;Aanchal Khadilkar;CLEVERTECH
+Rohit Patil;7;image.png;in.png;CTH_INDIA;Amministrazione Finanza e Controllo;Informatico;Impiegato;Tecnico esecutivo;4;;M;Aanchal Khadilkar;CLEVERTECH
+Prabhat Pandey;7;image.png;in.png;CTH_INDIA;Amministrazione Finanza e Controllo;Informatico;Proposal Engineer;Tecnico esecutivo;4;;M;Aanchal Khadilkar;CLEVERTECH
+Divakar Joshi;7;image.png;in.png;CTH_INDIA;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Harish Hubballi;7;image.png;in.png;CTH_INDIA;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Aaditya Pandey;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Kamalesh Das;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Syed Hamdaan;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Chetan Kathare;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Murali Pathipati;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Shivanand Pattar;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Vineet Naikwad;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Vinod Saptasagar;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Vivek Savant;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Akash Shinde;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Anil Kumar;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Mohammad Akif Ansari;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Dhanush Emidi;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Softwarista;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Shivalingppa  Ullagaddi;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Engineer;Tecnico esecutivo;4;;M;Amit Khadilkar;CLEVERTECH
+Soumya Patil;7;image.png;in.png;CTH_INDIA;After Sales & Service;Service;Service Engineer;Tecnico esecutivo;4;;F;Amit Khadilkar;CLEVERTECH
+Giuseppe Reggiani;1;image.png;it.png;CTH_ITALY;|Direzione Generale;|Direzione;|Amministratore Delegato;Dirigente;DIR;73;M;;CLEVERTECH
+Lorenzo Vezzani;2;image.png;it.png;CTH_ITALY;Supply Chain;|Direzione;|Direttore Supply Chain;|Direttivo (Quadro / Gestione del cambiamento);8;49;M;Giuseppe Reggiani;CLEVERTECH
+Gennaro Lombardo;3;image.png;it.png;CTH_ITALY;Supply Chain;Controllo Qualità Terzisti;|Responsabile Terzisti;|Direttivo (Responsabile di team/processi);7;44;M;Lorenzo Vezzani;CLEVERTECH
+Chiara Schiavone;4;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Supporto Amministrativo;|Direttivo (Tecnico/organizzativo);6;29;F;Lorenzo Vezzani;CLEVERTECH
+Alessia Crimi;4;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti After Sales;|Direttivo (Tecnico/organizzativo);6;37;F;Lorenzo Vezzani;CLEVERTECH
+Diego Panepinto;4;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti Meccanici;|Direttivo (Tecnico/organizzativo);6;47;M;Lorenzo Vezzani;ASOTECH
+Valeria Giudici;5;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti Elettrici;Tecnico specializzato;5S;45;F;Lorenzo Vezzani;CLEVERTECH
+Massimo Bragazzi;5;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti Macchine Terzi;Tecnico specializzato;5S;52;M;Lorenzo Vezzani;CLEVERTECH
+Massimiliano Nizzoli;5;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti Meccanici;Tecnico specializzato;5S;54;M;Lorenzo Vezzani;CLEVERTECH
+Sumeet Singh;6;Foto Sumeet.png;it.png;CTH_ITALY;Supply Chain;Tecnico Meccanico;Addetto Ottimizzazione Tecnica;Tecnico qualificato;5;28;M;Lorenzo Vezzani;CLEVERTECH
+Alessandro Viglione;7;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti Gruppi;Tecnico esecutivo;4;32;M;Lorenzo Vezzani;CLEVERTECH
+Deborah La Face;7;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti;Tecnico esecutivo;4;37;F;Lorenzo Vezzani;CLEVERTECH
+Maria Vittoria Bagni;7;image.png;it.png;CTH_ITALY;Supply Chain;Magazzino;Impiegato;Tecnico esecutivo;4;;F;Lorenzo Vezzani;CLEVERTECH
+Matteo Saccani;7;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti Elettrici;Tecnico esecutivo;4;24;M;Lorenzo Vezzani;CLEVERTECH
+Marina Gatta;7;image.png;it.png;CTH_ITALY;Supply Chain;Acquisti;Addetto Acquisti Macchine Terzi;Tecnico esecutivo;4;23;F;Massimo Bragazzi;CLEVERTECH
+Diego Franchi;7;image.png;it.png;CTH_ITALY;Supply Chain;Tecnico Meccanico;Addetto Ottimizzazione Tecnica;Tecnico esecutivo;4;20;M;Sumeet Singh;CLEVERTECH
+Diego Rigolini;7;image.png;it.png;CTH_ITALY;Supply Chain;Tecnico Meccanico;Addetto Ottimizzazione Tecnica;Tecnico esecutivo;4;;M;Sumeet Singh;ASOTECH
+Ciro Maviglia;10;image.png;it.png;CTH_ITALY;Supply Chain;Magazzino;Magazziniere;Operativo base;2;44;M;Lorenzo Vezzani;CLEVERTECH
+Francesca Tirelli;3;image.png;it.png;CTH_ITALY;Risorse Umane & Servizi Generali;Risorse Umane;|Responsabile Risorse Umane;|Direttivo (Responsabile di team/processi);7;55;F;Giuseppe Reggiani;CLEVERTECH
+Stefania Popa;6;image.png;it.png;CTH_ITALY;Risorse Umane & Servizi Generali;Reception;Receptionist;Tecnico qualificato;5;41;F;Giuseppe Reggiani;COOPSERVICE
+Chiara Borciani;6;image.png;it.png;CTH_ITALY;Risorse Umane & Servizi Generali;Risorse Umane;Impiegato;Tecnico qualificato;5;43;F;Francesca Tirelli;CLEVERTECH
+Gabriele Menozzi;3;image.png;it.png;CTH_ITALY;Qualità & Procedure;Qualità;|Responsabile Qualità;|Direttivo (Responsabile di team/processi);7;47;M;Giuseppe Reggiani;CLEVERTECH
+Andrea Fontana;5;image.png;it.png;CTH_ITALY;Qualità & Procedure;Qualità;Impiegato;Tecnico specializzato;5S;26;M;Gabriele Menozzi;CLEVERTECH
+Vincenzo Cozzolino;5;image.png;it.png;CTH_ITALY;Qualità & Procedure;Qualità;Quality Key Account;Tecnico specializzato;5S;42;M;Gabriele Menozzi;CLEVERTECH
+Davide Righetti;6;image.png;it.png;CTH_ITALY;Qualità & Procedure;Qualità;Addetto Qualità;Tecnico qualificato;5;43;M;Gabriele Menozzi;CLEVERTECH
+Stefano Giorgini;2;image.png;it.png;CTH_ITALY;Produzione;|Direzione;|Direttore Operativo;|Direttivo (Quadro / Gestione del cambiamento);8;46;M;Giuseppe Reggiani;CLEVERTECH
+Stefano Bulletta;3;image.png;it.png;CTH_ITALY;Produzione;Attrezzeria;|Responsabile Attrezzeria;|Direttivo (Responsabile di team/processi);7;35;M;Stefano Giorgini;CLEVERTECH
+Andrea Botti;3;image.png;it.png;CTH_ITALY;Produzione;Collaudo Software;|Responsabile Collaudo Software;|Direttivo (Responsabile di team/processi);7;42;M;Stefano Giorgini;CLEVERTECH
+Alessandro Barchi;3;image.png;it.png;CTH_ITALY;Produzione;Magazzino;|Responsabile Magazzino;|Direttivo (Responsabile di team/processi);7;38;M;Stefano Giorgini;CLEVERTECH
+Simone Mallozzi;3;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;|Responsabile Produzione Elettrica;|Direttivo (Responsabile di team/processi);7;42;M;Stefano Giorgini;CLEVERTECH
+Demis Bussei;3;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;|Responsabile Produzione Meccanica;|Direttivo (Responsabile di team/processi);7;46;M;Stefano Giorgini;CLEVERTECH
+Gianluca Foti;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;48;M;Demis Bussei;CLEVERTECH
+Andrea Borciani;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;50;M;Demis Bussei;CLEVERTECH
+Andrea Chierici;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;39;M;Demis Bussei;CLEVERTECH
+Andrea Salvatore Maltesi;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;44;M;Demis Bussei;CLEVERTECH
+Davide Bernardoni;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;60;M;Demis Bussei;CLEVERTECH
+Domenico Tromiro;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;52;M;Demis Bussei;CLEVERTECH
+Eugenio Corradi;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;61;M;Demis Bussei;CLEVERTECH
+Fabrizio Santini;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;61;M;Demis Bussei;CLEVERTECH
+Marco Cerasola;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;59;M;Demis Bussei;CLEVERTECH
+Paolo Santini;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;56;M;Demis Bussei;CLEVERTECH
+Said Mouanid;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;52;M;Demis Bussei;CLEVERTECH
+Stefano Farsoni;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;48;M;Demis Bussei;CLEVERTECH
+Luigi Izzo;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;53;M;Demis Bussei;CLEVERTECH
+Marco Giglioli;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;56;M;Demis Bussei;CLEVERTECH
+Mihail Cicanci;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;34;M;Demis Bussei;CLEVERTECH
+Tudorel Bogdan Varganici;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;42;M;Demis Bussei;CLEVERTECH
+Giovanni Zecchetti;4;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Capo Macchina;|Direttivo (Tecnico/organizzativo);6;36;M;Demis Bussei;CLEVERTECH
+Clauco Imerio Benelli;4;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;|Direttivo (Tecnico/organizzativo);6;74;M;Alessandro Barchi;CLEVERTECH
+Fabio Burani;4;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;|Direttivo (Tecnico/organizzativo);6;50;M;Alessandro Barchi;CLEVERTECH
+Francesco Mastrosimone;5;image.png;it.png;CTH_ITALY;Produzione;Collaudo Software;Softwarista;Tecnico specializzato;5S;30;M;Andrea Botti;CLEVERTECH
+Benvenuto Palmieri;5;image.png;it.png;CTH_ITALY;Produzione;Collaudo Software;Softwarista;Tecnico specializzato;5S;37;M;Andrea Botti;CLEVERTECH
+Khalifa ben hamed ben hassine;5;image.png;it.png;CTH_ITALY;Produzione;Attrezzeria;Verniciatore;Tecnico specializzato;5S;65;M;Stefano Bulletta;CLEVERTECH
+Taoufik Ermaidi;5;image.png;it.png;CTH_ITALY;Produzione;Attrezzeria;Verniciatore;Tecnico specializzato;5S;42;M;Stefano Bulletta;CLEVERTECH
+Denise Zaccarelli;7;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Impiegato;Tecnico esecutivo;4;29;F;Alessandro Barchi;CLEVERTECH
+Marco Petrocchi Barini;7;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Impiegato;Tecnico esecutivo;4;21;M;Demis Bussei;CLEVERTECH
+Francesco Larocca;7;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Impiegato;Tecnico esecutivo;4;30;M;Demis Bussei;MEDIADESIGN
+Jacopo Bigi;7;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Impiegato;Tecnico esecutivo;4;;M;Demis Bussei;MEDIADESIGN
+Nicola Venditti;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;45;M;Alessandro Barchi;CLEVERTECH
+Umberto Immovilli;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;56;M;Alessandro Barchi;CLEVERTECH
+Angelo Lampis;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;41;M;Alessandro Barchi;CLEVERTECH
+Anis Zekri;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;55;M;Alessandro Barchi;CLEVERTECH
+Gabriele Chiari;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;58;M;Alessandro Barchi;CLEVERTECH
+Gabriele Piguzzi;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;51;M;Alessandro Barchi;CLEVERTECH
+Gaetano Dattilo;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;34;M;Alessandro Barchi;CLEVERTECH
+Gerson Dervishaj;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;40;M;Alessandro Barchi;CLEVERTECH
+Hudson Guarise Dazilio;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;41;M;Alessandro Barchi;CLEVERTECH
+Ilyas Ennaciri;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;34;M;Alessandro Barchi;CLEVERTECH
+Marco Rosato;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;55;M;Alessandro Barchi;CLEVERTECH
+Paolo Ferrari;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;60;M;Alessandro Barchi;CLEVERTECH
+Pasquale Iacobone;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;49;M;Alessandro Barchi;CLEVERTECH
+Stefano Morari;8;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo specializzato;3S;54;M;Alessandro Barchi;CLEVERTECH
+Andrea Fiore;8;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;Montatore Elettrico;Operativo specializzato;3S;54;M;Simone Mallozzi;CLEVERTECH
+Fabrizio Caggiati;8;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;Montatore Elettrico;Operativo specializzato;3S;54;M;Simone Mallozzi;CLEVERTECH
+Silvano Lo Duca;8;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;Montatore Elettrico;Operativo specializzato;3S;56;M;Simone Mallozzi;CLEVERTECH
+Omar Bertani;8;image.png;it.png;CTH_ITALY;Produzione;Attrezzeria;Saldatore;Operativo specializzato;3S;46;M;Stefano Bulletta;CLEVERTECH
+Ermanno Paterlini;8;image.png;it.png;CTH_ITALY;Produzione;Attrezzeria;Tornitore;Operativo specializzato;3S;56;M;Stefano Bulletta;CLEVERTECH
+Naveed Razzaq;8;image.png;it.png;CTH_ITALY;Produzione;Attrezzeria;Tornitore;Operativo specializzato;3S;20;M;Stefano Bulletta;CLEVERTECH
+Malick Mame;8;image.png;it.png;CTH_ITALY;Produzione;Attrezzeria;Tornitore;Operativo specializzato;3S;;M;Stefano Bulletta;CLEVERTECH
+Aneamin Stephane Oulouzibo;9;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo qualificato;3;34;M;Alessandro Barchi;CLEVERTECH
+Filomena Lista;9;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo qualificato;3;40;F;Alessandro Barchi;CLEVERTECH
+Marco Vicedomini;9;image.png;it.png;CTH_ITALY;Produzione;Magazzino;Magazziniere;Operativo qualificato;3;43;M;Alessandro Barchi;CLEVERTECH
+Hassan Anejjar;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;Montatore Elettrico;Operativo base;2;39;M;Simone Mallozzi;CLEVERTECH
+Giulio Piluso;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;Montatore Elettrico;Operativo base;2;;M;Simone Mallozzi;CLEVERTECH
+Mino Ligorio;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;Montatore Elettrico;Operativo base;2;;M;Simone Mallozzi;MGA
+Raffaele Colurcio;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Elettrica;Montatore Elettrico;Operativo base;2;50;M;Simone Mallozzi;CLEVERTECH
+Andrea Lorenzani;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;47;M;Demis Bussei;CLEVERTECH
+Ghia Goghidze;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;37;M;Demis Bussei;CLEVERTECH
+Nicolas Gareri;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;42;M;Demis Bussei;CLEVERTECH
+Paolo Lusuardi;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;53;M;Demis Bussei;CLEVERTECH
+Stepan Rudyi;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;31;M;Demis Bussei;CLEVERTECH
+Abdelaziz El Haouat;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;54;M;Demis Bussei;CLEVERTECH
+Aurel Grigoras;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;54;M;Demis Bussei;CLEVERTECH
+Carmine D'orsi;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;47;M;Demis Bussei;CLEVERTECH
+Clementin Eugen Moisa;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;58;M;Demis Bussei;CLEVERTECH
+David Anthony Pecoraro;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;50;M;Demis Bussei;CLEVERTECH
+Domenico Frijio;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;29;M;Demis Bussei;CLEVERTECH
+Eduard Jardas;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;57;M;Demis Bussei;CLEVERTECH
+Mattia Maisano;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;24;M;Demis Bussei;CLEVERTECH
+Rabii El Haouat;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;49;M;Demis Bussei;CLEVERTECH
+Victor Cebanu;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;33;M;Demis Bussei;CLEVERTECH
+Vincenzo Santoro;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;;M;Demis Bussei;CLEVERTECH
+Andriy Tsvigun;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;51;M;Demis Bussei;CLEVERTECH
+Fouad Kouki;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;55;M;Demis Bussei;CLEVERTECH
+Lorenzo Grigoras;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;26;M;Demis Bussei;CLEVERTECH
+Mario Rento;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;60;M;Demis Bussei;CLEVERTECH
+Pietro Marusyk;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;55;M;Demis Bussei;CLEVERTECH
+Billo Gila;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;;M;Demis Bussei;CLEVERTECH
+Ivanisevic Dragan;10;image.png;it.png;CTH_ITALY;Produzione;Produzione Meccanica;Montatore Meccanico;Operativo base;2;;M;Demis Bussei;CLEVERTECH
+Simone Cervi;2;image.png;it.png;CTH_ITALY;Meccatronica;|Direzione;|Direttore Tecnico;|Direttivo (Quadro / Gestione del cambiamento);8;47;M;Giuseppe Reggiani;CLEVERTECH
+Elena Tonna;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;|Responsabile Tecnico Documentale;|Direttivo (Responsabile di team/processi);7;32;F;Simone Cervi;CLEVERTECH
+Mauro Filippi;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;|Responsabile Tecnico Elettrico;|Direttivo (Responsabile di team/processi);7;55;M;Simone Cervi;CLEVERTECH
+Fabio Leoni;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;|Responsabile Tecnico Meccanico;|Direttivo (Responsabile di team/processi);7;45;M;Simone Cervi;CLEVERTECH
+Fernando Luzzara;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico Leantech;|Responsabile Tecnico Meccanico Leantech;|Direttivo (Responsabile di team/processi);7;;M;Simone Cervi;LEANTECH
+Devid Agazzi;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Safety;|Responsabile Tecnico Safety;|Direttivo (Responsabile di team/processi);7;42;M;Simone Cervi;CLEVERTECH
+David Tabacco;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;|Responsabile Tecnico Software;|Direttivo (Responsabile di team/processi);7;38;M;Simone Cervi;CLEVERTECH
+Stefano Falavigna;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Standardizzazione;|Responsabile Tecnico Standardizzazione;|Direttivo (Responsabile di team/processi);7;27;M;Simone Cervi;CLEVERTECH
+Mauro Giovanelli;3;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Standardizzazione;|Responsabile Tecnico Standardizzazione;|Direttivo (Responsabile di team/processi);7;63;M;Simone Cervi;Lavoratore Autonomo
+Carmelo Antonio Minniti;4;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;|Direttivo (Tecnico/organizzativo);6;;M;Fernando Luzzara;LEANTECH
+Francesco Passafiume;5;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico specializzato;5S;46;M;Mauro Filippi;CLEVERTECH
+Esteban Paulino Vicent Sementa;5;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico specializzato;5S;54;M;David Tabacco;CLEVERTECH
+Enrico Morini;5;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico specializzato;5S;31;M;David Tabacco;CLEVERTECH
+Gualtiero Venturelli;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista;Tecnico qualificato;5;46;M;Elena Tonna;CLEVERTECH
+Martina Longobardi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista;Tecnico qualificato;5;23;F;Elena Tonna;ASOTECH
+Laura Coppelletti;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista;Tecnico qualificato;5;;F;Elena Tonna;ASOTECH
+Mirco Corradini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;31;M;Mauro Filippi;CLEVERTECH
+Gianni Costaggiu;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;42;M;Mauro Filippi;CLEVERTECH
+Andrea Di Puma;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;27;M;Mauro Filippi;CLEVERTECH
+Rino D'alsazia;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;35;M;Mauro Filippi;CLEVERTECH
+Mohammad Yaseen Siddique;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;25;M;Mauro Filippi;RYCAD
+Daniele Risposi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;;M;Mauro Filippi;CLEVERTECH
+Davide Laquaglia;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;;M;Mauro Filippi;MEDIADESIGN
+Francesco Grisendi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;;M;Mauro Filippi;MEDIADESIGN
+Nicolas Carracino;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Elettrico;Tecnico qualificato;5;;M;Mauro Filippi;ASOTECH
+Dalmazio Oddi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Meccanico;Tecnico qualificato;5;54;M;Mauro Filippi;CLEVERTECH
+Gianluca Majavacchi;6;Maja.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;60;M;Fabio Leoni;CLEVERTECH
+Andrea Salvo;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;53;M;Fabio Leoni;CLEVERTECH
+Maurizio Ornati;6;Ornati.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;58;M;Fabio Leoni;CLEVERTECH
+Alberto Soprani;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;50;M;Fabio Leoni;CLEVERTECH
+Alessandro De Maria;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;51;M;Fabio Leoni;CLEVERTECH
+Enrico Montanari;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;35;M;Fabio Leoni;MEDIADESIGN
+Marco Agostini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;44;M;Fabio Leoni;MEDIADESIGN
+Daniele Corradini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;35;M;Fabio Leoni;CLEVERTECH
+Alessandro Massaro;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;37;M;Fabio Leoni;CLEVERTECH
+Marcello Cabassi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;22;M;Fabio Leoni;MEDIADESIGN
+Nico Rossi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;30;M;Fabio Leoni;MEDIADESIGN
+Faisal Bahar;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;28;M;Fabio Leoni;CLEVERTECH
+Amos Giampaoli;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Fabio Leoni;MEDIADESIGN
+Davide Pellini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;31;M;Fabio Leoni;MEDIADESIGN
+Lorenzo Rocchi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;50;M;Fabio Leoni;Lavoratore autonomo
+Francesco Montanari;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;32;M;Fabio Leoni;MEDIADESIGN
+Gabriele Sacchi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Fabio Leoni;MEDIADESIGN
+Gianluca Cerini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Fabio Leoni;MPM
+Massimo Tommasini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;51;M;Fabio Leoni;MEDIADESIGN
+Luca Cavani;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;;M;Fabio Leoni;ASOTECH
+Daniele Rossi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Tecnico qualificato;5;;M;Fernando Luzzara;LEANTECH
+Federico Felloni;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Tecnico qualificato;5;;M;Fernando Luzzara;LEANTECH
+Ilir Janushaj;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Tecnico qualificato;5;;M;Fernando Luzzara;LEANTECH
+Matteo Grossi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Tecnico qualificato;5;;M;Fernando Luzzara;LEANTECH
+Simone Musumarra;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico Leantech;Progettista Meccanico;Tecnico qualificato;5;;M;Fernando Luzzara;LEANTECH
+Davide Zannini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;41;M;David Tabacco;CLEVERTECH
+Davide Baraldi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;49;M;David Tabacco;CLEVERTECH
+Roberto Sarzola;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;50;M;David Tabacco;CLEVERTECH
+Antonio Lettieri;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;David Tabacco;CLEVERTECH
+Paola Aprigliano;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;28;F;David Tabacco;CLEVERTECH
+Abdelghani Essakhi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;28;M;David Tabacco;CLEVERTECH
+Andrea Filippini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;20;M;David Tabacco;CLEVERTECH
+Achraf Namli;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;27;M;David Tabacco;CLEVERTECH
+Matteo Manzotti;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;32;M;David Tabacco;CLEVERTECH
+Stefano Bolognesi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;25;M;David Tabacco;CLEVERTECH
+Elias Emmanuel Albarracin;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;30;M;David Tabacco;CLEVERTECH
+Emanuele Romagnani;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;23;M;David Tabacco;CLEVERTECH
+Erik Simonetti;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;23;M;David Tabacco;CLEVERTECH
+Osayi Nevis Ovbiebo;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;32;M;David Tabacco;CLEVERTECH
+Radu Stirbul;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;34;M;David Tabacco;CLEVERTECH
+Adriano Tirelli;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;39;M;David Tabacco;CLEVERTECH
+Alexander Prodan;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;David Tabacco;CLEVERTECH
+Rafael Eduardo Flores Pat;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;David Tabacco;Energki
+Simone Tolu;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;David Tabacco;ASOTECH
+Alex Gugliotta;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;;M;David Tabacco;CLEVERTECH
+Matteo Paterlini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Tecnico qualificato;5;26;M;David Tabacco;CLEVERTECH
+Sonia Cicatiello;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Addetto Pianificazione;Tecnico qualificato;5;28;F;David Tabacco;CLEVERTECH
+Soraya Ponti;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Addetto Pianificazione;Tecnico qualificato;5;25;F;David Tabacco;CLEVERTECH
+Giovanni Orlandini;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Safety;Addetto Sicurezza macchine;Tecnico qualificato;5;;M;Devid Agazzi;CLEVERTECH
+Roberto Callegari;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista Meccanico;Tecnico qualificato;5;54;M;Elena Tonna;CLEVERTECH
+Lisa Aimi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista Meccanico;Tecnico qualificato;5;43;F;Elena Tonna;CLEVERTECH
+Annarita Arlotti;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista Meccanico;Tecnico qualificato;5;52;F;Elena Tonna;CLEVERTECH
+Fabiana Salardi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista Software;Tecnico qualificato;5;44;F;Elena Tonna;CLEVERTECH
+Mina Faiez Bishai Said;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Documentale;Manualista Software;Tecnico qualificato;5;;M;Elena Tonna;CLEVERTECH
+Giuseppe Rizza;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Bordo Macchina;Tecnico qualificato;5;56;M;Mauro Filippi;CLEVERTECH
+Alessandro Maestri;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Bordo Macchina;Tecnico qualificato;5;38;M;Mauro Filippi;CLEVERTECH
+Karla Canché;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Bordo Macchina;Tecnico qualificato;5;;F;Mauro Filippi;CLEVERTECH
+Haini Terzi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Canale;Tecnico qualificato;5;48;M;Mauro Filippi;CLEVERTECH
+Alberto Maria Esposito;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Canale;Tecnico qualificato;5;24;M;Mauro Filippi;CLEVERTECH
+Alex Gualtieri;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Elettrico;Progettista Canale;Tecnico qualificato;5;;M;Mauro Filippi;CLEVERTECH
+Davide Catozzi;6;cato.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico Ballatoi;Tecnico qualificato;5;53;M;Fabio Leoni;TECNODINAMICA
+Andrea Falciroli;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Tecnico qualificato;5;27;M;Stefano Falavigna;CLEVERTECH
+Mattia Chiericati;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Tecnico qualificato;5;26;M;Stefano Falavigna;CLEVERTECH
+Luca Bernardi;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Tecnico qualificato;5;31;M;Stefano Falavigna;ASOTECH
+Paolo Cocconcelli;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Standardizzazione;Progettista Meccanico Gruppi Standard;Tecnico qualificato;5;48;M;Stefano Falavigna;COMINT
+Fabio Schiatti;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico Protezioni;Tecnico qualificato;5;;M;Fabio Leoni;MEDIADESIGN
+Simone Andriulo;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico Protezioni;Tecnico qualificato;5;29;M;Fabio Leoni;MEDIADESIGN
+Matteo Piroli;6;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Meccanico;Progettista Meccanico Trasporti;Tecnico qualificato;5;;M;Fabio Leoni;MEDIADESIGN
+Yassine El Amiri;11;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;Appr.;23;M;David Tabacco;CLEVERTECH
+Samuele Borghi;11;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;Appr.;21;M;David Tabacco;CLEVERTECH
+Browndon Tankeu;11;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;Appr.;28;M;David Tabacco;CLEVERTECH
+Lucia Fornaciari;11;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;Appr.;21;F;David Tabacco;CLEVERTECH
+Massimo Verri;11;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;Appr.;20;M;David Tabacco;CLEVERTECH
+Ibara Akambo Beni;11;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;Appr.;21;M;David Tabacco;CLEVERTECH
+Floraldo Stafa;11;image.png;it.png;CTH_ITALY;Meccatronica;Tecnico Software;Softwarista;Apprendista impiegato;Appr.;;M;David Tabacco;CLEVERTECH
+Fabio Giordani;3;image.png;it.png;CTH_ITALY;HSE & Facility;Facility;|Responsabile Facility;|Direttivo (Responsabile di team/processi);7;43;M;Giuseppe Reggiani;CLEVERTECH
+Augusto Melissari;3;image.png;it.png;CTH_ITALY;HSE & Facility;Prevenzione e Protezione / Gestione Ambientale;|Responsabile Prevenzione e Protezione / Gestione Ambientale;|Direttivo (Responsabile di team/processi);7;42;M;Giuseppe Reggiani;CLEVERTECH
+Raffaella Mastrandrea;7;image.png;it.png;CTH_ITALY;HSE & Facility;Prevenzione e Protezione / Gestione Ambientale;Impiegato;Tecnico esecutivo;4;48;F;Augusto Melissari;CLEVERTECH
+Francesco Beltrami;2;image.png;it.png;CTH_ITALY;E-Commerce;|Direzione;|Direttore E-Commerce;|Direttivo (Quadro / Gestione del cambiamento);8;46;M;Giuseppe Reggiani;CLEVERTECH
+Edmond Leci;3;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;|Responsabile Produzione Meccanica;|Direttivo (Responsabile di team/processi);7;40;M;Francesco Beltrani;CLEVERTECH
+Matteo Viappiani;3;image.png;it.png;CTH_ITALY;E-Commerce;Supply Chain;|Responsabile Supply Chain;|Direttivo (Responsabile di team/processi);7;47;M;Francesco Beltrani;CLEVERTECH
+Matteo Modenese;3;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Meccanico;|Responsabile Tecnico Meccanico;|Direttivo (Responsabile di team/processi);7;57;M;Francesco Beltrani;CLEVERTECH
+Luca Stafetta;5;image.png;it.png;CTH_ITALY;E-Commerce;Supply Chain;Addetto Acquisti;Tecnico specializzato;5S;52;M;Matteo Viappiani;CLEVERTECH
+Matteo Cabassi;5;image.png;it.png;CTH_ITALY;E-Commerce;Project Management Meccanico;PM;Tecnico specializzato;5S;35;M;Francesco Beltrani;CLEVERTECH
+Elia Petruzzellis;6;image.png;it.png;CTH_ITALY;E-Commerce;Project Management Meccanico;PM;Tecnico qualificato;5;24;M;Matteo Cabassi;CLEVERTECH
+Claudio Soliani;6;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;33;M;Matteo Modenese;CLEVERTECH
+Mauro Mainini;6;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;58;M;Matteo Modenese;CLEVERTECH
+Gregorio Chiarella;6;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;24;M;Matteo Modenese;CLEVERTECH
+Simone Barba;6;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;33;M;Matteo Modenese;CLEVERTECH
+Daniele Gallinari;6;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Tecnico qualificato;5;59;M;Matteo Modenese;Lavoratore autonomo
+Edwin Levada;6;image.png;it.png;CTH_ITALY;E-Commerce;Qualità;Addetto Qualità;Tecnico qualificato;5;40;M;Francesco Beltrami;CLEVERTECH
+Pietro Avena;6;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Elettrico;Progettista Elettrico Quadri;Tecnico qualificato;5;35;M;Francesco Beltrami;CLEVERTECH
+Nansi Radwan;7;image.png;it.png;CTH_ITALY;E-Commerce;Tecnico Meccanico;Progettista Meccanico;Tecnico esecutivo;4;34;F;Matteo Modenese;CLEVERTECH
+Simone Scaffardi;7;image.png;it.png;CTH_ITALY;E-Commerce;Project Management Automazione;PM-A;Tecnico esecutivo;4;;M;Francesco Beltrami;ASOTECH
+Mario Rafael Rey;8;image.png;it.png;CTH_ITALY;E-Commerce;Collaudo Software;Montatore Elettrico;Operativo specializzato;3S;;M;Edmond Leci;CLEVERTECH
+DORIAN MARKJA;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;29;M;Edmond Leci;CLEVERTECH
+MARCO DI CRISTOFARO;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;40;M;Edmond Leci;CLEVERTECH
+MARIA LUCIA FOTTICCHIO;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;25;F;Edmond Leci;CLEVERTECH
+PAVEL OLARASU;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;53;M;Edmond Leci;CLEVERTECH
+VINCENZO GENTILE;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;37;M;Edmond Leci;CLEVERTECH
+ALESSANDRA SUMMA;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;48;F;Edmond Leci;CLEVERTECH
+EMANUELA BRUNO;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;24;F;Edmond Leci;CLEVERTECH
+MICHELE SABELLA;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;44;M;Edmond Leci;CLEVERTECH
+TERESA SCAFA;10;image.png;it.png;CTH_ITALY;E-Commerce;Produzione Meccanica;Montatore Meccanico;Operativo base;2;33;F;Edmond Leci;CLEVERTECH
+Umberto Reggiani;2;image.png;it.png;CTH_ITALY;Commerciale e Marketing;|Direzione;|Direttore Commerciale;|Direttivo (Quadro / Gestione del cambiamento);8;49;M;Giuseppe Reggiani;CLEVERTECH
+Luca Carollo;2;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Marketing;|Responsabile Marketing e Supporto Commerciale;|Direttivo (Quadro / Gestione del cambiamento);8;48;M;Umberto Reggiani;CLEVERTECH
+Fabio Spagni;3;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Automazione;|Responsabile Project Management Automazione;|Direttivo (Responsabile di team/processi);7;52;M;Umberto Reggiani;CLEVERTECH
+Emanuele Ferretti;3;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;|Responsabile Project Management Meccanico;|Direttivo (Responsabile di team/processi);7;39;M;Umberto Reggiani;CLEVERTECH
+Fabrizio Corradini;3;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;|Responsabile Tecnico Commerciale;|Direttivo (Responsabile di team/processi);7;47;M;Umberto Reggiani;CLEVERTECH
+Alice Reggiani;4;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Addetto Spedizioni;Impiegato;|Direttivo (Tecnico/organizzativo);6;40;F;Umberto Reggiani;CLEVERTECH
+Anastasiya Turci Vorobyova;5;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Marketing;Impiegato;Tecnico specializzato;5S;32;F;Umberto Reggiani;CLEVERTECH
+Amedeo Roma;5;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Commerciale;Venditore;Tecnico specializzato;5S;53;M;Luca Carollo;CLEVERTECH
+Paolo Soliani;5;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Commerciale;Venditore;Tecnico specializzato;5S;47;M;Luca Carollo;CLEVERTECH
+Marco Rama;5;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Commerciale;Venditore;Tecnico specializzato;5S;52;M;Luca Carollo;CLEVERTECH
+Laura Valenti;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Commerciale;Impiegato;Tecnico qualificato;5;56;F;Luca Carollo;CLEVERTECH
+Jorge Luis Pellegrini;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico qualificato;5;37;M;Fabrizio Corradini;CLEVERTECH
+Riccardo Dignatici;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico qualificato;5;41;M;Fabrizio Corradini;CLEVERTECH
+Satvir Singh;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico qualificato;5;29;M;Fabrizio Corradini;CLEVERTECH
+Serhiy Vakar;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico qualificato;5;64;M;Fabrizio Corradini;CLEVERTECH
+Andrea Francavilla;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico qualificato;5;36;M;Fabrizio Corradini;CLEVERTECH
+Federico Leporati;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;38;M;Emanuele Ferretti;CLEVERTECH
+Fabio Vaini;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;44;M;Emanuele Ferretti;CLEVERTECH
+Michele Bertolaso;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;33;M;Emanuele Ferretti;CLEVERTECH
+Alberto Caselli Bettuzzi;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;51;M;Emanuele Ferretti;CLEVERTECH
+Gian Guido Ghiretti;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;36;M;Emanuele Ferretti;CLEVERTECH
+Houssem Rahmouni;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;27;M;Emanuele Ferretti;CLEVERTECH
+Francesco Regalino;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;27;M;Emanuele Ferretti;CLEVERTECH
+Umberto Montruccoli;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;25;M;Emanuele Ferretti;CLEVERTECH
+Alessandro Terra;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;;M;Emanuele Ferretti;CLEVERTECH
+Mohamed Zouhid;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;;M;Emanuele Ferretti;CLEVERTECH
+Alvise Fenzo;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Automazione;PM-A;Tecnico qualificato;5;50;M;Fabio Spagni;CLEVERTECH
+Ralf Wagner;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Automazione;PM-A;Tecnico qualificato;5;37;M;Fabio Spagni;CLEVERTECH
+Enrico Franzoni;6;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Automazione;PM-A;Tecnico qualificato;5;31;M;Fabio Spagni;CLEVERTECH
+Sara Gariselli;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Marketing;Impiegato;Tecnico esecutivo;4;26;F;Anastasiya Vorobyova;CLEVERTECH
+Federica Tagliavini;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Marketing;Impiegato;Tecnico esecutivo;4;27;F;Anastasiya Vorobyova;CLEVERTECH
+Stefania De Padova;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;Impiegato;Tecnico esecutivo;4;43;F;Emanuele Ferretti;CLEVERTECH
+Alessandro Vezzani;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Impiegato;Tecnico esecutivo;4;;M;Fabrizio Corradini;CLEVERTECH
+Daisy Dicembrini;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Segreteria;Impiegato;Tecnico esecutivo;4;39;F;Umberto Reggiani;CLEVERTECH
+Marilena Bruno;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Segreteria;Impiegato;Tecnico esecutivo;4;47;F;Umberto Reggiani;CLEVERTECH
+Antonio Anastasi;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico esecutivo;4;27;M;Fabrizio Corradini;CLEVERTECH
+Tanja Lugli;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico esecutivo;4;38;F;Fabrizio Corradini;CLEVERTECH
+Davide Di Costa;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico esecutivo;4;27;M;Fabrizio Corradini;CLEVERTECH
+Antonio Laddomada;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico esecutivo;4;32;M;Fabrizio Corradini;CLEVERTECH
+Omar Ori;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Tecnico Commerciale;Layoutista;Tecnico esecutivo;4;;M;Fabrizio Corradini;MARCHIANI
+Davide Fontana;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico esecutivo;4;35;M;Emanuele Ferretti;CLEVERTECH
+Riccardo Gambarelli;7;image.png;it.png;CTH_ITALY;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico esecutivo;4;;M;Emanuele Ferretti;CLEVERTECH
+Enrico Reggiani;2;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;|Direzione;|Direttore Amministrazione;|Direttivo (Quadro / Gestione del cambiamento);8;47;M;Giuseppe Reggiani;CLEVERTECH
+Elena Minarini;3;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;|Responsabile Amministrazione;|Direttivo (Responsabile di team/processi);7;36;F;Enrico Reggiani;CLEVERTECH
+Natascia Tondi;3;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Business Intelligence;|Responsabile Business Intelligence;|Direttivo (Responsabile di team/processi);7;52;F;Enrico Reggiani;CLEVERTECH
+Riccardo Orlandi;3;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Controllo di gestione;|Responsabile Controllo di gestione;|Direttivo (Responsabile di team/processi);7;51;M;Enrico Reggiani;CLEVERTECH
+Giuliano Messori;3;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Informatico;|Responsabile Informatico;|Direttivo (Responsabile di team/processi);7;46;M;Enrico Reggiani;CLEVERTECH
+Enrica Manfredini;6;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Business Intelligence;Impiegato;Tecnico qualificato;5;59;F;Natascia Tondi;CLEVERTECH
+Alessandra Baroni;6;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Informatico;Addetto CAD e PLM;Tecnico qualificato;5;47;F;Giuliano Messori;CLEVERTECH
+Carlos Alberto Davila Torres Meglioli;6;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Informatico;Addetto I.A., Digitalizzazione, Gestione Attività;Tecnico qualificato;5;;M;Giuliano Messori;CLEVERTECH
+Assunta Innamorati;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;61;F;Elena Minarini;CLEVERTECH
+Michela Bonoretti;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;53;F;Elena Minarini;CLEVERTECH
+Lorella Ballotta;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;49;F;Elena Minarini;CLEVERTECH
+Massimo Di Puma;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;32;M;Elena Minarini;CLEVERTECH
+Arianna Rigonat;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;25;F;Elena Minarini;CLEVERTECH
+Chiara De Vita;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;33;F;Elena Minarini;CLEVERTECH
+Veronika Ryzhak;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Amministrazione;Impiegato;Tecnico esecutivo;4;27;F;Elena Minarini;CLEVERTECH
+Nicolò Campari;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Informatico;Addetto ERP;Tecnico esecutivo;4;;M;Giuliano Messori;MEDIADESIGN
+Cristian Reggiani;7;image.png;it.png;CTH_ITALY;Amministrazione Finanza e Controllo;Informatico;Addetto Sistemi informatici;Tecnico esecutivo;4;26;M;Giuliano Messori;CLEVERTECH
+Mohamed Kouki;3;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;|Responsabile After Sales;|Direttivo (Responsabile di team/processi);7;35;M;Christian Bisogni;CLEVERTECH
+Davide Salsi;3;image.png;it.png;CTH_ITALY;After Sales & Service;Service;|Responsabile Service Global;|Direttivo (Responsabile di team/processi);7;43;M;Christian Bisogni;CLEVERTECH
+Alfredo Malvisi;4;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Service Manager;|Direttivo (Tecnico/organizzativo);6;58;M;Davide Salsi;CLEVERTECH
+Massimiliano Bernabeni;4;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Gestione Ricambi;|Direttivo (Tecnico/organizzativo);6;55;M;Mohamed Kouki;CLEVERTECH
+Christian Fallini;4;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Trainer After Sales;|Direttivo (Tecnico/organizzativo);6;51;M;Mohamed Kouki;CLEVERTECH
+Gianpaolo Popovich;4;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Venditore UPG;|Direttivo (Tecnico/organizzativo);6;51;M;Mohamed Kouki;CLEVERTECH
+Amdy Moustapha Thiam;5;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Tecnico specializzato;5S;48;M;Alfredo Malvisi;CLEVERTECH
+Arturo Izzo;5;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Tecnico specializzato;5S;49;M;Alfredo Malvisi;CLEVERTECH
+Dragan Ivanisevic;5;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Tecnico specializzato;5S;58;M;Alfredo Malvisi;CLEVERTECH
+Moira Dotti;6;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Impiegato;Tecnico qualificato;5;47;F;Alfredo Malvisi;CLEVERTECH
+Alex Incerti;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Progettista Elettrico;Tecnico qualificato;5;46;M;Mohamed Kouki;CLEVERTECH
+Matteo Bonori;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Progettista Meccanico;Tecnico qualificato;5;53;M;Mohamed Kouki;CLEVERTECH
+Massimo Tedeschi;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Progettista Meccanico;Tecnico qualificato;5;47;M;Mohamed Kouki;ASOTECH
+Giovanni Fantuzzi;6;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Service Manager;Tecnico qualificato;5;30;M;Alfredo Malvisi;CLEVERTECH
+Daniele Ciarlini;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Softwarista;Tecnico qualificato;5;68;M;Mohamed Kouki;CLEVERTECH
+Daniele Stefanutti;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Softwarista;Tecnico qualificato;5;39;M;Mohamed Kouki;CLEVERTECH
+Emanuele Olivieri;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Softwarista;Tecnico qualificato;5;40;M;Mohamed Kouki;CLEVERTECH
+Francesco Melegari;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Softwarista;Tecnico qualificato;5;28;M;Mohamed Kouki;CLEVERTECH
+Roberto Longo;6;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Venditore;Tecnico qualificato;5;41;M;Mohamed Kouki;CLEVERTECH
+Luigi Sagliocca;6;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Addetto Imballi;Tecnico qualificato;5;45;M;Mohamed Kouki;CLEVERTECH
+Carolina Cazac;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;30;F;Mohamed Kouki;CLEVERTECH
+Giorgia Montanari;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;49;F;Mohamed Kouki;CLEVERTECH
+Ornella Covri;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;52;F;Mohamed Kouki;CLEVERTECH
+Ofelia Veronesi;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;49;F;Mohamed Kouki;CLEVERTECH
+Claudia Marzo;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;29;F;Mohamed Kouki;CLEVERTECH
+Sabrina Bondavalli;7;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;43;F;Alfredo Malvisi;CLEVERTECH
+Margherita Carletti;7;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;28;F;Alfredo Malvisi;CLEVERTECH
+Lorenzo Magnani;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Progettista Meccanico;Tecnico esecutivo;4;37;M;Mohamed Kouki;CLEVERTECH
+Giuseppe Anno;7;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;38;M;Alfredo Malvisi;CLEVERTECH
+Yaroslav Tryhuba;7;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;32;M;Alfredo Malvisi;CLEVERTECH
+Marco Marino;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Softwarista;Tecnico esecutivo;4;28;M;Mohamed Kouki;CLEVERTECH
+Sassi Fahem;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Softwarista;Tecnico esecutivo;4;40;M;Mohamed Kouki;CLEVERTECH
+Nicola Galloni;7;image.png;it.png;CTH_ITALY;After Sales & Service;After Sales;Softwarista;Tecnico esecutivo;4;45;M;Mohamed Kouki;CLEVERTECH
+Massimo Giuberti;8;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Elettrico;Operativo specializzato;3S;54;M;Alfredo Malvisi;CLEVERTECH
+Luca Bigliardi;8;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Operativo specializzato;3S;42;M;Alfredo Malvisi;CLEVERTECH
+Osvaldo Ruggiero;8;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Operativo specializzato;3S;59;M;Alfredo Malvisi;CLEVERTECH
+Roberto Spaggiari;8;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Operativo specializzato;3S;48;M;Alfredo Malvisi;CLEVERTECH
+Bruno De Gregorio;9;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Elettrico;Operativo qualificato;3;53;M;Alfredo Malvisi;CLEVERTECH
+Fabio Caselli;9;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Operativo qualificato;3;56;M;Alfredo Malvisi;CLEVERTECH
+Giovanni Magliulo;9;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Operativo qualificato;3;;M;Alfredo Malvisi;CLEVERTECH
+Pietro Dallari;9;image.png;it.png;CTH_ITALY;After Sales & Service;Service;Montatore Meccanico;Operativo qualificato;3;;M;Alfredo Malvisi;CLEVERTECH
+Saulo Samos;5;image.png;it.png;CTH_LATAM;Meccatronica;Tecnico Software;Softwarista;Tecnico specializzato;5S;;M;David Tabacco;Energki
+Giorgio Zanardi;2;image.png;us.png;CTH_NORTH_AMERICA;|Direzione Filiale;|Direzione;|Direttore Filiale;|Direttivo (Quadro / Gestione del cambiamento);8;;M;Giuseppe Reggiani;CLEVERTECH
+Arlet Ramirez-Longwell;6;image.png;us.png;CTH_NORTH_AMERICA;|Direzione Filiale;Segreteria;Impiegato;Tecnico qualificato;5;;F;Giorgio Zanardi;CLEVERTECH
+Adnelys Hernandez;6;image.png;us.png;CTH_NORTH_AMERICA;|Direzione Filiale;Segreteria;Impiegato;Tecnico qualificato;5;;F;Giorgio Zanardi;CLEVERTECH
+Julie Peterson;4;image.png;us.png;CTH_NORTH_AMERICA;Risorse Umane & Servizi Generali;Risorse Umane;|Responsabile Risorse Umane;|Direttivo (Tecnico/organizzativo);6;;F;Giorgio Zanardi;CLEVERTECH
+Nicole Pena;7;image.png;us.png;CTH_NORTH_AMERICA;Produzione;Produzione Meccanica;Montatore Meccanico;Tecnico esecutivo;4;;F;Giorgio Zanardi;CLEVERTECH
+Drew Hinton;7;image.png;us.png;CTH_NORTH_AMERICA;HSE & Facility;Prevenzione e Protezione / Gestione Ambientale;Impiegato;Tecnico esecutivo;4;;M;Giorgio Zanardi;CLEVERTECH
+Beth Zarnick-Duffy;6;image.png;us.png;CTH_NORTH_AMERICA;Commerciale e Marketing;Commerciale;Impiegato;Tecnico qualificato;5;;F;Giorgio Zanardi;CLEVERTECH
+Ildiko Nyeste;6;image.png;us.png;CTH_NORTH_AMERICA;Commerciale e Marketing;Commerciale;Impiegato;Tecnico qualificato;5;;F;Giorgio Zanardi;CLEVERTECH
+Jean St-Martin;6;image.png;us.png;CTH_NORTH_AMERICA;Commerciale e Marketing;Commerciale;Venditore;Tecnico qualificato;5;;M;Giorgio Zanardi;CLEVERTECH
+Deanna Futch;7;image.png;us.png;CTH_NORTH_AMERICA;Commerciale e Marketing;Addetto Spedizioni;Impiegato;Tecnico esecutivo;4;;F;Giorgio Zanardi;CLEVERTECH
+Abigail Maravilla;7;image.png;us.png;CTH_NORTH_AMERICA;Commerciale e Marketing;Marketing;Impiegato;Tecnico esecutivo;4;;M;Giorgio Zanardi;CLEVERTECH
+Kevin Zarnick;7;image.png;us.png;CTH_NORTH_AMERICA;Commerciale e Marketing;Commerciale;Venditore;Tecnico esecutivo;4;;M;Giorgio Zanardi;CLEVERTECH
+Franca Traversa;3;image.png;us.png;CTH_NORTH_AMERICA;Amministrazione Finanza e Controllo;Controllo di gestione;|Responsabile Controllo di gestione;|Direttivo (Responsabile di team/processi);7;;F;Giorgio Zanardi;CLEVERTECH
+Christian Bisogni;2;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;|Direzione;|Direttore After Sales/Service;|Direttivo (Quadro / Gestione del cambiamento);8;;M;Umberto Reggiani;Lavoratore Autonomo
+John Feeley;3;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;After Sales;|Responsabile After Sales;|Direttivo (Responsabile di team/processi);7;;;Christian Bisogni;CLEVERTECH
+Danjel Perndoka;6;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;After Sales;Progettista Meccanico;Tecnico qualificato;5;26;M;John Feeley;CLEVERTECH
+Anthony Yanora;6;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Service Manager;Tecnico qualificato;5;;M;Davide Salsi;CLEVERTECH
+Matteo Rombolà;6;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Service Manager;Tecnico qualificato;5;;M;Davide Salsi;CLEVERTECH
+Brody Avis;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;;M;John Feeley;CLEVERTECH
+Kurt Ulrich;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;;M;John Feeley;CLEVERTECH
+Shawn Estes;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;;M;John Feeley;CLEVERTECH
+Tracy Taranto;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;After Sales;Impiegato;Tecnico esecutivo;4;;F;John Feeley;CLEVERTECH
+Jim Artley;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Jim Speed;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Petro Shkurhan;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Santiago Lisboa;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Scott Jenkins;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Zeb Veale;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Impiegato;Tecnico esecutivo;4;;;Davide Salsi;CLEVERTECH
+Jorge Reynolds;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Montatore Elettrico;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Yvan Montauti Sanchez;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Service Manager;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Julio Bizama;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;After Sales;Softwarista;Tecnico esecutivo;4;;M;John Feeley;CLEVERTECH
+Brian Ramage;7;image.png;us.png;CTH_NORTH_AMERICA;After Sales & Service;Service;Trasfertisti/Esterni;Tecnico esecutivo;4;;M;Davide Salsi;CLEVERTECH
+Matthew Carey;3;image.png;gb.png;CTH_UK;Commerciale e Marketing;Commerciale;|Responsabile Commerciale UK;|Direttivo (Responsabile di team/processi);7;;M;Umberto Reggiani;CLEVERTECH
+Craig Smith;6;image.png;gb.png;CTH_UK;Commerciale e Marketing;Project Management Meccanico;PM;Tecnico qualificato;5;;M;Umberto Reggiani;CLEVERTECH
+Nicky Hull;7;image.png;gb.png;CTH_UK;Commerciale e Marketing;Commerciale;Venditore;Tecnico esecutivo;4;;M;Matthew Carey;CLEVERTECH
