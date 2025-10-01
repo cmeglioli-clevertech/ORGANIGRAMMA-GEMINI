@@ -1,5 +1,0 @@
-{
-  "name": "Interactive Organizational Chart",
-  "description": "An interactive and expandable organizational chart application that displays company structure by location, department, and office. Each employee has a detailed card with their photo, name, role, and department.",
-  "requestFramePermissions": []
-}

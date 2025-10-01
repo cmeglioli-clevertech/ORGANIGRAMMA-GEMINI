@@ -1,10 +1,17 @@
 # 🏢 Clevertech Interactive Organizational Chart
 
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-success)](https://github.com)
-[![Version](https://img.shields.io/badge/Version-4.0.0-blue)](https://github.com)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2025--09--29-green)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-4.1.0-blue)](https://github.com)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2025--10--01-green)](https://github.com)
 
-Una **webapp interattiva completa** per visualizzare e gestire l'organigramma aziendale di Clevertech con sistema di schede avanzato, badge colorati per qualifiche, ricerca fuzzy, filtri intelligenti e interfaccia massimizzata.
+Una **webapp interattiva completa** per visualizzare e gestire l'organigramma aziendale di Clevertech con:
+- 📊 **Integrazione Smartsheet** - Sincronizzazione dati in tempo reale
+- 🎨 **Sistema di schede avanzato** - 13 colori distintivi per qualifiche
+- 🔍 **Ricerca fuzzy + filtri intelligenti** - Risposta < 100ms
+- 🖼️ **Interfaccia massimizzata** - 99% utilizzo schermo
+- ⚡ **467 Dipendenti** - Assegnazione intelligente automatica
+
+> **🆕 Ottobre 2025**: Architettura ristrutturata con `src/`, integrazione Smartsheet completa, documentazione aggiornata per AI agents.
 
 ## 🎯 **Stato Finale del Progetto (v4.0.0)**
 

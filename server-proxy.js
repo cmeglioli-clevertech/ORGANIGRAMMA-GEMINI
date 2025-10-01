@@ -29,7 +29,9 @@ app.use(express.json());
  */
 app.get('/api/smartsheet/sheets/:sheetId', async (req, res) => {
   const { sheetId } = req.params;
-  const token = process.env.VITE_SMARTSHEET_TOKEN;
+  // Backend usa variabili senza prefisso VITE_ (best practice)
+  // Fallback a VITE_ per retrocompatibilità
+  const token = process.env.SMARTSHEET_TOKEN || process.env.VITE_SMARTSHEET_TOKEN;
 
   console.log('📡 Proxy request to Smartsheet API');
   console.log('  Sheet ID:', sheetId);

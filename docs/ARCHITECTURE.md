@@ -1,12 +1,126 @@
-# 🏗️ Architecture Documentation - Clevertech Organigramma v4.0.0
+# 🏗️ Architecture Documentation - Clevertech Organigramma v4.2.0
 
-## 📋 **System Overview - Final Implementation**
+## 📋 **System Overview - Production Ready + Smartsheet Integration**
 
-Sistema **production-ready** che trasforma dati Excel/CSV in organigramma interattivo con **sistema professionale di schede**, **badge colorati per 12 qualifiche**, **interfaccia massimizzata** e **assegnazione intelligente dipendenti**.
+Sistema **production-ready** con **integrazione Smartsheet** che trasforma dati in organigramma interattivo con **sistema professionale di schede**, **badge colorati per 13 qualifiche**, **interfaccia massimizzata** e **assegnazione intelligente dipendenti**.
 
 **Performance**: 467 dipendenti, <2s caricamento, <100ms ricerca  
 **UI**: 99% utilizzo schermo, schede uniformi 320×528px, badge centrati  
-**Features**: Ricerca fuzzy + filtri + zoom/pan + export + smart assignment
+**Features**: Ricerca fuzzy + filtri + zoom/pan + export + smart assignment + **Smartsheet sync**
+**Architecture**: Clean `src/` structure, TypeScript, React 19, Vite 6
+
+> **🆕 v4.2.0 (Oct 2025)**: Ristrutturazione completa con `src/`, integrazione Smartsheet via proxy, documentazione AI-ready.
+
+---
+
+## 📁 **Project Structure (v4.2.0)**
+
+### **Clean Architecture with src/**
+```
+ORGANIGRAMMA-GEMINI/
+├── 📂 src/                          ← ⭐ All source code
+│   ├── main.tsx                     ← Entry point (React root)
+│   ├── App.tsx                      ← Main application logic (1570 lines)
+│   ├── types.ts                     ← TypeScript interfaces
+│   │
+│   ├── 📂 components/               ← UI Components
+│   │   ├── NavigableOrgChart.tsx    ← Zoom/pan wrapper
+│   │   ├── OrgChartNode.tsx         ← Card rendering (447 lines)
+│   │   ├── SearchBar.tsx            ← Search UI
+│   │   ├── FilterPanel.tsx          ← Filter controls
+│   │   ├── ExportMenu.tsx           ← Export functionality
+│   │   ├── StatsBar.tsx             ← Statistics display
+│   │   └── icons/                   ← Icon components
+│   │
+│   ├── 📂 hooks/                    ← Custom React Hooks
+│   │   ├── useOrgSearch.ts          ← Fuzzy search logic
+│   │   └── useFilters.ts            ← Multi-criteria filters
+│   │
+│   └── 📂 services/                 ← External Services
+│       └── smartsheetService.ts     ← Smartsheet API integration
+│
+├── 📂 docs/                         ← Documentation
+│   ├── AI-AGENT-GUIDE.md            ← ⭐ AI Agent quick start
+│   ├── ARCHITECTURE.md              ← This file
+│   ├── PROJECT-STATUS.md            ← Current status
+│   ├── SMARTSHEET-INTEGRATION.md    ← Smartsheet guide
+│   ├── ENV-SETUP.md                 ← Environment setup
+│   ├── FINAL-HANDOVER.md            ← Project handover
+│   └── IMMAGINI/ (741 photos)       ← Employee photos
+│
+├── 📂 scripts/                      ← Utility scripts
+│   ├── update-csv-from-excel.mjs    ← Excel → CSV conversion
+│   ├── capture-screenshots.mjs      ← Screenshots automation
+│   └── add-responsabili.cjs         ← Legacy utility
+│
+├── 📂 public/                       ← Static assets
+│   └── building-background.jpg
+│
+├── server-proxy.js                  ← ⭐ Smartsheet proxy server (Node.js)
+├── start-servers.ps1                ← ⭐ Auto-start script
+├── index.html                       ← HTML entry (loads /src/main.tsx)
+├── vite.config.ts                   ← Vite configuration
+├── tsconfig.json                    ← TypeScript config
+├── package.json                     ← Dependencies
+├── .env                             ← Environment variables (git-ignored)
+└── _Suddivisione Clevertech light.csv ← Fallback CSV data
+```
+
+### **Data Flow Architecture**
+```
+┌─────────────────────┐
+│  Smartsheet API     │ ← Primary data source
+│  (467 employees)    │
+└──────────┬──────────┘
+           │ HTTPS Request
+           ↓
+┌──────────────────────┐
+│  server-proxy.js     │ ← CORS bypass (Port 3001)
+│  (Node.js + Express) │
+└──────────┬───────────┘
+           │ JSON Response
+           ↓
+┌───────────────────────────────┐
+│ smartsheetService.ts          │ ← Convert to CSV format
+│ (src/services/)               │
+└──────────┬────────────────────┘
+           │ CSV Array
+           ↓
+┌───────────────────────────────┐
+│ parseCsvEmployees()           │ ← Parse to Employee[]
+│ (src/App.tsx)                 │
+└──────────┬────────────────────┘
+           │
+           ├─→ buildOrgTree() → Location hierarchy
+           └─→ buildRoleTree() → Role hierarchy
+                    ↓
+           ┌────────────────┐
+           │  Node Tree     │
+           └────────┬───────┘
+                    ↓
+           ┌─────────────────────┐
+           │ OrgChartNode.tsx    │ ← Render cards
+           │ (src/components/)   │
+           └─────────────────────┘
+
+FALLBACK (Offline):
+_Suddivisione Clevertech light.csv → Auto-loaded on startup
+```
+
+### **Key Files by Purpose**
+
+| Purpose | File | Lines | Description |
+|---------|------|-------|-------------|
+| **Entry** | `src/main.tsx` | 17 | React root render |
+| **Core Logic** | `src/App.tsx` | 1570 | State, tree building, CSV parsing |
+| **UI Rendering** | `src/components/OrgChartNode.tsx` | 447 | Professional card system |
+| **Type Definitions** | `src/types.ts` | 50 | TypeScript interfaces |
+| **Search** | `src/hooks/useOrgSearch.ts` | 186 | Fuzzy search with Fuse.js |
+| **Filters** | `src/hooks/useFilters.ts` | 96 | Multi-criteria filtering |
+| **Smartsheet** | `src/services/smartsheetService.ts` | 234 | API integration |
+| **Backend** | `server-proxy.js` | 128 | CORS proxy server |
+
+---
 
 ## 🎨 **Professional Card System Architecture**
 

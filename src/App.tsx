@@ -7,7 +7,7 @@ import FilterPanel from "./components/FilterPanel";
 import ExportMenu from "./components/ExportMenu";
 import { useOrgSearch } from "./hooks/useOrgSearch";
 import { useFilters } from "./hooks/useFilters";
-import { fetchSmartsheetData, csvArrayToString } from "./src/services/smartsheetService";
+import { fetchSmartsheetData, csvArrayToString } from "./services/smartsheetService";
 import type { Node, NodeMetadata, NodeType } from "./types";
 
 interface Employee {
@@ -355,7 +355,7 @@ const getQualificationOrder = (qualification: string) =>
   resolveQualification(qualification).order;
 
 // Mappa immagini dipendenti (docs/IMMAGINI/*.png) caricata a build-time
-const employeeImageModules = import.meta.glob("./docs/IMMAGINI/**/*.png", { eager: true, as: "url" }) as Record<string, string>;
+const employeeImageModules = import.meta.glob("../docs/IMMAGINI/**/*.png", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
 
 const normalizeImageKey = (value: string) =>
   value
@@ -1231,6 +1231,27 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 🎯 PRIORITÀ 1: Prova a caricare da Smartsheet
+        console.log('🔄 Tentativo caricamento dati da Smartsheet...');
+        try {
+          const csvData = await fetchSmartsheetData();
+          const csvString = csvArrayToString(csvData);
+          const employees = parseCsvEmployees(csvString);
+          const orgTree = buildOrgTree(employees);
+          const roleTree = buildRoleTree(employees);
+          setLocationTree(orgTree);
+          setRoleTree(roleTree);
+          console.log(`✅ Dati caricati da Smartsheet: ${employees.length} dipendenti`);
+          toast.success(`✅ Dati sincronizzati da Smartsheet (${employees.length} dipendenti)`, {
+            duration: 3000
+          });
+          return; // Successo! Esci dalla funzione
+        } catch (smartsheetError) {
+          // Smartsheet fallito, usa CSV locale come fallback
+          console.warn('⚠️ Smartsheet non disponibile, carico CSV locale...', smartsheetError);
+        }
+
+        // 📄 FALLBACK: Carica CSV locale se Smartsheet non disponibile
         const csvUrl = new URL("./_Suddivisione Clevertech light.csv", import.meta.url);
         const response = await fetch(csvUrl);
         if (!response.ok) {
@@ -1242,7 +1263,12 @@ const App: React.FC = () => {
         const roleTree = buildRoleTree(employees);
         setLocationTree(orgTree);
         setRoleTree(roleTree);
+        console.log(`📄 Dati caricati da CSV locale: ${employees.length} dipendenti`);
+        toast.info('📄 Dati caricati da CSV locale (Smartsheet non disponibile)', {
+          duration: 3000
+        });
       } catch (e) {
+        console.error('❌ Errore caricamento dati:', e);
         setError(e instanceof Error ? e.message : "Failed to load organizational data.");
       } finally {
         setLoading(false);
@@ -1320,18 +1346,7 @@ const App: React.FC = () => {
       setLocationTree(orgTree);
       setRoleTree(roleTree);
       
-      // 6. Salva il CSV aggiornato su disco
-      // Nota: In un'app browser, salviamo via download automatico
-      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', '_Suddivisione Clevertech light.csv');
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
+      // ✅ Successo - dati aggiornati direttamente da Smartsheet
       toast.success(`✅ Aggiornamento completato! ${employees.length} dipendenti sincronizzati.`, { 
         id: toastId,
         duration: 5000 
@@ -1339,12 +1354,16 @@ const App: React.FC = () => {
       
     } catch (error) {
       console.error('Errore sincronizzazione Smartsheet:', error);
-      toast.error(
-        error instanceof Error 
-          ? `❌ ${error.message}` 
-          : '❌ Errore durante la sincronizzazione con Smartsheet',
-        { id: toastId, duration: 6000 }
-      );
+      
+      // Messaggio specifico per errore di connessione al proxy
+      let errorMessage = '❌ Errore durante la sincronizzazione con Smartsheet';
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        errorMessage = '❌ Proxy server non disponibile. Avvia il proxy con: npm run proxy';
+      } else if (error instanceof Error) {
+        errorMessage = `❌ ${error.message}`;
+      }
+      
+      toast.error(errorMessage, { id: toastId, duration: 8000 });
     } finally {
       setIsSmartsheetSyncing(false);
     }

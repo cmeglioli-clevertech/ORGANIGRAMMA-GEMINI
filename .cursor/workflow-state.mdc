@@ -3,9 +3,9 @@
 ## State
 **Workflow Stage**: VALIDATE *(2025-10-01)*  
 **Current Phase**: PRODUCTION READY ✅  
-**Last Updated**: 2025-10-01  
-**Project**: Interactive Organizational Chart for Clevertech - v4.1.5 FIELD OPTIMIZATION
-**Status**: Complete Implementation with Optimized Information Fields
+**Last Updated**: 2025-10-01 21:30  
+**Project**: Interactive Organizational Chart for Clevertech - v4.3.0 AUTO-SYNC + UX IMPROVEMENTS
+**Status**: Complete Implementation with Auto-Sync Smartsheet & Centered View
 
 ## Plan
 1. Allineare `parseCsvEmployees` e l'interfaccia `Employee` al nuovo CSV, normalizzando valori (pipe iniziali, manager assegnato, livello ipotetico, sesso, azienda) e propagando i metadati aggiuntivi nei nodi.
@@ -15,7 +15,17 @@
 5. Eseguire `npm run build` per il controllo finale e aggiornare README, changelog e questa `workflow-state.mdc` con log sintetico delle modifiche.
 
 ## Context
-Sistema organigramma interattivo **production-ready** per Clevertech con 467 dipendenti. Implementazione completa con sistema schede avanzato, badge colorati per 13 qualifiche, interfaccia integrata e massimizzata, ricerca fuzzy, filtri intelligenti e assegnazione dipendenti basata su algoritmo di punteggio.
+Sistema organigramma interattivo **production-ready** per Clevertech con 467 dipendenti. Implementazione completa con:
+- 📊 **Auto-Sync Smartsheet** - Caricamento automatico all'avvio (proxy attivo) con fallback CSV
+- 🏗️ **Clean Architecture** - Tutti i sorgenti in `src/` seguendo standard Vite
+- 🎯 **Auto-Centered View** - Organigramma centrato automaticamente al caricamento
+- 🎨 **Sistema schede avanzato** - Badge colorati per 13 qualifiche
+- 🔍 **Ricerca fuzzy + filtri** - Risposta < 100ms
+- 🖼️ **Interfaccia massimizzata** - 99% utilizzo schermo
+- ⚡ **Assegnazione smart** - Algoritmo SEDE+UFFICIO+ORDER
+
+**Flusso Dati**: Smartsheet API (primary) → Proxy (3001) → Frontend (3000) → CSV locale (fallback)
+**UX**: Zero step manuali, dati sempre aggiornati, toast informativi.
 
 ## Final Implementation Status (v4.0.0)
 
@@ -77,27 +87,52 @@ OrgChartNode: React.FC<Props> = ({ node, ... }) => {
 
 ### Data Processing Pipeline
 ```
-Excel Files (.xlsx) 
-    ↓ [scripts/update-csv-from-excel.mjs]
-CSV File (.csv) 
-    ↓ [parseCsvEmployees() in App.tsx]
+PRIMARY (Real-time):
+Smartsheet API
+    ↓ [server-proxy.js on port 3001]
+Proxy Server (CORS bypass)
+    ↓ [smartsheetService.ts]
+CSV Format Conversion
+    ↓ [parseCsvEmployees() in src/App.tsx]
 Employee[] Array (467 employees)
     ↓ [buildOrgTree() / buildRoleTree()]
 Node Tree Structure
-    ↓ [OrgChartNode component]
+    ↓ [components/OrgChartNode]
 Professional Card System
+
+FALLBACK (Offline):
+_Suddivisione Clevertech light.csv (root)
+    ↓ [Auto-loaded on app startup]
+Employee[] Array
+    ↓ [Same pipeline as above]
 ```
 
 ### Component Organization
 ```
-App.tsx                    // State management + tree building
-├── useOrgSearch()         // Fuzzy search logic
-├── useFilters()           // Multi-criteria filtering
-└── NavigableOrgChart      // Zoom/pan wrapper
-    └── OrgChartNode       // Professional card system
-        ├── Badge colors   // 13 qualification colors
-        ├── Type-specific info // Different data per card type
-        └── Uniform layout // 320x480px consistent sizing
+src/
+├── main.tsx                      // Entry point (React root render)
+├── App.tsx                       // State management + tree building
+│   ├── useOrgSearch()            // Fuzzy search logic (hooks/)
+│   ├── useFilters()              // Multi-criteria filtering (hooks/)
+│   └── smartsheetService         // Smartsheet API integration (services/)
+├── components/
+│   ├── NavigableOrgChart.tsx     // Zoom/pan wrapper
+│   ├── OrgChartNode.tsx          // Professional card system
+│   │   ├── Badge colors          // 13 qualification colors
+│   │   ├── Type-specific info    // Different data per card type
+│   │   └── Uniform layout        // 320x480px consistent sizing
+│   ├── SearchBar.tsx             // Search UI component
+│   ├── FilterPanel.tsx           // Filter controls
+│   ├── ExportMenu.tsx            // Export functionality
+│   └── StatsBar.tsx              // Statistics display
+├── hooks/
+│   ├── useOrgSearch.ts           // Fuzzy search with Fuse.js
+│   └── useFilters.ts             // Multi-criteria filtering
+├── services/
+│   └── smartsheetService.ts      // Smartsheet API integration
+└── types.ts                      // TypeScript interfaces
+
+server-proxy.js (root)            // Node.js proxy for Smartsheet API
 ```
 
 ## Key Features Verified
@@ -151,9 +186,17 @@ App.tsx                    // State management + tree building
   "fuse.js": "^7.1.0",
   "react-zoom-pan-pinch": "^3.7.0",
   "react-hot-toast": "^2.6.0",
-  "xlsx": "^0.18.x"
+  "xlsx": "^0.18.x",
+  "cors": "^2.8.5",
+  "dotenv": "^17.2.3",
+  "express": "^5.1.0"
 }
 ```
+
+### Backend (server-proxy.js)
+- **express**: HTTP server for Smartsheet API proxy
+- **cors**: CORS middleware for frontend communication
+- **dotenv**: Environment variables management
 
 ### Scripts (Core Utilities Only)
 - **update-csv-from-excel.mjs**: Excel to CSV conversion
@@ -161,6 +204,25 @@ App.tsx                    // State management + tree building
 - **add-responsabili.cjs**: Legacy script (maintained for compatibility)
 
 ## Log
+
+### 2025-10-01 21:30 - AUTO-SYNC & UX IMPROVEMENTS v4.3.0 ✅
+- ✅ **AUTO-LOAD SMARTSHEET**: App carica automaticamente dati da Smartsheet all'avvio (proxy attivo)
+- ✅ **SMART FALLBACK**: Se Smartsheet non disponibile → Fallback automatico a CSV locale con toast
+- ✅ **NO CSV DOWNLOAD**: Rimossa funzione download CSV automatico durante sync
+- ✅ **AUTO-CENTERED VIEW**: Organigramma si centra automaticamente dopo caricamento dati
+- ✅ **BETTER UX**: Toast informativi mostrano fonte dati (Smartsheet vs CSV locale)
+- ✅ **ZERO MANUAL STEPS**: Utente non deve più cliccare "↻ Smartsheet" ad ogni refresh
+
+### 2025-10-01 19:45 - ARCHITECTURE REFACTOR v4.2.0 ✅
+- ✅ **CLEAN ARCHITECTURE**: Spostati tutti i file sorgente in `src/` (era distribuito tra root e src/)
+- ✅ **ENTRY POINT STANDARD**: Rinominato `index.tsx` → `src/main.tsx` seguendo convenzioni Vite
+- ✅ **IMPORT PATHS AGGIORNATI**: Tutti gli import corretti per nuova struttura
+- ✅ **VITE GLOB FIX**: Aggiornato `as: "url"` (deprecato) → `query: "?url", import: "default"`
+- ✅ **SMARTSHEET FALLBACK**: Migliorato error handling quando proxy non disponibile
+- ✅ **REPOSITORY CLEANUP**: Rimossi screenshot vecchi, file backup, docs obsoleti
+- ✅ **DOCUMENTAZIONE AI**: Guida completa per AI agents in `docs/AI-AGENT-GUIDE.md`
+- ✅ **START SCRIPT FIX**: Corretto encoding UTF-8 per emoji in `start-servers.ps1`
+- ✅ **ENV SEPARATION**: Backend usa `SMARTSHEET_TOKEN` con fallback a `VITE_SMARTSHEET_TOKEN`
 
 ### 2025-10-01 - FIELD OPTIMIZATION v4.1.5 ✅
 - ✅ **SEDE RIMOSSA**: Eliminata la sede dalle info card (già visibile con bandiera sopra)

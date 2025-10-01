@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { Node } from '../types';
 import OrgChartNode from './OrgChartNode';
@@ -21,6 +21,8 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   onCollapseAll
 }) => {
   const nodeElemsRef = useRef<Map<string, HTMLElement>>(new Map());
+  const centerViewRef = useRef<((scale?: number, animationTime?: number) => void) | null>(null);
+  const hasInitialCentered = useRef(false);
 
   const registerNodeElem = useCallback((id: string, el: HTMLElement | null) => {
     const map = nodeElemsRef.current;
@@ -30,6 +32,19 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
       map.delete(id);
     }
   }, []);
+
+  // 🎯 Centro automaticamente la vista quando i dati sono caricati
+  useEffect(() => {
+    if (tree && centerViewRef.current && !hasInitialCentered.current) {
+      // Aspetta un momento per permettere il rendering completo
+      setTimeout(() => {
+        if (centerViewRef.current) {
+          centerViewRef.current(1, 0); // Scala 1, animazione istantanea
+          hasInitialCentered.current = true;
+        }
+      }, 100);
+    }
+  }, [tree]);
 
   return (
     <div className="relative w-full h-full overflow-hidden">
@@ -67,7 +82,11 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
         limitToBounds={false}
         centerContent={true}
       >
-        {({ zoomIn, zoomOut, resetTransform, centerView, zoomToElement }) => (
+        {({ zoomIn, zoomOut, resetTransform, centerView, zoomToElement }) => {
+          // Salva centerView nel ref per usarlo nell'useEffect
+          centerViewRef.current = centerView;
+          
+          return (
           <>
             {/* Controlli di navigazione */}
             <div className="absolute top-4 right-4 z-50 flex flex-col gap-2">
@@ -169,7 +188,8 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
               </div>
             </TransformComponent>
           </>
-        )}
+          );
+        }}
       </TransformWrapper>
     </div>
   );
