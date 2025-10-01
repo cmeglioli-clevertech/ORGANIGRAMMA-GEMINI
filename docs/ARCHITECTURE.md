@@ -338,6 +338,7 @@ const fuseOptions = {
 ## 📊 **Data Architecture**
 
 ### **Complete Data Flow**
+
 ```
 Excel Files (.xlsx)                    [HR Source Data]
     ↓ scripts/update-csv-from-excel.mjs
