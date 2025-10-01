@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import NavigableOrgChart from "./components/NavigableOrgChart";
 import SearchBar from "./components/SearchBar";
 import FilterPanel from "./components/FilterPanel";
 import ExportMenu from "./components/ExportMenu";
 import { useOrgSearch } from "./hooks/useOrgSearch";
 import { useFilters } from "./hooks/useFilters";
+import { fetchSmartsheetData, csvArrayToString } from "./src/services/smartsheetService";
 import type { Node, NodeMetadata, NodeType } from "./types";
 
 interface Employee {
@@ -1165,10 +1167,17 @@ const updateNodeById = (node: Node, targetId: string, updater: (current: Node) =
   };
 };
 
-const collapseTree = (node: Node): Node => ({
+/**
+ * Comprime l'albero fino a un livello specificato
+ * @param node - Nodo da comprimere
+ * @param currentLevel - Livello corrente (0 = root/CEO)
+ * @param maxLevel - Livello massimo da mantenere espanso (default: 0, quindi espandi solo CEO)
+ */
+const collapseTree = (node: Node, currentLevel: number = 0, maxLevel: number = 0): Node => ({
   ...node,
-  isExpanded: false,
-  children: node.children?.map((child) => collapseTree(child)),
+  // Mantieni espanso solo il CEO (livello 0), comprimi tutto dal livello 1 in poi (direttori compressi)
+  isExpanded: currentLevel <= maxLevel,
+  children: node.children?.map((child) => collapseTree(child, currentLevel + 1, maxLevel)),
 });
 
 const App: React.FC = () => {
@@ -1179,6 +1188,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  const [isSmartsheetSyncing, setIsSmartsheetSyncing] = useState(false);
   const [activeFilters, setActiveFilters] = useState({
     sede: null,
     dipartimento: null,
@@ -1265,13 +1275,80 @@ const App: React.FC = () => {
     }
   }, [viewMode]);
 
-  const handleCollapseAll = useCallback(() => {
+  /**
+   * Gestisce la compressione dell'albero mostrando solo CEO e i suoi diretti riporti
+   * Dopo la compressione, centra la vista con uno zoom appropriato per visualizzare tutte le schede
+   */
+  const handleCollapseAll = useCallback((centerView: (scale?: number, animationTime?: number) => void) => {
     if (viewMode === "location") {
       setLocationTree((prev) => (prev ? collapseTree(prev) : prev));
     } else {
       setRoleTree((prev) => (prev ? collapseTree(prev) : prev));
     }
+    
+    // Centra la vista con zoom 0.65 per visualizzare CEO + tutti i direttori
+    setTimeout(() => {
+      centerView(0.65, 400);
+    }, 150);
   }, [viewMode]);
+
+  /**
+   * Gestisce l'aggiornamento dei dati da Smartsheet
+   * Scarica i dati, aggiorna il CSV locale e ricostruisce gli alberi
+   */
+  const handleSmartsheetUpdate = useCallback(async () => {
+    setIsSmartsheetSyncing(true);
+    const toastId = toast.loading('📡 Connessione a Smartsheet...');
+
+    try {
+      // 1. Scarica i dati da Smartsheet
+      toast.loading('📥 Download dati in corso...', { id: toastId });
+      const csvData = await fetchSmartsheetData();
+      
+      // 2. Converti in stringa CSV
+      const csvString = csvArrayToString(csvData);
+      
+      // 3. Parsa i nuovi dati
+      toast.loading('🔄 Elaborazione dati...', { id: toastId });
+      const employees = parseCsvEmployees(csvString);
+      
+      // 4. Ricostruisci gli alberi
+      const orgTree = buildOrgTree(employees);
+      const roleTree = buildRoleTree(employees);
+      
+      // 5. Aggiorna lo stato
+      setLocationTree(orgTree);
+      setRoleTree(roleTree);
+      
+      // 6. Salva il CSV aggiornato su disco
+      // Nota: In un'app browser, salviamo via download automatico
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', '_Suddivisione Clevertech light.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success(`✅ Aggiornamento completato! ${employees.length} dipendenti sincronizzati.`, { 
+        id: toastId,
+        duration: 5000 
+      });
+      
+    } catch (error) {
+      console.error('Errore sincronizzazione Smartsheet:', error);
+      toast.error(
+        error instanceof Error 
+          ? `❌ ${error.message}` 
+          : '❌ Errore durante la sincronizzazione con Smartsheet',
+        { id: toastId, duration: 6000 }
+      );
+    } finally {
+      setIsSmartsheetSyncing(false);
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -1443,6 +1520,26 @@ const App: React.FC = () => {
                     🎛️ Filtri
                   </button>
                   <ExportMenu tree={tree} />
+                  <button
+                    type="button"
+                    onClick={handleSmartsheetUpdate}
+                    disabled={isSmartsheetSyncing}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
+                      isSmartsheetSyncing
+                        ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                        : "bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-300"
+                    }`}
+                    title="Sincronizza dati da Smartsheet"
+                  >
+                    {isSmartsheetSyncing ? (
+                      <>
+                        <span className="inline-block animate-spin mr-2">⟳</span>
+                        Sync...
+                      </>
+                    ) : (
+                      <>↻ Smartsheet</>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>

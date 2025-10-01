@@ -9,7 +9,7 @@ interface NavigableOrgChartProps {
   highlightedNodes: Set<string>;
   visibleNodes?: Set<string> | null;
   isSearchNarrowed?: boolean;
-  onCollapseAll: () => void;
+  onCollapseAll: (centerView: (scale?: number, animationTime?: number) => void) => void;
 }
 
 const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
@@ -64,11 +64,11 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
             {/* Controlli di navigazione */}
             <div className="absolute top-4 right-4 z-50 flex flex-col gap-2">
               <button
-                onClick={onCollapseAll}
+                onClick={() => onCollapseAll(centerView)}
                 className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-slate-400 transition-colors text-slate-700 hover:text-slate-900"
                 type="button"
-                title="Comprimi tutti i rami"
-                aria-label="Comprimi tutti i rami"
+                title="Comprimi e centra vista"
+                aria-label="Comprimi e centra vista"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4M16 15l-4 4-4-4" />
@@ -97,10 +97,13 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
               </button>
               
               <button
-                onClick={() => resetTransform()}
+                onClick={() => {
+                  resetTransform();
+                  setTimeout(() => centerView(1, 300), 50);
+                }}
                 className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-green-400 transition-colors text-slate-700 hover:text-green-600"
                 type="button"
-                title="Reset Vista"
+                title="Reset e Centra Vista"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

@@ -49,10 +49,10 @@ Una **webapp interattiva completa** per visualizzare e gestire l'organigramma az
 
 ### **Header Unificato**
 ```
-┌────────────────────────────────────────────────────────────────┐
-│ CLEVERTECH        🏢[Sedi] 👥[Ruoli] 🔍[Cerca] 🎛️[Filtri] 📤[Esporta] │
-│ (Controlli uniformi min-w-[85px] integrati nell'organigramma)  │
-└────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────┐
+│ CLEVERTECH  🏢[Sedi] 👥[Ruoli] 🔍[Cerca] 🎛️[Filtri] 📤[Esporta] ↻[Smartsheet] │
+│ (Controlli uniformi min-w-[85px] integrati nell'organigramma)            │
+└──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### **Spazio Ottimizzato**
@@ -75,12 +75,38 @@ xlsx                      // Processing Excel files
 
 ### **Struttura Dati**
 ```
-Excel → CSV → Employee[] → Node Tree → Interactive UI
+Excel/Smartsheet → CSV → Employee[] → Node Tree → Interactive UI
 
 Viste:
 1. 🏢 Vista Sedi:  CEO → Sedi → Dipartimenti → Uffici → Persone
 2. 👥 Vista Ruoli: CEO → Direttori → Responsabili → 12 livelli qualifiche
 ```
+
+## 📡 **Integrazione Smartsheet (v4.2.0)**
+
+### **🔄 Sincronizzazione Automatica**
+- **Bottone "↻ Smartsheet"**: Click nell'header per sincronizzare i dati in tempo reale
+- **Smartsheet API**: Connessione diretta al foglio Smartsheet aziendale
+- **Mapping intelligente**: Supporto per colonne in ordine diverso
+- **Download automatico**: CSV aggiornato salvato localmente dopo sync
+- **Filtro automatico**: Esclude dipendenti licenziati (colonna LICENZIATO)
+- **Feedback visivo**: Toast notifications per ogni fase della sincronizzazione
+
+### **⚙️ Setup Veloce**
+1. Ottieni API token da [Smartsheet](https://app.smartsheet.com/) (Account → API Access)
+2. Crea file `.env` nella root del progetto:
+   ```env
+   VITE_SMARTSHEET_TOKEN=your_token_here
+   VITE_SMARTSHEET_SHEET_ID=911474324465540
+   ```
+3. Avvia **DUE terminali**:
+   - **Terminale 1**: `npm run proxy` (server proxy porta 3001)
+   - **Terminale 2**: `npm run dev` (frontend porta 3000)
+4. Click sul bottone **"↻ Smartsheet"** per sincronizzare
+
+⚠️ **Nota**: Il proxy server è necessario per risolvere limitazioni CORS dell'API Smartsheet
+
+📖 **Guida completa**: Vedi [`docs/SMARTSHEET-INTEGRATION.md`](docs/SMARTSHEET-INTEGRATION.md)
 
 ## 📊 **Componenti Core**
 
@@ -100,6 +126,9 @@ components/
 hooks/
 ├── useOrgSearch.ts     # Logica ricerca con evidenziazione
 └── useFilters.ts       # Logica filtri combinabili
+
+services/
+└── smartsheetService.ts # Integrazione Smartsheet API
 ```
 
 ## 🚀 **Come Usare l'Applicazione**
@@ -117,6 +146,7 @@ npm run dev
 3. **🎛️ Filtri**: Click "Filtri" → Applica criteri → Evidenzia struttura filtrata
 4. **⚡ Navigazione**: Zoom con mouse, pan trascinando, pulsante + per espandere
 5. **📤 Export**: Esporta in JSON/CSV/Stampa per analisi esterne
+6. **📡 Smartsheet**: Click "↻ Smartsheet" → Sincronizza dati in tempo reale
 
 ### **🎯 Esperienza Utente**
 - **Vista Ruoli default**: Si apre nella modalità più utilizzata

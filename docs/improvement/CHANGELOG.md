@@ -1,5 +1,34 @@
 # CHANGELOG - Miglioramenti Organigramma Clevertech
 
+## Versione 4.2.0 - 1 Ottobre 2025 📡 SMARTSHEET INTEGRATION
+
+### 🚀 Nuova Funzionalità: Sincronizzazione Smartsheet
+- **Bottone "↻ Smartsheet"**: Nuovo pulsante nell'header per sincronizzazione dati
+- **Proxy Server Express**: Server locale (porta 3001) per risolvere limitazioni CORS
+- **Smartsheet API Service**: Modulo dedicato per comunicazione con API Smartsheet
+- **Mapping colonne intelligente**: Supporto per colonne in ordine diverso dal CSV
+  - Mapping automatico: `Principale` → `Nome (Nome, Cognome)`
+  - Mapping automatico: `Mansione` → `MANSIONE`
+- **Filtro dipendenti licenziati**: Esclusione automatica di dipendenti con flag LICENZIATO
+- **Download automatico CSV**: Salva il CSV aggiornato dopo la sincronizzazione
+- **Feedback utente**: Toast notifications per stati sync (loading, success, error)
+- **Gestione errori**: Messaggi chiari per token invalidi, foglio non trovato, ecc.
+
+### 🔧 Architettura
+- **Due server**: Proxy (3001) + Frontend (3000) per sicurezza e CORS
+- **Server proxy**: `server-proxy.js` gestisce autenticazione e chiamate API
+- **Token sicuro**: Credenziali rimangono sul server, mai esposte al browser
+
+### 📄 Documentazione
+- Guida completa setup in `docs/SMARTSHEET-INTEGRATION.md`
+- File `.env.example` con configurazione template
+- Troubleshooting per errori comuni
+
+### 🔒 Sicurezza
+- Credenziali API salvate in `.env` (gitignored)
+- Token non esposto nel codice sorgente
+- Best practices per gestione token API
+
 ## Versione 4.1.6 - 1 Ottobre 2025 🐛 FIX CSV DATA
 
 ### 🔧 Correzione dati CSV
