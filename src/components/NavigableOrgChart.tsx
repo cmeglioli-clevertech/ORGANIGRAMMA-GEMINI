@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { Node } from '../types';
 import OrgChartNode from './OrgChartNode';
@@ -11,6 +11,7 @@ interface NavigableOrgChartProps {
   visibleNodes?: Set<string> | null;
   isSearchNarrowed?: boolean;
   onCollapseAll: (centerView: (scale?: number, animationTime?: number) => void) => void;
+  centerViewRef?: React.MutableRefObject<((scale?: number, animationTime?: number) => void) | null>;
 }
 
 const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
@@ -19,13 +20,24 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   highlightedNodes,
   visibleNodes = null,
   isSearchNarrowed = false,
-  onCollapseAll
+  onCollapseAll,
+  centerViewRef: externalCenterViewRef
 }) => {
   const nodeElemsRef = useRef<Map<string, HTMLElement>>(new Map());
   const centerViewRef = useRef<((scale?: number, animationTime?: number) => void) | null>(null);
   const hasInitialCentered = useRef(false);
   const currentScaleRef = useRef<number>(1);
   const { isModalOpen, resetZoomRef } = useModal();
+  
+  // 🎯 State per l'indicatore zoom (si aggiorna in tempo reale)
+  const [currentZoom, setCurrentZoom] = useState<number>(100);
+  
+  // 🎯 Callback per aggiornare lo zoom quando cambia (chiamato da onTransformed)
+  const handleTransformed = useCallback((ref: any, state: any) => {
+    const newZoom = Math.round(state.scale * 100);
+    setCurrentZoom(newZoom);
+    currentScaleRef.current = state.scale;
+  }, []);
 
   const registerNodeElem = useCallback((id: string, el: HTMLElement | null) => {
     const map = nodeElemsRef.current;
@@ -60,11 +72,12 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
         }}
       />
       <TransformWrapper
-        initialScale={1}
+        initialScale={0.65}
         minScale={0.05}
         maxScale={5}
         centerZoomedOut={false}
         centerOnInit={true}
+        onTransformed={handleTransformed}
         wheel={{
           wheelDisabled: isModalOpen,
           touchPadDisabled: isModalOpen,
@@ -91,6 +104,11 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
           centerViewRef.current = centerView;
           currentScaleRef.current = state?.scale || 1;
           
+          // Esporta centerView al componente padre se richiesto
+          if (externalCenterViewRef) {
+            externalCenterViewRef.current = centerView;
+          }
+          
           // Reset zoom condizionale: solo se zoom > 1.3x
           resetZoomRef.current = () => {
             const currentScale = currentScaleRef.current;
@@ -104,65 +122,89 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
           
           return (
           <>
-            {/* Controlli di navigazione */}
-            <div className="absolute top-4 right-4 z-50 flex flex-col gap-2">
-              <button
-                onClick={() => onCollapseAll(centerView)}
-                className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-slate-400 transition-colors text-slate-700 hover:text-slate-900"
-                type="button"
-                title="Comprimi e centra vista"
-                aria-label="Comprimi e centra vista"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l4-4 4 4M16 15l-4 4-4-4" />
-                </svg>
-              </button>
-              <button
-                onClick={() => zoomIn(0.2)}
-                className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-blue-400 transition-colors text-slate-700 hover:text-blue-600"
-                type="button"
-                title="Zoom In"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </button>
+            {/* 🎮 CONTROLLI NAVIGAZIONE ELEGANTI */}
+            <div className="absolute top-20 right-4 z-50 flex flex-col items-center gap-2">
               
-              <button
-                onClick={() => zoomOut(0.2)}
-                className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-blue-400 transition-colors text-slate-700 hover:text-blue-600"
-                type="button"
-                title="Zoom Out"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                </svg>
-              </button>
-              
-              <button
-                onClick={() => {
-                  resetTransform();
-                  setTimeout(() => centerView(1, 300), 50);
-                }}
-                className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-green-400 transition-colors text-slate-700 hover:text-green-600"
-                type="button"
-                title="Reset e Centra Vista"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-              </button>
+              {/* Indicatore Zoom - Design Coerente */}
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 px-3 py-2 text-center w-[72px]">
+                <div className="text-[9px] font-semibold text-blue-600 uppercase tracking-wider mb-0.5">Zoom</div>
+                <div className="text-xl font-black text-blue-600 leading-none">
+                  {currentZoom}%
+                </div>
+              </div>
 
-              <button
-                onClick={() => centerView()}
-                className="flex items-center justify-center w-10 h-10 bg-white rounded-lg shadow-md border-2 border-slate-200 hover:border-purple-400 transition-colors text-slate-700 hover:text-purple-600"
-                type="button"
-                title="Centra Vista"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-              </button>
+              {/* Gruppo Zoom - Design Bilanciato */}
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[72px]">
+                <button
+                  onClick={() => zoomIn(0.2)}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-blue-50 transition-all text-blue-600 hover:text-blue-700 border border-transparent hover:border-blue-300"
+                  type="button"
+                  title="Zoom avanti"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                  </svg>
+                </button>
+                
+                <div className="w-8 h-px bg-slate-200"></div>
+                
+                <button
+                  onClick={() => zoomOut(0.2)}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-blue-50 transition-all text-blue-600 hover:text-blue-700 border border-transparent hover:border-blue-300"
+                  type="button"
+                  title="Zoom indietro"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM7 10h6" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Gruppo Navigazione - Design Bilanciato */}
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[72px]">
+                {/* Comprimi Tutto */}
+                <button
+                  onClick={() => onCollapseAll(centerView)}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-amber-50 transition-all text-amber-600 hover:text-amber-700 border border-transparent hover:border-amber-300"
+                  type="button"
+                  title="Comprimi tutto"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+                
+                <div className="w-8 h-px bg-slate-200"></div>
+                
+                {/* Reset Vista */}
+                <button
+                  onClick={() => {
+                    resetTransform();
+                    setTimeout(() => centerView(1, 300), 50);
+                  }}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-green-50 transition-all text-green-600 hover:text-green-700 border border-transparent hover:border-green-300"
+                  type="button"
+                  title="Reset zoom 100%"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+                
+                <div className="w-8 h-px bg-slate-200"></div>
+                
+                {/* Centra Vista */}
+                <button
+                  onClick={() => centerView()}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-purple-50 transition-all text-purple-600 hover:text-purple-700 border border-transparent hover:border-purple-300"
+                  type="button"
+                  title="Centra vista"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Organigramma navigabile */}

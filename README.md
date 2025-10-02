@@ -1,8 +1,8 @@
 # 🏢 Clevertech Interactive Organizational Chart
 
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-success)](https://github.com)
-[![Version](https://img.shields.io/badge/Version-4.1.0-blue)](https://github.com)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2025--10--01-green)](https://github.com)
+[![Version](https://img.shields.io/badge/Version-4.3.1-blue)](https://github.com)
+[![Last Updated](https://img.shields.io/badge/Last%20Updated-2025--10--02-green)](https://github.com)
 
 Una **webapp interattiva completa** per visualizzare e gestire l'organigramma aziendale di Clevertech con:
 - 📊 **Integrazione Smartsheet** - Sincronizzazione dati in tempo reale
@@ -13,14 +13,15 @@ Una **webapp interattiva completa** per visualizzare e gestire l'organigramma az
 
 > **🆕 Ottobre 2025**: Architettura ristrutturata con `src/`, integrazione Smartsheet completa, documentazione aggiornata per AI agents.
 
-## 🎯 **Stato Finale del Progetto (v4.0.0)**
+## 🎯 **Stato Finale del Progetto (v4.3.0)**
 
 ### ✅ **PRODUCTION READY - Funzionalità Complete**
-- 🎨 **Sistema Schede Avanzato**: 13 colori distintivi per qualifiche, layout uniforme, badge centrati
-- 🖼️ **UI Design Integrato**: Controlli nell'header, organigramma massimizzato (99% schermo)
-- 🔍 **Ricerca + Filtri**: Sistema combinato con evidenziazione intelligente
-- ⚡ **Navigazione Fluida**: Zoom/pan ottimizzato, pulsanti sempre reattivi
-- 📊 **467 Dipendenti**: Gestiti con assegnazione intelligente e gerarchia 13 livelli
+- 🎨 **Navbar Moderna**: Logo Clevertech, ricerca inline sempre visibile, controlli ottimizzati
+- 🔍 **Ricerca Intelligente**: Centratura automatica sui risultati, espansione albero, zoom adattivo
+- 🎮 **Controlli Avanzati**: Indicatore zoom live, pulsanti intelligenti (Comprimi/Reset/Centra)
+- 🎛️ **Filtri Multi-Selezione**: Badge contatore, espansione automatica, ricerca opzioni
+- 📊 **603 Dipendenti**: Sincronizzazione Smartsheet in tempo reale, esclusione licenziati
+- ⚡ **Navigazione Fluida**: Zoom/pan ottimizzato, comprimi intelligente (preserva ricerca)
 
 ## 🎨 **Sistema Schede Professionale**
 
@@ -52,20 +53,65 @@ Una **webapp interattiva completa** per visualizzare e gestire l'organigramma az
 - **Badge**: Posizionati **a metà del bordo superiore** con testo grassetto
 - **Contenuto**: Area informazioni ottimizzata senza ridondanze
 
-## 🖼️ **Interfaccia Integrata e Massimizzata**
+## 🖼️ **Interfaccia Moderna e Professionale (v4.3.0)**
 
-### **Header Unificato**
+### **✨ Navbar Riprogettata**
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│ CLEVERTECH  🏢[Sedi] 👥[Ruoli] 🔍[Cerca] 🎛️[Filtri] 📤[Esporta] ↻[Smartsheet] │
-│ (Controlli uniformi min-w-[85px] integrati nell'organigramma)            │
-└──────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────┐
+│ [LOGO] │ [🔍 Ricerca inline sempre visibile]  [Sedi|Ruoli] [Filtri🔢] [Export] [↻] │
+└────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+**Layout a 3 Zone**:
+- **Sinistra**: Logo Clevertech PNG (40px altezza)
+- **Centro**: Ricerca inline con contatore risultati live e icona cancella
+- **Destra**: Controlli compatti (Segmented control viste, Filtri con badge, Export, Smartsheet sync)
+
+**Caratteristiche**:
+- ✅ Ricerca sempre accessibile (no pannelli laterali)
+- ✅ Badge contatore filtri attivi
+- ✅ Indicatore ultima sincronizzazione Smartsheet
+- ✅ Design moderno con backdrop blur e ombre
+
+### **🎮 Controlli Navigazione Intelligenti**
+
+**Pannello Laterale Migliorato** (top-right):
+```
+┌──────────┐
+│ Zoom     │  ← Indicatore live (es: "125%")
+│  125%    │
+├──────────┤
+│    +     │  ← Zoom In
+│    -     │  ← Zoom Out
+├──────────┤
+│    ⇅     │  ← Comprimi* (intelligente)
+│    ↻     │  ← Reset zoom a 100%
+│    ◉     │  ← Centra vista
+└──────────┘
+```
+
+**Funzioni Ridefinite**:
+1. **Comprimi Tutto** 🟡: Chiude tutti i rami, MA preserva i risultati della ricerca attiva
+2. **Reset Vista** 🟢: Riporta zoom a 100% e centra (nodi rimangono invariati)
+3. **Centra Vista** 🟣: Centra con zoom corrente (ideale per pan accidentale)
+
+### **🔍 Ricerca Intelligente**
+
+**Centratura Automatica dopo Ricerca**:
+- **1 risultato** → Zoom 120%, centrato sulla persona
+- **2-3 risultati** → Zoom 90%, mostra gruppo ristretto
+- **4+ risultati** → Zoom 70%, panoramica completa
+
+**Comportamenti Intelligenti**:
+- ✅ Espande automaticamente i rami fino ai risultati
+- ✅ Nasconde schede non correlate
+- ✅ Preserva espansione durante "Comprimi" se ricerca attiva
+- ✅ Aggiorna centratura in tempo reale al cambio risultati
 
 ### **Spazio Ottimizzato**
-- **Organigramma**: 99% dello schermo utilizzato (p-2)
+- **Organigramma**: 99% dello schermo utilizzato
 - **Altezza**: 100vh per sfruttare tutto lo spazio verticale
-- **Layout**: Zero elementi esterni al riquadro principale
+- **Navbar**: 60px altezza ottimizzata
 
 ## 🏗️ Architettura
 
@@ -264,7 +310,58 @@ node scripts/update-csv-from-excel.mjs  # Aggiorna dati da Excel
 
 ---
 
+## 📝 **Changelog**
+
+### **v4.3.1** (2 Ottobre 2025)
+**🎨 Final Polish**:
+- ✅ **Controlli laterali riprogettati**: Pulsanti circolari (w-11 h-11) con hover scale-110
+- ✅ **Icone migliorate**: Lente ingrandimento con +/-, icone più intuitive
+- ✅ **Box zoom con gradiente**: from-white to-blue-50, border-2 border-blue-200
+- ✅ **Indicatore data**: Bottom-left con timestamp completo (formato italiano)
+- ✅ **Repository cleanup**: Archiviati 25 file obsoleti in docs/archive/
+
+**🧹 Repository**:
+- Creata struttura docs/archive/ con README
+- Spostati tutti i file hotfix e UX intermedie
+- Repository più pulita e professionale
+
+### **v4.3.0** (2 Ottobre 2025)
+**🎨 UX/UI Improvements**:
+- ✅ Navbar moderna con logo Clevertech e layout a 3 zone
+- ✅ Ricerca inline sempre visibile (rimosso pannello laterale)
+- ✅ Indicatore zoom live funzionante (useState con tracking)
+- ✅ **Controlli laterali riprogettati**: Pulsanti circolari con hover scale, icone intuitive
+- ✅ **Indicatore data ultimo aggiornamento**: Bottom-left con timestamp completo
+- ✅ Pulsanti navigazione ridefiniti (Comprimi/Reset/Centra)
+- ✅ Comprimi intelligente (preserva risultati ricerca)
+- ✅ Centratura automatica dopo ricerca (zoom adattivo 70-120%)
+- ✅ Badge contatore filtri attivi
+- ✅ Indicatore ultima sincronizzazione Smartsheet
+
+**🔧 Technical**:
+- Pulsanti circolari (w-11 h-11 rounded-full) con hover scale-110
+- Icone lente ingrandimento con + e - integrate
+- Gradiente blue sul box zoom (from-white to-blue-50)
+- `dataLoadedTime` state per tracking data caricamento
+- Aggiunto `centerViewRef` per comunicazione App ↔ NavigableOrgChart
+- `useState<number>` per tracking zoom in tempo reale
+- Logica intelligente `handleCollapseAll` con check `searchQuery`
+- Auto-centering con `useEffect` post-espansione nodi
+- Zoom adattivo basato su `resultCount`
+
+### **v4.2.0** (1 Ottobre 2025)
+- Integrazione completa Smartsheet API
+- Proxy server per risoluzione CORS
+- Filtro automatico dipendenti licenziati (603 attivi)
+
+### **v4.1.0** (29 Settembre 2025)
+- Filtri multi-selezione con checkbox
+- Espansione automatica albero per filtri
+- Badge colorati per qualifiche (13 livelli)
+
+---
+
 **🎉 Sistema completo, professionale e production-ready per Clevertech!**
 
-*📅 Ultimo aggiornamento: 29 Settembre 2025*  
+*📅 Ultimo aggiornamento: 2 Ottobre 2025*  
 *🤖 Preparato per collaborazione AI e sviluppo futuro*

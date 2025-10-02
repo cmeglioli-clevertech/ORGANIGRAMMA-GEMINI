@@ -180,6 +180,7 @@ export const useOrgSearch = (tree: Node | null) => {
     getAncestorIds,
     shouldExpandNode,
     resultCount: searchResults.length,
-    visibleNodes
+    visibleNodes,
+    nodesToExpand: visibleNodes // Alias esplicito per indicare quali nodi espandere
   };
 };

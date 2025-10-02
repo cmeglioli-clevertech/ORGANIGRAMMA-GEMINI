@@ -97,6 +97,15 @@ app.get('/api/smartsheet/sheets/:sheetId', async (req, res) => {
     const data = await response.json();
     console.log('✅ Dati ricevuti da Smartsheet:', data.rows?.length || 0, 'righe');
     
+    // 🔍 DEBUG: Log prime 3 righe per verificare aggiornamenti
+    if (data.rows && data.rows.length > 0) {
+      console.log('📋 Sample dati (prime 3 righe):');
+      data.rows.slice(0, 3).forEach((row, idx) => {
+        const cells = row.cells.slice(0, 5).map(c => c.displayValue || c.value || '---');
+        console.log(`  Riga ${idx + 1}:`, cells.join(' | '));
+      });
+    }
+    
     res.json(data);
     
   } catch (error) {

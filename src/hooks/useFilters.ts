@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import type { Node } from '../types';
 
+// ✨ Filtri con selezioni multiple
 interface ActiveFilters {
   sede: string | null;
-  dipartimento: string | null;
-  ufficio: string | null;
-  ruolo: string | null;
+  dipartimento: Set<string>;
+  ufficio: Set<string>;
+  ruolo: Set<string>;
 }
 
 export const useFilters = (tree: Node | null, filters: ActiveFilters) => {
@@ -15,31 +16,28 @@ export const useFilters = (tree: Node | null, filters: ActiveFilters) => {
     const matchingNodes = new Set<string>();
     
     // Se nessun filtro è attivo, non evidenziare nulla
-    const hasActiveFilters = Object.values(filters).some(v => v !== null);
+    const hasActiveFilters = 
+      filters.dipartimento.size > 0 ||
+      filters.ufficio.size > 0 ||
+      filters.ruolo.size > 0;
     if (!hasActiveFilters) return matchingNodes;
 
     const checkNode = (node: Node): boolean => {
       let matches = true;
 
-      // Controlla filtro sede
-      if (filters.sede !== null) {
-        const nodeSede = node.metadata?.sede || node.location;
-        matches = matches && (nodeSede === filters.sede);
+      // Controlla filtro dipartimento (multi-selezione)
+      if (filters.dipartimento.size > 0) {
+        matches = matches && filters.dipartimento.has(node.department || '');
       }
 
-      // Controlla filtro dipartimento
-      if (filters.dipartimento !== null) {
-        matches = matches && (node.department === filters.dipartimento);
+      // Controlla filtro ufficio (multi-selezione)
+      if (filters.ufficio.size > 0) {
+        matches = matches && filters.ufficio.has(node.metadata?.office || '');
       }
 
-      // Controlla filtro ufficio
-      if (filters.ufficio !== null) {
-        matches = matches && (node.metadata?.office === filters.ufficio);
-      }
-
-      // Controlla filtro ruolo
-      if (filters.ruolo !== null) {
-        matches = matches && (node.role === filters.ruolo);
+      // Controlla filtro ruolo (multi-selezione)
+      if (filters.ruolo.size > 0) {
+        matches = matches && filters.ruolo.has(node.role || '');
       }
 
       if (matches) {
@@ -58,7 +56,46 @@ export const useFilters = (tree: Node | null, filters: ActiveFilters) => {
     return matchingNodes;
   }, [tree, filters]);
 
-  // Funzione per determinare quali nodi espandere
+  // Calcola i nodi da espandere (percorso completo dagli antenati ai nodi filtrati)
+  const nodesToExpand = useMemo(() => {
+    if (!tree || filteredNodes.size === 0) return null;
+
+    const nodesToReveal = new Set<string>();
+
+    // Funzione helper per trovare il percorso di un nodo
+    const findPathById = (node: Node, targetId: string, path: string[] = []): string[] | null => {
+      const currentPath = [...path, node.id];
+
+      if (node.id === targetId) {
+        return currentPath;
+      }
+
+      if (!node.children) {
+        return null;
+      }
+
+      for (const child of node.children) {
+        const result = findPathById(child, targetId, currentPath);
+        if (result) {
+          return result;
+        }
+      }
+
+      return null;
+    };
+
+    // Per ogni nodo filtrato, aggiungi tutti gli antenati al set
+    filteredNodes.forEach(nodeId => {
+      const pathIds = findPathById(tree, nodeId);
+      if (pathIds) {
+        pathIds.forEach(id => nodesToReveal.add(id));
+      }
+    });
+
+    return nodesToReveal.size > 0 ? nodesToReveal : null;
+  }, [tree, filteredNodes]);
+
+  // Funzione per determinare quali nodi espandere (mantenuta per retrocompatibilità)
   const shouldExpandForFilter = (nodeId: string, tree: Node | null): boolean => {
     if (!tree || filteredNodes.size === 0) return false;
 
@@ -86,10 +123,21 @@ export const useFilters = (tree: Node | null, filters: ActiveFilters) => {
     return findAndCheck(tree);
   };
 
+  const hasActiveFilters = 
+    filters.dipartimento.size > 0 ||
+    filters.ufficio.size > 0 ||
+    filters.ruolo.size > 0;
+
+  const filterCount = 
+    filters.dipartimento.size +
+    filters.ufficio.size +
+    filters.ruolo.size;
+
   return {
     filteredNodes,
     shouldExpandForFilter,
-    hasActiveFilters: Object.values(filters).some(v => v !== null),
-    filterCount: Object.values(filters).filter(v => v !== null).length
+    hasActiveFilters,
+    filterCount,
+    nodesToExpand // ✨ NUOVO: Set di nodi da espandere (come la ricerca)
   };
 };

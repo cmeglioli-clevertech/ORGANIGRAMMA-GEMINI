@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import { Toaster } from 'react-hot-toast';
 import toast from 'react-hot-toast';
 import NavigableOrgChart from "./components/NavigableOrgChart";
-import SearchBar from "./components/SearchBar";
 import FilterPanel from "./components/FilterPanel";
 import ExportMenu from "./components/ExportMenu";
 import EmployeeDetailModal from "./components/EmployeeDetailModal";
@@ -1024,47 +1023,52 @@ const buildRoleTree = (employees: Employee[]): Node => {
   });
 
   // 3. Correggi gerarchie anomale: se dipendente e manager hanno stesso livello, sposta al livello superiore
-  employees.forEach(emp => {
-    const employeeNode = nodesByName.get(emp.name);
-    if (!employeeNode || !emp.manager) return;
-
-    const managerNode = nodesByName.get(emp.manager);
-    if (!managerNode) return;
-
-    const employeeLevel = getQualificationOrder(emp.qualification);
-    const managerQual = managerNode.metadata?.qualification || '';
-    const managerLevel = getQualificationOrder(managerQual);
-
-    // Se dipendente e manager hanno lo stesso livello gerarchico (es: entrambi livello 3)
-    if (employeeLevel === managerLevel) {
-      // Trova il manager del manager
-      const managerManagerName = employees.find(e => e.name === emp.manager)?.manager;
-      
-      if (managerManagerName) {
-        const managerManagerNode = nodesByName.get(managerManagerName);
-        
-        if (managerManagerNode) {
-          // Rimuovi il dipendente dal manager corrente
-          if (managerNode.children) {
-            managerNode.children = managerNode.children.filter(
-              child => child.id !== employeeNode.id
-            );
-            if (managerNode.children.length === 0) {
-              managerNode.children = undefined;
-            }
-          }
-
-          // Aggiungi il dipendente al manager del manager
-          if (!managerManagerNode.children) {
-            managerManagerNode.children = [];
-          }
-          if (!managerManagerNode.children.some(child => child.id === employeeNode.id)) {
-            managerManagerNode.children.push(employeeNode);
-          }
-        }
-      }
-    }
-  });
+  // 3. DISABILITATO: Logica di "livellamento gerarchico"
+  // Questa logica spostava automaticamente i dipendenti se avevano la stessa qualifica del manager.
+  // PROBLEMA: Non rispetta il campo "RESPONSABILE ASSEGNATO" dal CSV/Smartsheet.
+  // SOLUZIONE: Rispettiamo esattamente le assegnazioni manager-dipendente come specificate.
+  
+  // employees.forEach(emp => {
+  //   const employeeNode = nodesByName.get(emp.name);
+  //   if (!employeeNode || !emp.manager) return;
+  //
+  //   const managerNode = nodesByName.get(emp.manager);
+  //   if (!managerNode) return;
+  //
+  //   const employeeLevel = getQualificationOrder(emp.qualification);
+  //   const managerQual = managerNode.metadata?.qualification || '';
+  //   const managerLevel = getQualificationOrder(managerQual);
+  //
+  //   // Se dipendente e manager hanno lo stesso livello gerarchico (es: entrambi livello 3)
+  //   if (employeeLevel === managerLevel) {
+  //     // Trova il manager del manager
+  //     const managerManagerName = employees.find(e => e.name === emp.manager)?.manager;
+  //     
+  //     if (managerManagerName) {
+  //       const managerManagerNode = nodesByName.get(managerManagerName);
+  //       
+  //       if (managerManagerNode) {
+  //         // Rimuovi il dipendente dal manager corrente
+  //         if (managerNode.children) {
+  //           managerNode.children = managerNode.children.filter(
+  //             child => child.id !== employeeNode.id
+  //           );
+  //           if (managerNode.children.length === 0) {
+  //             managerNode.children = undefined;
+  //           }
+  //         }
+  //
+  //         // Aggiungi il dipendente al manager del manager
+  //         if (!managerManagerNode.children) {
+  //           managerManagerNode.children = [];
+  //         }
+  //         if (!managerManagerNode.children.some(child => child.id === employeeNode.id)) {
+  //           managerManagerNode.children.push(employeeNode);
+  //         }
+  //       }
+  //     }
+  //   }
+  // });
 
   // 4. DISABILITATO: Rispettiamo esattamente i manager dal CSV
   // La logica di riorganizzazione automatica è stata disabilitata per rispettare
@@ -1179,9 +1183,20 @@ const updateNodeById = (node: Node, targetId: string, updater: (current: Node) =
  */
 const collapseTree = (node: Node, currentLevel: number = 0, maxLevel: number = 0): Node => ({
   ...node,
-  // Mantieni espanso solo il CEO (livello 0), comprimi tutto dal livello 1 in poi (direttori compressi)
+  // Mantieni espanso solo il CEO (livello 0), comprimi tutto dal livello 1 in poi (direttori compresi)
   isExpanded: currentLevel <= maxLevel,
   children: node.children?.map((child) => collapseTree(child, currentLevel + 1, maxLevel)),
+});
+
+/**
+ * Espande i nodi specificati nell'albero (usato per la ricerca)
+ * @param node - Nodo corrente dell'albero
+ * @param nodeIdsToExpand - Set di ID dei nodi da espandere
+ */
+const expandNodes = (node: Node, nodeIdsToExpand: Set<string>): Node => ({
+  ...node,
+  isExpanded: nodeIdsToExpand.has(node.id) ? true : node.isExpanded,
+  children: node.children?.map((child) => expandNodes(child, nodeIdsToExpand)),
 });
 
 const App: React.FC = () => {
@@ -1191,14 +1206,19 @@ const App: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("role");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(false);
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   const [isSmartsheetSyncing, setIsSmartsheetSyncing] = useState(false);
+  const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
+  const [dataLoadedTime, setDataLoadedTime] = useState<Date>(new Date());
+  
+  // 🎯 Ref per centerView (passato da NavigableOrgChart)
+  const centerViewRef = React.useRef<((scale?: number, animationTime?: number) => void) | null>(null);
+  // ✨ Filtri con selezioni multiple
   const [activeFilters, setActiveFilters] = useState({
     sede: null,
-    dipartimento: null,
-    ufficio: null,
-    ruolo: null
+    dipartimento: new Set<string>(),
+    ufficio: new Set<string>(),
+    ruolo: new Set<string>()
   });
   
   const tree = viewMode === "location" ? locationTree : roleTree;
@@ -1209,29 +1229,32 @@ const App: React.FC = () => {
     setSearchQuery,
     highlightedNodes,
     resultCount,
-    visibleNodes
+    visibleNodes,
+    nodesToExpand
   } = useOrgSearch(tree);
 
   // Hook per i filtri
   const {
     filteredNodes,
     shouldExpandForFilter,
-    hasActiveFilters
+    hasActiveFilters,
+    nodesToExpand: filterNodesToExpand // ✨ NUOVO: nodi da espandere per i filtri
   } = useFilters(tree, activeFilters);
 
   // Combina i nodi evidenziati da ricerca e filtri
   const combinedHighlightedNodes = new Set([...highlightedNodes, ...filteredNodes]);
 
-  // Limita la visibilità per ricerca e filtri
+  // Limita la visibilità per ricerca
   const searchVisibilitySet = visibleNodes && searchQuery.trim().length > 0 && resultCount > 0 ? visibleNodes : null;
   const isSearchNarrowed = Boolean(searchVisibilitySet);
   
-  // Non limitare la visibilità per i filtri, solo evidenziare
-  const isFilterNarrowed = false; // I filtri non nascondono nodi, solo evidenziano
+  // Limita la visibilità per i filtri (come la ricerca)
+  const filterVisibilitySet = filterNodesToExpand && hasActiveFilters && !searchQuery.trim() ? filterNodesToExpand : null;
+  const isFilterNarrowed = Boolean(filterVisibilitySet);
   
-  // Solo la ricerca limita la visibilità
-  const combinedVisibilitySet = searchVisibilitySet;
-  const isVisibilityNarrowed = isSearchNarrowed;
+  // Combina la visibilità: priorità alla ricerca, poi ai filtri
+  const combinedVisibilitySet = searchVisibilitySet || filterVisibilitySet;
+  const isVisibilityNarrowed = isSearchNarrowed || isFilterNarrowed;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -1246,11 +1269,9 @@ const App: React.FC = () => {
           const roleTree = buildRoleTree(employees);
           setLocationTree(orgTree);
           setRoleTree(roleTree);
+          setDataLoadedTime(new Date());
           console.log(`✅ Dati caricati da Smartsheet: ${employees.length} dipendenti`);
-          toast.success(`✅ Dati caricati da Smartsheet (${employees.length} dipendenti)`, {
-            duration: 3000,
-            icon: '📡'
-          });
+          // Rimossa notifica toast di caricamento iniziale
           return; // Successo! Esci dalla funzione
         } catch (smartsheetError) {
           // Smartsheet fallito, usa CSV locale come fallback (silenzioso)
@@ -1269,12 +1290,9 @@ const App: React.FC = () => {
         const roleTree = buildRoleTree(employees);
         setLocationTree(orgTree);
         setRoleTree(roleTree);
+        setDataLoadedTime(new Date());
         console.log(`📄 Dati caricati da CSV locale: ${employees.length} dipendenti`);
-        // Toast solo se fallback (non duplicato)
-        toast('📄 Dati caricati da CSV locale', {
-          duration: 3000,
-          icon: '💾'
-        });
+        // Rimossa notifica toast di caricamento CSV
       } catch (e) {
         console.error('❌ Errore caricamento dati:', e);
         setError(e instanceof Error ? e.message : "Failed to load organizational data.");
@@ -1285,6 +1303,61 @@ const App: React.FC = () => {
 
     fetchData();
   }, []);
+
+  // 🔍 Espansione automatica dei nodi durante la ricerca
+  // Usa useMemo per evitare espansioni inutili quando nodesToExpand non cambia sostanzialmente
+  const expandedNodesStr = useMemo(() => {
+    if (!nodesToExpand || nodesToExpand.size === 0) return '';
+    return Array.from(nodesToExpand).sort().join(',');
+  }, [nodesToExpand]);
+
+  useEffect(() => {
+    // Guard: Espandi solo se ci sono nodi validi e una query di ricerca attiva
+    if (!searchQuery.trim() || !expandedNodesStr) {
+      return; // Nessun nodo da espandere o ricerca non attiva
+    }
+
+    // Espandi i nodi nell'albero corrente (location o role)
+    const nodeIds = new Set<string>(expandedNodesStr.split(','));
+    if (viewMode === "location") {
+      setLocationTree((prev) => prev ? expandNodes(prev, nodeIds) : prev);
+    } else if (viewMode === "role") {
+      setRoleTree((prev) => prev ? expandNodes(prev, nodeIds) : prev);
+    }
+    
+    // 🎯 CENTRATURA AUTOMATICA dopo espansione ricerca
+    // Aspetta che il DOM si aggiorni, poi centra la vista sui risultati
+    setTimeout(() => {
+      if (centerViewRef.current && resultCount > 0) {
+        // Zoom intelligente basato sul numero di risultati
+        const zoomLevel = resultCount === 1 ? 1.2 : resultCount <= 3 ? 0.9 : 0.7;
+        centerViewRef.current(zoomLevel, 500);
+      }
+    }, 200);
+  }, [expandedNodesStr, viewMode, searchQuery, resultCount]); // Dipende da searchQuery per resettare quando cambia
+
+  // 🎛️ Espansione automatica dei nodi durante il filtraggio
+  // Stessa logica della ricerca ma per i filtri
+  const expandedFilterNodesStr = useMemo(() => {
+    if (!filterNodesToExpand || filterNodesToExpand.size === 0) return '';
+    return Array.from(filterNodesToExpand).sort().join(',');
+  }, [filterNodesToExpand]);
+
+  useEffect(() => {
+    // Guard: Espandi solo se ci sono filtri attivi e nodi da espandere
+    // NON espandere se c'è una ricerca attiva (la ricerca ha priorità)
+    if (!hasActiveFilters || !expandedFilterNodesStr || searchQuery.trim()) {
+      return; // Nessun filtro attivo, nessun nodo da espandere, o ricerca attiva
+    }
+
+    // Espandi i nodi nell'albero corrente (location o role)
+    const nodeIds = new Set<string>(expandedFilterNodesStr.split(','));
+    if (viewMode === "location") {
+      setLocationTree((prev) => prev ? expandNodes(prev, nodeIds) : prev);
+    } else if (viewMode === "role") {
+      setRoleTree((prev) => prev ? expandNodes(prev, nodeIds) : prev);
+    }
+  }, [expandedFilterNodesStr, viewMode, hasActiveFilters, searchQuery]); // Dipende dai filtri attivi
 
   const handleToggleNode = useCallback((nodeId: string) => {
     // Forza il toggle indipendentemente dallo stato corrente
@@ -1311,9 +1384,21 @@ const App: React.FC = () => {
 
   /**
    * Gestisce la compressione dell'albero mostrando solo CEO e i suoi diretti riporti
-   * Dopo la compressione, centra la vista con uno zoom appropriato per visualizzare tutte le schede
+   * INTELLIGENTE: Se c'è una ricerca attiva, preserva i nodi ricercati
+   * Dopo la compressione, centra la vista con uno zoom appropriato
    */
   const handleCollapseAll = useCallback((centerView: (scale?: number, animationTime?: number) => void) => {
+    // 🎯 Se c'è una ricerca attiva, NON comprimere - preserva i risultati
+    if (searchQuery.trim() && nodesToExpand && nodesToExpand.size > 0) {
+      // Solo centra la vista sui risultati della ricerca
+      setTimeout(() => {
+        const zoomLevel = resultCount === 1 ? 1.2 : resultCount <= 3 ? 0.9 : 0.7;
+        centerView(zoomLevel, 400);
+      }, 50);
+      return;
+    }
+    
+    // Nessuna ricerca attiva: comprimi tutto normalmente
     if (viewMode === "location") {
       setLocationTree((prev) => (prev ? collapseTree(prev) : prev));
     } else {
@@ -1324,7 +1409,7 @@ const App: React.FC = () => {
     setTimeout(() => {
       centerView(0.65, 400);
     }, 150);
-  }, [viewMode]);
+  }, [viewMode, searchQuery, nodesToExpand, resultCount]);
 
   /**
    * Gestisce l'aggiornamento dei dati da Smartsheet
@@ -1355,6 +1440,9 @@ const App: React.FC = () => {
       setRoleTree(roleTree);
       
       // ✅ Successo - dati aggiornati direttamente da Smartsheet
+      const now = new Date();
+      setLastSyncTime(now);
+      setDataLoadedTime(now);
       toast.success(`✅ Aggiornamento completato! ${employees.length} dipendenti sincronizzati.`, { 
         id: toastId,
         duration: 5000 
@@ -1436,42 +1524,6 @@ const App: React.FC = () => {
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-purple-50 text-slate-800 p-1">
 
-
-
-        {/* Pannello ricerca */}
-        {isSearchPanelOpen && (
-          <div className="fixed top-20 right-4 z-20 w-96">
-            <div className="bg-white rounded-xl border border-slate-200 shadow-xl p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold text-slate-900">🔍 Ricerca Globale</h3>
-                <button
-                  onClick={() => setIsSearchPanelOpen(false)}
-                  className="text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-              <SearchBar 
-                onSearch={setSearchQuery}
-                resultCount={resultCount}
-                placeholder="Cerca persone, ruoli, dipartimenti..."
-                containerClassName="w-full"
-              />
-              {searchQuery && resultCount > 0 && (
-                <p className="mt-2 text-sm text-emerald-600">
-                  ✅ {resultCount} risultati trovati
-                </p>
-              )}
-              {searchQuery && resultCount === 0 && (
-                <p className="mt-2 text-sm text-amber-600">
-                  ⚠️ Nessun risultato per "{searchQuery}"
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-
-
         {/* Pannello filtri - Solo quando aperto */}
         {isFilterPanelOpen && (
           <FilterPanel
@@ -1487,96 +1539,156 @@ const App: React.FC = () => {
           <div className="relative w-full h-full 
                           bg-gradient-to-br from-white via-blue-50/20 to-purple-50/20 
                           overflow-hidden">
-            {/* Header e controlli integrati dentro l'organigramma */}
-            <div className="absolute top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 z-10">
-              <div className="flex items-center justify-between px-6 py-4">
-                {/* Lato sinistro: Titolo */}
-                <div>
-                  <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600 tracking-tight">
-                    CLEVERTECH
-                  </h1>
-                  <p className="text-sm text-slate-600">Organigramma Aziendale Interattivo</p>
+            {/* 🎨 NUOVA NAVBAR PROFESSIONALE */}
+            <div className="absolute top-0 left-0 right-0 bg-white/98 backdrop-blur-md border-b border-slate-200 shadow-sm z-10">
+              <div className="flex items-center justify-between gap-6 px-6 py-3">
+                
+                {/* 📍 ZONA SINISTRA: Logo */}
+                <div className="flex items-center gap-4 min-w-[200px]">
+                  <img 
+                    src="/clevertech-logo.png" 
+                    alt="Clevertech" 
+                    className="h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+                    title="Clevertech - Organigramma Interattivo"
+                  />
                 </div>
 
-                {/* Lato destro: Fila di controlli proporzionati */}
+                {/* 🎯 ZONA CENTRO: Ricerca + Stats */}
+                <div className="flex-1 max-w-xl">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={searchQuery || ''}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Cerca persone, ruoli, dipartimenti... (premi '/')"
+                      className="w-full px-4 py-2 pl-10 pr-24 text-sm border border-slate-300 rounded-lg 
+                                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                                 bg-white shadow-sm"
+                    />
+                    <svg className="absolute left-3 top-2.5 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    {searchQuery && (
+                      <div className="absolute right-2 top-1.5 flex items-center gap-1">
+                        <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                          {resultCount} {resultCount === 1 ? 'risultato' : 'risultati'}
+                        </span>
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-600"
+                          title="Cancella ricerca"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* ⚙️ ZONA DESTRA: Controlli */}
                 <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("location")}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
-                      viewMode === "location"
-                        ? "bg-blue-600 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                    aria-pressed={viewMode === "location"}
-                    title="Vista per sedi geografiche"
-                  >
-                    🏢 Sedi
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setViewMode("role")}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
-                      viewMode === "role"
-                        ? "bg-blue-600 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                    aria-pressed={viewMode === "role"}
-                    title="Vista per gerarchia ruoli"
-                  >
-                    👥 Ruoli
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setIsSearchPanelOpen(!isSearchPanelOpen)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
-                      isSearchPanelOpen
-                        ? "bg-emerald-600 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                    title="Apri ricerca globale"
-                  >
-                    🔍 Cerca
-                  </button>
+                  
+                  {/* Segmented Control: Viste */}
+                  <div className="flex bg-slate-100 rounded-lg p-1 shadow-inner">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("location")}
+                      className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                        viewMode === "location"
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                      title="Vista per sedi geografiche"
+                    >
+                      🏢 Sedi
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode("role")}
+                      className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                        viewMode === "role"
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-slate-600 hover:text-slate-900"
+                      }`}
+                      title="Vista per gerarchia ruoli"
+                    >
+                      👥 Ruoli
+                    </button>
+                  </div>
+
+                  {/* Separatore */}
+                  <div className="w-px h-8 bg-slate-300"></div>
+
+                  {/* Pulsante Filtri con Badge */}
                   <button
                     type="button"
                     onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
+                    className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all ${
                       isFilterPanelOpen
-                        ? "bg-purple-600 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        ? "bg-purple-100 text-purple-700 ring-2 ring-purple-300"
+                        : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-300"
                     }`}
-                    title="Apri pannello filtri"
+                    title="Filtri avanzati (Ctrl+F)"
                   >
                     🎛️ Filtri
-                  </button>
-                  <ExportMenu tree={tree} />
-                  <button
-                    type="button"
-                    onClick={handleSmartsheetUpdate}
-                    disabled={isSmartsheetSyncing}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors min-w-[85px] ${
-                      isSmartsheetSyncing
-                        ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                        : "bg-orange-100 text-orange-700 hover:bg-orange-200 border border-orange-300"
-                    }`}
-                    title="Sincronizza dati da Smartsheet"
-                  >
-                    {isSmartsheetSyncing ? (
-                      <>
-                        <span className="inline-block animate-spin mr-2">⟳</span>
-                        Sync...
-                      </>
-                    ) : (
-                      <>↻ Smartsheet</>
+                    {hasActiveFilters && (
+                      <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                        {(activeFilters.dipartimento?.size || 0) + 
+                         (activeFilters.ufficio?.size || 0) + 
+                         (activeFilters.ruolo?.size || 0)}
+                      </span>
                     )}
                   </button>
+
+                  {/* Export Menu */}
+                  <ExportMenu tree={tree} />
+
+                  {/* Separatore */}
+                  <div className="w-px h-8 bg-slate-300"></div>
+
+                  {/* Pulsante Smartsheet Sync con Indicatore */}
+                  <div className="flex flex-col items-end gap-0.5">
+                    <button
+                      type="button"
+                      onClick={handleSmartsheetUpdate}
+                      disabled={isSmartsheetSyncing}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 ${
+                        isSmartsheetSyncing
+                          ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                          : "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-md hover:shadow-lg"
+                      }`}
+                      title={lastSyncTime ? `Ultima sincronizzazione: ${lastSyncTime.toLocaleString('it-IT')}` : "Sincronizza dati da Smartsheet"}
+                    >
+                      {isSmartsheetSyncing ? (
+                        <>
+                          <span className="inline-block animate-spin">⟳</span>
+                          <span>Sync...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          <span>Aggiorna</span>
+                        </>
+                      )}
+                    </button>
+                    {lastSyncTime && !isSmartsheetSyncing && (
+                      <span className="text-[10px] text-slate-500">
+                        {new Date().getTime() - lastSyncTime.getTime() < 60000 
+                          ? 'Ora' 
+                          : lastSyncTime.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Organigramma a schermo pieno */}
-            <div className="pt-20 h-full w-full">
+            <div className="pt-20 h-full w-full relative">
               <NavigableOrgChart 
                 tree={tree} 
                 onToggle={handleToggleNode}
@@ -1584,7 +1696,28 @@ const App: React.FC = () => {
                 visibleNodes={combinedVisibilitySet}
                 isSearchNarrowed={isVisibilityNarrowed}
                 onCollapseAll={handleCollapseAll}
+                centerViewRef={centerViewRef}
               />
+              
+              {/* 📅 Indicatore Data - Bottom Right */}
+              <div className="absolute bottom-4 right-4 z-40 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-md border border-slate-200">
+                <div className="flex items-center gap-2">
+                  <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div>
+                    <div className="text-[8px] font-medium text-slate-500 uppercase tracking-wide">Aggiornato</div>
+                    <div className="text-[10px] font-semibold text-slate-700">
+                      {dataLoadedTime.toLocaleString('it-IT', { 
+                        day: '2-digit', 
+                        month: '2-digit',
+                        hour: '2-digit', 
+                        minute: '2-digit'
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
