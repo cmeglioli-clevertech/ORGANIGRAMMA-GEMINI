@@ -62,7 +62,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   }, [tree]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative w-full h-full">
       {/* Sfondo con immagine dell'edificio Clevertech */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10 pointer-events-none"
@@ -209,10 +209,10 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
 
             {/* Organigramma navigabile */}
             <TransformComponent
-              wrapperClass="!w-full !h-full"
-              contentClass="!cursor-grab active:!cursor-grabbing"
+              wrapperClass="!w-full !h-full !overflow-visible"
+              contentClass="!cursor-grab active:!cursor-grabbing !overflow-visible"
             >
-              <div className="flex justify-center items-center min-h-full p-12">
+              <div className="flex justify-center items-center min-h-full p-24 overflow-visible">
                 {(() => {
                   // ✅ Scroll minimo compensativo: mantiene card cliccata visibile
                   const handleToggleWithStability = (id: string) => {

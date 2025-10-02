@@ -125,8 +125,8 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
   const shouldHighlight = isHighlighted || highlightedNodes.has(node.id);
 
   return (
-    <div className="relative flex flex-col items-center">
-      {/* CARD PRINCIPALE - Design Moderno Compatto */}
+    <div className="relative flex flex-col items-center overflow-visible">
+      {/* CARD PRINCIPALE - Design Moderno Compatto con Z-INDEX ALTO */}
       <div
         ref={(el) => registerNodeElem?.(node.id, el)}
         id={`node-${node.id}`}
@@ -140,6 +140,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
           cursor-default
           group
         `}
+        style={{ zIndex: 10 }}
       >
         {/* Badge in alto - Minimal con icone */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
@@ -326,46 +327,58 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
 
       </div>
 
-      {/* FIGLI - Albero gerarchico */}
+      {/* FIGLI - Albero gerarchico con sistema CSS dinamico */}
       {hasChildren && nodeExpanded && (
-        <div className="flex flex-col items-center mt-8">
-          {/* Linea verticale verso figli - Più visibile */}
-          <div className="w-1 h-8 bg-slate-400 rounded-full" />
+        <div className="flex flex-col items-center overflow-visible">
+          {/* Linea verticale verso figli - ATTACCATA ALLA CARD (no margin) */}
+          <div className="bg-black shadow-sm" style={{ width: '4px', height: '48px', zIndex: 1 }} />
 
-          {/* Contenitore figli */}
-          <div className="flex items-start gap-8 relative">
-            {/* Linea orizzontale tra figli - Più visibile */}
-            {filteredChildren.length > 1 && (
-              <div
-                className="absolute top-0 h-1 bg-slate-400 rounded-full"
-                style={{
-                  left: "50%",
-                  right: "50%",
-                  transform: `translateX(-${(filteredChildren.length - 1) * 176}px)`,
-                  width: `${(filteredChildren.length - 1) * 352}px`,
-                }}
-              />
-            )}
+          {/* Contenitore figli con sistema linee dinamico */}
+          <div className="flex items-start justify-center gap-8 overflow-visible relative">
+            {/* Render ricorsivo figli con wrapper per linee CSS */}
+            {filteredChildren.map((child, index) => {
+              const isFirst = index === 0;
+              const isLast = index === filteredChildren.length - 1;
+              const isSingle = filteredChildren.length === 1;
+              
+              return (
+                <div 
+                  key={child.id} 
+                  className="relative flex flex-col items-center overflow-visible"
+                >
+                  {/* Linea verticale che connette alla linea orizzontale - SEMPRE DIETRO LE CARD */}
+                  <div className="bg-black shadow-sm" style={{ width: '4px', height: '48px', position: 'relative', zIndex: -1 }} />
+                  
+                  {/* Linea orizzontale sopra questo nodo - ESTESA PER COPRIRE GAP COMPLETO */}
+                  {!isSingle && (
+                    <div 
+                      className="absolute bg-black"
+                      style={{
+                        height: '4px',
+                        top: '0',
+                        // Estende MOLTO di più: gap-8 = 32px, quindi estendo 20px da ogni lato per sicurezza
+                        left: isFirst ? '50%' : '-20px',
+                        width: isFirst ? 'calc(50% + 20px)' : (isLast ? 'calc(50% + 20px)' : 'calc(100% + 40px)'),
+                        right: isLast ? '50%' : undefined,
+                        zIndex: -1, // NEGATIVO per stare sempre dietro
+                      }}
+                    />
+                  )}
 
-            {/* Render ricorsivo figli */}
-            {filteredChildren.map((child, index) => (
-              <div key={child.id} className="relative flex flex-col items-center">
-                {/* Linea verticale da linea orizzontale a card figlio - Più visibile */}
-                <div className="w-1 h-8 bg-slate-400 rounded-full" />
-
-                {/* Nodo figlio ricorsivo */}
-              <OrgChartNode
-                  node={child}
-                onToggle={onToggle}
-                depth={depth + 1}
-                  isHighlighted={highlightedNodes.has(child.id)}
-                highlightedNodes={highlightedNodes}
-                visibleNodes={visibleNodes}
-                isSearchNarrowed={isSearchNarrowed}
-                registerNodeElem={registerNodeElem}
-              />
-            </div>
-          ))}
+                  {/* Nodo figlio ricorsivo */}
+                  <OrgChartNode
+                    node={child}
+                    onToggle={onToggle}
+                    depth={depth + 1}
+                    isHighlighted={highlightedNodes.has(child.id)}
+                    highlightedNodes={highlightedNodes}
+                    visibleNodes={visibleNodes}
+                    isSearchNarrowed={isSearchNarrowed}
+                    registerNodeElem={registerNodeElem}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

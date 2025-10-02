@@ -1535,10 +1535,9 @@ const App: React.FC = () => {
         )}
 
         {/* Organigramma fullscreen senza box */}
-        <div className="w-full h-screen">
+        <div className="w-full h-screen overflow-hidden">
           <div className="relative w-full h-full 
-                          bg-gradient-to-br from-white via-blue-50/20 to-purple-50/20 
-                          overflow-hidden">
+                          bg-gradient-to-br from-white via-blue-50/20 to-purple-50/20">
             {/* 🎨 NUOVA NAVBAR PROFESSIONALE */}
             <div className="absolute top-0 left-0 right-0 bg-white/98 backdrop-blur-md border-b border-slate-200 shadow-sm z-10">
               <div className="flex items-center justify-between gap-6 px-6 py-3">
