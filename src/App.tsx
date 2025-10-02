@@ -5,9 +5,12 @@ import NavigableOrgChart from "./components/NavigableOrgChart";
 import SearchBar from "./components/SearchBar";
 import FilterPanel from "./components/FilterPanel";
 import ExportMenu from "./components/ExportMenu";
+import EmployeeDetailModal from "./components/EmployeeDetailModal";
 import { useOrgSearch } from "./hooks/useOrgSearch";
 import { useFilters } from "./hooks/useFilters";
+import { useModal } from "./contexts/ModalContext";
 import { fetchSmartsheetData, csvArrayToString } from "./services/smartsheetService";
+import { getOfficeCardImage, getDepartmentCardImage } from "./utils/officeBackgrounds";
 import type { Node, NodeMetadata, NodeType } from "./types";
 
 interface Employee {
@@ -392,7 +395,8 @@ const parseCsvEmployees = (csvText: string): Employee[] => {
 
     const orderStr = getPart(1) || "99";
     const photo = stripPipePrefix(getPart(2));
-    const flag = stripPipePrefix(getPart(3));
+    const flagRaw = stripPipePrefix(getPart(3));
+    const flag = flagRaw.replace(/\.png$/i, '').toLowerCase(); // Rimuove .png e lowercase per flagcdn
     const sede = stripPipePrefix(getPart(4)) || FALLBACK_SEDE;
     const department = normalizeHierarchyValue(parts[5] ?? "");
     const office = normalizeHierarchyValue(parts[6] ?? "");
@@ -671,7 +675,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
                 role: "Ufficio",
                 department: departmentName,
                 location: locationValue,
-                imageUrl: `https://picsum.photos/seed/${encodeURIComponent(`office-${sedeName}-${departmentName}-${officeName}`)}/128/128`,
+                imageUrl: getOfficeCardImage(officeName),
                 type: "office",
                 responsible: responsiblePerson?.name,
                 metadata: {
@@ -716,7 +720,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
 
             location: locationValue,
 
-            imageUrl: `https://picsum.photos/seed/${encodeURIComponent(`department-${sedeName}-${departmentName}`)}/128/128`,
+            imageUrl: getDepartmentCardImage(departmentName),
 
             type: "department",
 
@@ -904,7 +908,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
     role: "Holding di controllo",
     department: "REFA Board",
     location: "Globale",
-    imageUrl: "https://picsum.photos/seed/refa-root/128/128",
+    imageUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&q=80",
     type: "root",
     responsible: ceo?.name ?? "Giuseppe Reggiani",
     metadata: {
@@ -924,7 +928,7 @@ const buildOrgTree = (employees: Employee[]): Node => {
         role: "Consiglio di amministrazione",
         department: "REFA",
         location: "Globale",
-        imageUrl: "https://picsum.photos/seed/refa-board/128/128",
+        imageUrl: getDepartmentCardImage("REFA Board"),
         type: "department",
         responsible: "Giuseppe Reggiani",
         metadata: {
@@ -1137,7 +1141,7 @@ const buildRoleTree = (employees: Employee[]): Node => {
     role: "Struttura gerarchica",
     department: "Ruoli",
     location: "Globale",
-    imageUrl: "https://picsum.photos/seed/dirigenza-root/128/128",
+    imageUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80",
     type: "root",
     responsible: null,
     metadata: {
@@ -1181,6 +1185,7 @@ const collapseTree = (node: Node, currentLevel: number = 0, maxLevel: number = 0
 });
 
 const App: React.FC = () => {
+  const { modalNode, closeModal } = useModal();
   const [locationTree, setLocationTree] = useState<Node | null>(null);
   const [roleTree, setRoleTree] = useState<Node | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("role");
@@ -1242,12 +1247,13 @@ const App: React.FC = () => {
           setLocationTree(orgTree);
           setRoleTree(roleTree);
           console.log(`✅ Dati caricati da Smartsheet: ${employees.length} dipendenti`);
-          toast.success(`✅ Dati sincronizzati da Smartsheet (${employees.length} dipendenti)`, {
-            duration: 3000
+          toast.success(`✅ Dati caricati da Smartsheet (${employees.length} dipendenti)`, {
+            duration: 3000,
+            icon: '📡'
           });
           return; // Successo! Esci dalla funzione
         } catch (smartsheetError) {
-          // Smartsheet fallito, usa CSV locale come fallback
+          // Smartsheet fallito, usa CSV locale come fallback (silenzioso)
           console.warn('⚠️ Smartsheet non disponibile, carico CSV locale...', smartsheetError);
         }
 
@@ -1264,8 +1270,10 @@ const App: React.FC = () => {
         setLocationTree(orgTree);
         setRoleTree(roleTree);
         console.log(`📄 Dati caricati da CSV locale: ${employees.length} dipendenti`);
-        toast.info('📄 Dati caricati da CSV locale (Smartsheet non disponibile)', {
-          duration: 3000
+        // Toast solo se fallback (non duplicato)
+        toast('📄 Dati caricati da CSV locale', {
+          duration: 3000,
+          icon: '💾'
         });
       } catch (e) {
         console.error('❌ Errore caricamento dati:', e);
@@ -1426,7 +1434,7 @@ const App: React.FC = () => {
         }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 p-1">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-slate-50 to-purple-50 text-slate-800 p-1">
 
 
 
@@ -1464,17 +1472,21 @@ const App: React.FC = () => {
         )}
 
 
-        {/* Pannello filtri */}
-        <FilterPanel
-          tree={tree}
-          onFilterChange={setActiveFilters}
-          isOpen={isFilterPanelOpen}
-          onToggle={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-        />
+        {/* Pannello filtri - Solo quando aperto */}
+        {isFilterPanelOpen && (
+          <FilterPanel
+            tree={tree}
+            onFilterChange={setActiveFilters}
+            isOpen={isFilterPanelOpen}
+            onToggle={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
+          />
+        )}
 
-        {/* Organigramma massimizzato con tutto integrato */}
-        <div className="w-full h-screen p-2">
-          <div className="relative w-full h-full border-2 border-slate-300 rounded-2xl bg-white shadow-xl overflow-hidden">
+        {/* Organigramma fullscreen senza box */}
+        <div className="w-full h-screen">
+          <div className="relative w-full h-full 
+                          bg-gradient-to-br from-white via-blue-50/20 to-purple-50/20 
+                          overflow-hidden">
             {/* Header e controlli integrati dentro l'organigramma */}
             <div className="absolute top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-slate-200 z-10">
               <div className="flex items-center justify-between px-6 py-4">
@@ -1578,6 +1590,14 @@ const App: React.FC = () => {
         </div>
 
       </div>
+
+      {/* Modal Globale - Renderizzato fuori dal Transform per garantire visibilità */}
+      {modalNode && (
+        <EmployeeDetailModal 
+          node={modalNode}
+          onClose={closeModal}
+        />
+      )}
     </>
   );
 };

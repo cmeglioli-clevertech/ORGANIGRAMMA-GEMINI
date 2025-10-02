@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { ModalProvider } from './contexts/ModalContext';
+import './animations.css';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -9,7 +11,7 @@ if (!rootElement) {
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
-  <React.StrictMode>
+  <ModalProvider>
     <App />
-  </React.StrictMode>
+  </ModalProvider>
 );

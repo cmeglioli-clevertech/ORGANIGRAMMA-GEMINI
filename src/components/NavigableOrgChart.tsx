@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { Node } from '../types';
 import OrgChartNode from './OrgChartNode';
+import { useModal } from '../contexts/ModalContext';
 
 interface NavigableOrgChartProps {
   tree: Node;
@@ -23,6 +24,8 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   const nodeElemsRef = useRef<Map<string, HTMLElement>>(new Map());
   const centerViewRef = useRef<((scale?: number, animationTime?: number) => void) | null>(null);
   const hasInitialCentered = useRef(false);
+  const currentScaleRef = useRef<number>(1);
+  const { isModalOpen, resetZoomRef } = useModal();
 
   const registerNodeElem = useCallback((id: string, el: HTMLElement | null) => {
     const map = nodeElemsRef.current;
@@ -58,33 +61,46 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
       />
       <TransformWrapper
         initialScale={1}
-        minScale={0.3}
-        maxScale={2}
-        centerZoomedOut={true}
+        minScale={0.05}
+        maxScale={5}
+        centerZoomedOut={false}
         centerOnInit={true}
         wheel={{
-          wheelDisabled: false,
-          touchPadDisabled: false,
+          wheelDisabled: isModalOpen,
+          touchPadDisabled: isModalOpen,
           step: 0.1,
         }}
         panning={{
-          disabled: false,
+          disabled: isModalOpen,
           velocityDisabled: false,
         }}
         pinch={{
-          disabled: false,
+          disabled: isModalOpen,
         }}
         doubleClick={{
-          disabled: false,
+          disabled: isModalOpen,
           mode: 'zoomIn',
           step: 0.3,
         }}
         limitToBounds={false}
-        centerContent={true}
+        centerContent={false}
+        alignmentAnimation={{ disabled: true }}
       >
-        {({ zoomIn, zoomOut, resetTransform, centerView, zoomToElement }) => {
-          // Salva centerView nel ref per usarlo nell'useEffect
+        {({ zoomIn, zoomOut, resetTransform, centerView, zoomToElement, state }) => {
+          // Salva centerView e resetTransform nei ref
           centerViewRef.current = centerView;
+          currentScaleRef.current = state?.scale || 1;
+          
+          // Reset zoom condizionale: solo se zoom > 1.3x
+          resetZoomRef.current = () => {
+            const currentScale = currentScaleRef.current;
+            if (currentScale > 1.3) {
+              // Zoom troppo alto, reset necessario per vedere modal
+              resetTransform();
+              setTimeout(() => centerView && centerView(1, 300), 50);
+            }
+            // Se zoom ≤ 1.3x, non fare nulla (modal visibile)
+          };
           
           return (
           <>
@@ -156,27 +172,46 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
             >
               <div className="flex justify-center items-center min-h-full p-12">
                 {(() => {
-                  const handleToggleAndCenter = (id: string) => {
+                  // ✅ Scroll minimo compensativo: mantiene card cliccata visibile
+                  const handleToggleWithStability = (id: string) => {
+                    const el = nodeElemsRef.current.get(id);
+                    
+                    // Salva posizione attuale della card
+                    const rectBefore = el?.getBoundingClientRect();
+                    
+                    // Esegui toggle
                     onToggle(id);
-                    // Centra la vista sulla scheda appena interagita
+                    
+                    // Dopo il rendering, controlla se la card è ancora visibile
                     requestAnimationFrame(() => {
-                      const el = nodeElemsRef.current.get(id);
-                      if (el && typeof zoomToElement === 'function') {
-                        try {
-                          zoomToElement(el as unknown as HTMLElement, 1, 300, 'easeOut');
-                        } catch {
-                          centerView && centerView();
+                      requestAnimationFrame(() => {
+                        if (!el || !rectBefore) return;
+                        
+                        const rectAfter = el.getBoundingClientRect();
+                        
+                        // Controlla se la card è uscita dal viewport o si è spostata troppo
+                        const viewportHeight = window.innerHeight;
+                        const isOutOfView = 
+                          rectAfter.top < 0 || 
+                          rectAfter.bottom > viewportHeight ||
+                          Math.abs(rectAfter.top - rectBefore.top) > 200; // Spostamento > 200px
+                        
+                        if (isOutOfView) {
+                          // Scroll minimo per mantenere visibile (non center, ma 'nearest')
+                          el.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'nearest',  // ✅ Scroll minimo, non centra
+                            inline: 'nearest'
+                          });
                         }
-                      } else if (centerView) {
-                        centerView();
-                      }
+                      });
                     });
                   };
 
                   return (
                     <OrgChartNode 
                       node={tree} 
-                      onToggle={handleToggleAndCenter} 
+                      onToggle={handleToggleWithStability}
                       depth={0}
                       highlightedNodes={highlightedNodes}
                       visibleNodes={visibleNodes}
