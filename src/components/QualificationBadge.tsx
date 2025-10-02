@@ -64,20 +64,20 @@ const QUALIFICATION_LABELS: Record<string, string> = {
   'apprendista-operaio': 'APPR.OP',
 };
 
-// Colori moderni WCAG AA compliant
+// Colori moderni più tenui - WCAG AA compliant
 export const MODERN_QUALIFICATION_COLORS: Record<string, string> = {
-  'dirigente': 'bg-red-600 text-white border-red-700 shadow-red-200',
-  'direttivo-quadro-gestione-del-cambiamento': 'bg-orange-600 text-white border-orange-700 shadow-orange-200',
-  'direttivo-responsabile-di-team-processi': 'bg-amber-600 text-white border-amber-700 shadow-amber-200',
-  'direttivo-tecnico-organizzativo': 'bg-blue-600 text-white border-blue-700 shadow-blue-200',
-  'tecnico-specializzato': 'bg-emerald-600 text-white border-emerald-700 shadow-emerald-200',
-  'tecnico-qualificato': 'bg-purple-600 text-white border-purple-700 shadow-purple-200',
-  'tecnico-esecutivo': 'bg-cyan-600 text-white border-cyan-700 shadow-cyan-200',
-  'operativo-specializzato': 'bg-orange-700 text-white border-orange-800 shadow-orange-200',
-  'operativo-qualificato': 'bg-rose-600 text-white border-rose-700 shadow-rose-200',
-  'operativo-base': 'bg-slate-600 text-white border-slate-700 shadow-slate-200',
-  'apprendista-impiegato': 'bg-lime-600 text-white border-lime-700 shadow-lime-200',
-  'apprendista-operaio': 'bg-stone-600 text-white border-stone-700 shadow-stone-200',
+  'dirigente': 'bg-red-500 text-white border-red-600 shadow-red-100',
+  'direttivo-quadro-gestione-del-cambiamento': 'bg-orange-500 text-white border-orange-600 shadow-orange-100',
+  'direttivo-responsabile-di-team-processi': 'bg-amber-500 text-white border-amber-600 shadow-amber-100',
+  'direttivo-tecnico-organizzativo': 'bg-blue-500 text-white border-blue-600 shadow-blue-100',
+  'tecnico-specializzato': 'bg-emerald-500 text-white border-emerald-600 shadow-emerald-100',
+  'tecnico-qualificato': 'bg-purple-500 text-white border-purple-600 shadow-purple-100',
+  'tecnico-esecutivo': 'bg-cyan-500 text-white border-cyan-600 shadow-cyan-100',
+  'operativo-specializzato': 'bg-orange-600 text-white border-orange-700 shadow-orange-100',
+  'operativo-qualificato': 'bg-rose-500 text-white border-rose-600 shadow-rose-100',
+  'operativo-base': 'bg-slate-500 text-white border-slate-600 shadow-slate-100',
+  'apprendista-impiegato': 'bg-lime-500 text-white border-lime-600 shadow-lime-100',
+  'apprendista-operaio': 'bg-stone-500 text-white border-stone-600 shadow-stone-100',
 };
 
 const QualificationBadge: React.FC<QualificationBadgeProps> = ({ 
@@ -108,9 +108,9 @@ const QualificationBadge: React.FC<QualificationBadgeProps> = ({
         ${modernColor}
         rounded-full border-2 
         font-bold tracking-wide
-        shadow-lg
+        shadow-md
         transition-all duration-300
-        hover:scale-110 hover:shadow-xl
+        hover:scale-105 hover:shadow-lg
       `}>
         {icon}
         <span className="uppercase">{label}</span>

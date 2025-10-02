@@ -39,7 +39,7 @@ interface SmartsheetError {
 }
 
 /**
- * Recupera i dati dal foglio Smartsheet
+ * Recupera i dati dal foglio Smartsheet con retry automatico
  */
 export async function fetchSmartsheetData(): Promise<string[][]> {
   const token = import.meta.env.VITE_SMARTSHEET_TOKEN;
@@ -59,41 +59,76 @@ export async function fetchSmartsheetData(): Promise<string[][]> {
     throw new Error('Sheet ID non configurato. Aggiungi VITE_SMARTSHEET_SHEET_ID nel file .env');
   }
 
-  try {
-    // Usa il proxy locale invece di chiamare direttamente Smartsheet API (risolve CORS)
-    const response = await fetch(`${PROXY_API_BASE}/sheets/${sheetId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  // Retry automatico con backoff esponenziale
+  const MAX_RETRIES = 3;
+  const BASE_DELAY = 1000; // 1 secondo
 
-    if (!response.ok) {
-      const errorData: SmartsheetError = await response.json().catch(() => ({
-        errorCode: response.status,
-        message: response.statusText
-      }));
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      console.log(`📡 Tentativo ${attempt}/${MAX_RETRIES} di connessione a Smartsheet...`);
       
-      if (response.status === 401) {
-        throw new Error('Token Smartsheet non valido o scaduto. Verifica le credenziali in .env');
-      } else if (response.status === 404) {
-        throw new Error(`Foglio Smartsheet non trovato (ID: ${sheetId}). Verifica l'ID in .env`);
-      } else {
-        throw new Error(`Errore Smartsheet API: ${errorData.message || response.statusText}`);
-      }
-    }
+      // Usa il proxy locale invece di chiamare direttamente Smartsheet API (risolve CORS)
+      const response = await fetch(`${PROXY_API_BASE}/sheets/${sheetId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    const sheet: SmartsheetSheet = await response.json();
-    
-    // Converti il formato Smartsheet in formato CSV (array di array)
-    return convertSmartsheetToCSV(sheet);
-    
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
+      if (!response.ok) {
+        const errorData: SmartsheetError = await response.json().catch(() => ({
+          errorCode: response.status,
+          message: response.statusText
+        }));
+        
+        // Errori non recuperabili - non riprovare
+        if (response.status === 401) {
+          throw new Error('Token Smartsheet non valido o scaduto. Verifica le credenziali in .env');
+        } else if (response.status === 404) {
+          throw new Error(`Foglio Smartsheet non trovato (ID: ${sheetId}). Verifica l'ID in .env`);
+        } else if (response.status >= 400 && response.status < 500) {
+          // Errori client (4xx) - non riprovare
+          throw new Error(`Errore Smartsheet API: ${errorData.message || response.statusText}`);
+        } else {
+          // Errori server (5xx) o di rete - riprova
+          throw new Error(`Errore server Smartsheet (${response.status}): ${errorData.message || response.statusText}`);
+        }
+      }
+
+      const sheet: SmartsheetSheet = await response.json();
+      console.log(`✅ Connessione riuscita al tentativo ${attempt}`);
+      
+      // Converti il formato Smartsheet in formato CSV (array di array)
+      return convertSmartsheetToCSV(sheet);
+      
+    } catch (error) {
+      const isLastAttempt = attempt === MAX_RETRIES;
+      const isRetryableError = error instanceof Error && 
+        (error.message.includes('server') || 
+         error.message.includes('network') || 
+         error.message.includes('timeout') ||
+         error.message.includes('fetch'));
+
+      if (isLastAttempt || !isRetryableError) {
+        // Ultimo tentativo o errore non recuperabile
+        if (error instanceof Error) {
+          throw error;
+        }
+        throw new Error('Errore di connessione a Smartsheet. Verifica la tua connessione internet.');
+      }
+
+      // Calcola delay con backoff esponenziale
+      const delay = BASE_DELAY * Math.pow(2, attempt - 1);
+      console.warn(`⚠️ Tentativo ${attempt} fallito, riprovo tra ${delay}ms...`);
+      console.warn(`   Errore: ${error instanceof Error ? error.message : 'Errore sconosciuto'}`);
+      
+      // Attendi prima del prossimo tentativo
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
-    throw new Error('Errore di connessione a Smartsheet. Verifica la tua connessione internet.');
   }
+
+  // Non dovrebbe mai arrivare qui, ma per sicurezza
+  throw new Error('Tutti i tentativi di connessione sono falliti');
 }
 
 /**

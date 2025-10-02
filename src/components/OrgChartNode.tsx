@@ -39,25 +39,25 @@ interface OrgChartNodeProps {
 }
 
 const badgeColours: Record<Node["type"], string> = {
-  root: "bg-emerald-100 text-emerald-700",
-  ceo: "bg-amber-100 text-amber-700",
-  sede: "bg-blue-100 text-blue-700",
-  department: "bg-emerald-100 text-emerald-700",
-  office: "bg-indigo-100 text-indigo-700",
-  person: "bg-slate-200 text-slate-600",
-  qualification: "bg-amber-100 text-amber-700",
-  "role-group": "bg-emerald-100 text-emerald-700",
+  root: "bg-emerald-50 text-emerald-600",
+  ceo: "bg-amber-50 text-amber-600",
+  sede: "bg-blue-50 text-blue-600",
+  department: "bg-emerald-50 text-emerald-600",
+  office: "bg-indigo-50 text-indigo-600",
+  person: "bg-slate-100 text-slate-600",
+  qualification: "bg-amber-50 text-amber-600",
+  "role-group": "bg-emerald-50 text-emerald-600",
 };
 
 const borderColours: Record<Node["type"], string> = {
-  root: "border-emerald-500",
-  ceo: "border-amber-500",
-  sede: "border-blue-500",
-  department: "border-emerald-500",
-  office: "border-indigo-500",
+  root: "border-emerald-400",
+  ceo: "border-amber-400",
+  sede: "border-blue-400",
+  department: "border-emerald-400",
+  office: "border-indigo-400",
   person: "border-slate-300",
-  qualification: "border-amber-500",
-  "role-group": "border-emerald-500",
+  qualification: "border-amber-400",
+  "role-group": "border-emerald-400",
 };
 
 const OrgChartNode: React.FC<OrgChartNodeProps> = ({
@@ -314,13 +314,13 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
             title={nodeExpanded ? 'Click per comprimere team' : 'Click per espandere team'}
             aria-label={nodeExpanded ? 'Comprimi team' : 'Espandi team'}
           >
-            <span className={`text-[16px] font-bold ${nodeExpanded ? 'text-emerald-700' : 'text-blue-700'}`}>
+            <span className={`text-[16px] font-bold ${nodeExpanded ? 'text-emerald-600' : 'text-blue-600'}`}>
               {nodeExpanded ? 'Comprimi Team' : 'Espandi Team'}
             </span>
             {nodeExpanded ? (
-              <ChevronUp className="w-6 h-6 text-emerald-600 group-hover/footer:scale-110 transition-transform" />
+              <ChevronUp className="w-6 h-6 text-emerald-500 group-hover/footer:scale-110 transition-transform" />
             ) : (
-              <ChevronDown className="w-6 h-6 text-blue-600 group-hover/footer:scale-110 transition-transform" />
+              <ChevronDown className="w-6 h-6 text-blue-500 group-hover/footer:scale-110 transition-transform" />
             )}
           </button>
         )}

@@ -54,7 +54,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
       // Aspetta un momento per permettere il rendering completo
       setTimeout(() => {
         if (centerViewRef.current) {
-          centerViewRef.current(1, 0); // Scala 1, animazione istantanea
+          centerViewRef.current(0.4, 0); // Scala 0.4 per vedere più schede, animazione istantanea
           hasInitialCentered.current = true;
         }
       }, 100);
@@ -72,7 +72,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
         }}
       />
       <TransformWrapper
-        initialScale={0.65}
+        initialScale={0.4}
         minScale={0.05}
         maxScale={5}
         centerZoomedOut={false}
@@ -126,18 +126,18 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
             <div className="absolute top-20 right-4 z-50 flex flex-col items-center gap-2">
               
               {/* Indicatore Zoom - Design Coerente */}
-              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 px-1.5 py-1.5 text-center w-[50px]">
-                <div className="text-[8px] font-semibold text-blue-600 uppercase tracking-wide mb-0.5">Zoom</div>
-                <div className="text-base font-black text-blue-600 leading-none">
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-md border border-slate-200 px-1.5 py-1.5 text-center w-[50px]">
+                <div className="text-[8px] font-semibold text-slate-500 uppercase tracking-wide mb-0.5">Zoom</div>
+                <div className="text-base font-black text-slate-700 leading-none">
                   {currentZoom}%
                 </div>
               </div>
 
               {/* Gruppo Zoom - Design Bilanciato */}
-              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[50px]">
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-md border border-slate-200 p-2 flex flex-col items-center gap-2 w-[50px]">
                 <button
                   onClick={() => zoomIn(0.2)}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-blue-50 transition-all text-blue-600 hover:text-blue-700 border border-transparent hover:border-blue-300"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-blue-50/60 transition-all text-slate-600 hover:text-blue-600 border border-transparent hover:border-blue-200"
                   type="button"
                   title="Zoom avanti"
                 >
@@ -150,7 +150,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
                 
                 <button
                   onClick={() => zoomOut(0.2)}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-blue-50 transition-all text-blue-600 hover:text-blue-700 border border-transparent hover:border-blue-300"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-blue-50/60 transition-all text-slate-600 hover:text-blue-600 border border-transparent hover:border-blue-200"
                   type="button"
                   title="Zoom indietro"
                 >
@@ -161,11 +161,11 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
               </div>
 
               {/* Gruppo Navigazione - Design Bilanciato */}
-              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[50px]">
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-md border border-slate-200 p-2 flex flex-col items-center gap-2 w-[50px]">
                 {/* Comprimi Tutto */}
                 <button
                   onClick={() => onCollapseAll(centerView)}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-amber-50 transition-all text-amber-600 hover:text-amber-700 border border-transparent hover:border-amber-300"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-amber-50/60 transition-all text-slate-600 hover:text-amber-600 border border-transparent hover:border-amber-200"
                   type="button"
                   title="Comprimi tutto"
                 >
@@ -182,7 +182,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
                     resetTransform();
                     setTimeout(() => centerView(1, 300), 50);
                   }}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-green-50 transition-all text-green-600 hover:text-green-700 border border-transparent hover:border-green-300"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-emerald-50/60 transition-all text-slate-600 hover:text-emerald-600 border border-transparent hover:border-emerald-200"
                   type="button"
                   title="Reset zoom 100%"
                 >
@@ -196,7 +196,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
                 {/* Centra Vista */}
                 <button
                   onClick={() => centerView()}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-purple-50 transition-all text-purple-600 hover:text-purple-700 border border-transparent hover:border-purple-300"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-purple-50/60 transition-all text-slate-600 hover:text-purple-600 border border-transparent hover:border-purple-200"
                   type="button"
                   title="Centra vista"
                 >

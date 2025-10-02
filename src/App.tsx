@@ -9,6 +9,7 @@ import { useOrgSearch } from "./hooks/useOrgSearch";
 import { useFilters } from "./hooks/useFilters";
 import { useModal } from "./contexts/ModalContext";
 import { fetchSmartsheetData, csvArrayToString } from "./services/smartsheetService";
+import { syncWithCache, getCacheMetadata, clearCache } from "./services/cacheService";
 import { getOfficeCardImage, getDepartmentCardImage } from "./utils/officeBackgrounds";
 import type { Node, NodeMetadata, NodeType } from "./types";
 
@@ -42,6 +43,21 @@ interface NodeWithParent {
 }
 
 type ViewMode = "location" | "role";
+
+// Stati sincronizzazione
+type SyncStatus = 'idle' | 'loading' | 'success' | 'error';
+interface SyncState {
+  status: SyncStatus;
+  message: string;
+  progress: number;
+  fromCache: boolean;
+  lastSync?: string;
+  changes?: {
+    added: number;
+    removed: number;
+    modified: number;
+  };
+}
 
 const ROOT_ID = "refa-root";
 const FALLBACK_SEDE = "Non specificata";
@@ -153,7 +169,7 @@ const QUALIFICATION_DEFINITION_SEEDS: QualificationDefinitionSeed[] = [
     newLevel: "A1",
     oldCode: "8",
     description: "Guida di funzioni/aree e impulso all’innovazione; ampia autonomia e responsabilità su processi e risultati.",
-    colorClass: "bg-orange-100 text-orange-800 border-orange-200",
+    colorClass: "bg-orange-50 text-orange-700 border-orange-300",
     synonyms: [
       "quadro / direttore",
       "quadro-direttore",
@@ -184,7 +200,7 @@ const QUALIFICATION_DEFINITION_SEEDS: QualificationDefinitionSeed[] = [
     newLevel: "B2",
     oldCode: "6",
     description: "Autonomia tecnico-organizzativa su attività complesse; presidio di obiettivi e risorse, senza perimetro da quadro.",
-    colorClass: "bg-blue-100 text-blue-800 border-blue-200",
+    colorClass: "bg-blue-50 text-blue-700 border-blue-300",
     synonyms: [
       "impiegato direttivo",
       "direttivo tecnico",
@@ -198,7 +214,7 @@ const QUALIFICATION_DEFINITION_SEEDS: QualificationDefinitionSeed[] = [
     newLevel: "B1",
     oldCode: "5S",
     description: "Elevato know-how; presidio di procedure critiche e supporto/guida operativa non gerarchica.",
-    colorClass: "bg-green-100 text-green-800 border-green-200",
+    colorClass: "bg-emerald-50 text-emerald-700 border-emerald-300",
     synonyms: [
       "specialista (impiegatizio/tecnico)",
       "specialista impiegatizio",
@@ -213,7 +229,7 @@ const QUALIFICATION_DEFINITION_SEEDS: QualificationDefinitionSeed[] = [
     newLevel: "C3",
     oldCode: "5",
     description: "Attività qualificate con autonomia ordinaria (es. set-up, diagnosi base, controlli di processo).",
-    colorClass: "bg-purple-100 text-purple-800 border-purple-200",
+    colorClass: "bg-purple-50 text-purple-700 border-purple-300",
     synonyms: ["impiegato qualificato"],
   },
   {
@@ -1203,6 +1219,7 @@ const App: React.FC = () => {
   const { modalNode, closeModal } = useModal();
   const [locationTree, setLocationTree] = useState<Node | null>(null);
   const [roleTree, setRoleTree] = useState<Node | null>(null);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>("role");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -1210,6 +1227,14 @@ const App: React.FC = () => {
   const [isSmartsheetSyncing, setIsSmartsheetSyncing] = useState(false);
   const [lastSyncTime, setLastSyncTime] = useState<Date | null>(null);
   const [dataLoadedTime, setDataLoadedTime] = useState<Date>(new Date());
+  
+  // Stati sincronizzazione intelligente
+  const [syncState, setSyncState] = useState<SyncState>({
+    status: 'idle',
+    message: '',
+    progress: 0,
+    fromCache: false
+  });
   
   // 🎯 Ref per centerView (passato da NavigableOrgChart)
   const centerViewRef = React.useRef<((scale?: number, animationTime?: number) => void) | null>(null);
@@ -1259,19 +1284,30 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 🎯 PRIORITÀ 1: Prova a caricare da Smartsheet
-        console.log('🔄 Tentativo caricamento dati da Smartsheet...');
+        setLoading(true);
+        
+        // 🎯 PRIORITÀ 1: Prova cache intelligente
+        console.log('🔄 Tentativo caricamento dati con cache intelligente...');
         try {
-          const csvData = await fetchSmartsheetData();
-          const csvString = csvArrayToString(csvData);
-          const employees = parseCsvEmployees(csvString);
+          const result = await syncWithCache(false); // Non forzare, usa cache se disponibile
+          const employees = parseCsvEmployees(csvArrayToString(result.csvData));
           const orgTree = buildOrgTree(employees);
           const roleTree = buildRoleTree(employees);
+          
           setLocationTree(orgTree);
           setRoleTree(roleTree);
+          setEmployees(employees);
           setDataLoadedTime(new Date());
-          console.log(`✅ Dati caricati da Smartsheet: ${employees.length} dipendenti`);
-          // Rimossa notifica toast di caricamento iniziale
+          setLastSyncTime(new Date(result.metadata.lastSync));
+          
+          if (result.fromCache) {
+            console.log(`✅ Dati caricati dalla cache: ${employees.length} dipendenti`);
+            toast.success(`📦 Dati caricati dalla cache! ${employees.length} dipendenti (${Math.round((Date.now() - new Date(result.metadata.lastSync).getTime()) / 1000 / 60)} min fa)`);
+          } else {
+            console.log(`✅ Dati aggiornati da Smartsheet: ${employees.length} dipendenti`);
+            toast.success(`✅ Dati aggiornati da Smartsheet! ${employees.length} dipendenti caricati.`);
+          }
+          
           return; // Successo! Esci dalla funzione
         } catch (smartsheetError) {
           // Smartsheet fallito, usa CSV locale come fallback (silenzioso)
@@ -1290,6 +1326,7 @@ const App: React.FC = () => {
         const roleTree = buildRoleTree(employees);
         setLocationTree(orgTree);
         setRoleTree(roleTree);
+        setEmployees(employees);
         setDataLoadedTime(new Date());
         console.log(`📄 Dati caricati da CSV locale: ${employees.length} dipendenti`);
         // Rimossa notifica toast di caricamento CSV
@@ -1412,44 +1449,114 @@ const App: React.FC = () => {
   }, [viewMode, searchQuery, nodesToExpand, resultCount]);
 
   /**
-   * Gestisce l'aggiornamento dei dati da Smartsheet
+   * Gestisce l'aggiornamento dei dati da Smartsheet con cache intelligente
    * Scarica i dati, aggiorna il CSV locale e ricostruisce gli alberi
    */
-  const handleSmartsheetUpdate = useCallback(async () => {
+  const handleSmartsheetUpdate = useCallback(async (forceRefresh: boolean = false) => {
+    if (isSmartsheetSyncing) return;
+    
     setIsSmartsheetSyncing(true);
-    const toastId = toast.loading('📡 Connessione a Smartsheet...');
+    setSyncState({
+      status: 'loading',
+      message: 'Inizializzazione...',
+      progress: 0,
+      fromCache: false
+    });
+    
+    const toastId = toast.loading('🔄 Sincronizzazione intelligente...');
 
     try {
-      // 1. Scarica i dati da Smartsheet
-      toast.loading('📥 Download dati in corso...', { id: toastId });
-      const csvData = await fetchSmartsheetData();
+      // 1. Verifica cache se non forzato
+      if (!forceRefresh) {
+        setSyncState(prev => ({ ...prev, message: 'Verifica cache...', progress: 10 }));
+        const cacheMetadata = getCacheMetadata();
+        if (cacheMetadata) {
+          setSyncState(prev => ({ 
+            ...prev, 
+            message: `Cache trovata (${Math.round((Date.now() - new Date(cacheMetadata.lastSync).getTime()) / 1000 / 60)} min fa)`,
+            progress: 20 
+          }));
+        }
+      }
+
+      // 2. Sincronizzazione intelligente
+      setSyncState(prev => ({ ...prev, message: 'Sincronizzazione...', progress: 30 }));
+      toast.loading('📡 Connessione a Smartsheet...', { id: toastId });
       
-      // 2. Converti in stringa CSV
-      const csvString = csvArrayToString(csvData);
+      const result = await syncWithCache(forceRefresh);
       
-      // 3. Parsa i nuovi dati
+      // 3. Aggiorna stato sincronizzazione
+      setSyncState(prev => ({ 
+        ...prev, 
+        message: result.fromCache ? 'Dati caricati dalla cache' : 'Dati aggiornati da Smartsheet',
+        progress: 60,
+        fromCache: result.fromCache,
+        lastSync: result.metadata.lastSync,
+        changes: result.diff ? {
+          added: result.diff.added,
+          removed: result.diff.removed,
+          modified: result.diff.modified
+        } : undefined
+      }));
+
+      // 4. Parsa i dipendenti
+      setSyncState(prev => ({ ...prev, message: 'Elaborazione dati...', progress: 70 }));
       toast.loading('🔄 Elaborazione dati...', { id: toastId });
-      const employees = parseCsvEmployees(csvString);
+      const employees = parseCsvEmployees(csvArrayToString(result.csvData));
       
-      // 4. Ricostruisci gli alberi
-      const orgTree = buildOrgTree(employees);
-      const roleTree = buildRoleTree(employees);
+      // 5. Costruisci gli alberi
+      setSyncState(prev => ({ ...prev, message: 'Costruzione organigramma...', progress: 90 }));
+      toast.loading('🌳 Costruzione organigramma...', { id: toastId });
+      const newLocationTree = buildOrgTree(employees);
+      const newRoleTree = buildRoleTree(employees);
       
-      // 5. Aggiorna lo stato
-      setLocationTree(orgTree);
-      setRoleTree(roleTree);
+      // 6. Aggiorna lo stato
+      setLocationTree(newLocationTree);
+      setRoleTree(newRoleTree);
+      setEmployees(employees);
+      setLastSyncTime(new Date());
+      setDataLoadedTime(new Date());
       
-      // ✅ Successo - dati aggiornati direttamente da Smartsheet
-      const now = new Date();
-      setLastSyncTime(now);
-      setDataLoadedTime(now);
-      toast.success(`✅ Aggiornamento completato! ${employees.length} dipendenti sincronizzati.`, { 
+      // 7. Notifica successo con dettagli
+      let successMessage = `✅ Sincronizzazione completata! ${employees.length} dipendenti`;
+      if (result.fromCache) {
+        successMessage += ' (da cache)';
+      } else if (result.diff?.hasChanges) {
+        const changes = result.diff;
+        const changeDetails = [];
+        if (changes.added > 0) changeDetails.push(`+${changes.added} nuovi`);
+        if (changes.removed > 0) changeDetails.push(`-${changes.removed} rimossi`);
+        if (changes.modified > 0) changeDetails.push(`~${changes.modified} modificati`);
+        successMessage += ` (${changeDetails.join(', ')})`;
+      }
+      
+      setSyncState({
+        status: 'success',
+        message: successMessage,
+        progress: 100,
+        fromCache: result.fromCache,
+        lastSync: result.metadata.lastSync,
+        changes: result.diff ? {
+          added: result.diff.added,
+          removed: result.diff.removed,
+          modified: result.diff.modified
+        } : undefined
+      });
+      
+      toast.success(successMessage, { 
         id: toastId,
         duration: 5000 
       });
       
     } catch (error) {
       console.error('Errore sincronizzazione Smartsheet:', error);
+      
+      setSyncState({
+        status: 'error',
+        message: error instanceof Error ? error.message : 'Errore sconosciuto',
+        progress: 0,
+        fromCache: false
+      });
       
       // Messaggio specifico per errore di connessione al proxy
       let errorMessage = '❌ Errore durante la sincronizzazione con Smartsheet';
@@ -1462,6 +1569,11 @@ const App: React.FC = () => {
       toast.error(errorMessage, { id: toastId, duration: 8000 });
     } finally {
       setIsSmartsheetSyncing(false);
+      
+      // Reset stato dopo 5 secondi
+      setTimeout(() => {
+        setSyncState(prev => ({ ...prev, status: 'idle', message: '', progress: 0 }));
+      }, 5000);
     }
   }, []);
 
@@ -1569,7 +1681,7 @@ const App: React.FC = () => {
                     </svg>
                     {searchQuery && (
                       <div className="absolute right-2 top-1.5 flex items-center gap-1">
-                        <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                        <span className="text-xs font-medium text-blue-600 bg-blue-50/80 px-2 py-1 rounded">
                           {resultCount} {resultCount === 1 ? 'risultato' : 'risultati'}
                         </span>
                         <button
@@ -1587,53 +1699,62 @@ const App: React.FC = () => {
                 </div>
 
                 {/* ⚙️ ZONA DESTRA: Controlli */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   
-                  {/* Segmented Control: Viste */}
-                  <div className="flex bg-slate-100 rounded-lg p-1 shadow-inner">
+                  {/* Segmented Control: Viste - Ridisegnato */}
+                  <div className="inline-flex bg-slate-100 rounded-lg p-0.5 shadow-sm">
                     <button
                       type="button"
                       onClick={() => setViewMode("location")}
-                      className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                      className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
                         viewMode === "location"
-                          ? "bg-white text-blue-600 shadow-sm"
-                          : "text-slate-600 hover:text-slate-900"
+                          ? "bg-white text-blue-600 shadow-md"
+                          : "text-slate-600 hover:text-slate-800 hover:bg-white/60"
                       }`}
                       title="Vista per sedi geografiche"
                     >
-                      🏢 Sedi
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                      </svg>
+                      Sedi
                     </button>
                     <button
                       type="button"
                       onClick={() => setViewMode("role")}
-                      className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                      className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
                         viewMode === "role"
-                          ? "bg-white text-blue-600 shadow-sm"
-                          : "text-slate-600 hover:text-slate-900"
+                          ? "bg-white text-blue-600 shadow-md"
+                          : "text-slate-600 hover:text-slate-800 hover:bg-white/60"
                       }`}
                       title="Vista per gerarchia ruoli"
                     >
-                      👥 Ruoli
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                      Ruoli
                     </button>
                   </div>
 
                   {/* Separatore */}
-                  <div className="w-px h-8 bg-slate-300"></div>
+                  <div className="w-px h-8 bg-slate-200"></div>
 
-                  {/* Pulsante Filtri con Badge */}
+                  {/* Pulsante Filtri con Badge - Uniformato */}
                   <button
                     type="button"
                     onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-                    className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                    className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 shadow-sm ${
                       isFilterPanelOpen
-                        ? "bg-purple-100 text-purple-700 ring-2 ring-purple-300"
-                        : "bg-white text-slate-700 hover:bg-slate-50 border border-slate-300"
+                        ? "bg-purple-500 text-white shadow-md"
+                        : "bg-white text-slate-700 hover:bg-purple-50/80 border border-slate-300 hover:border-purple-300"
                     }`}
                     title="Filtri avanzati (Ctrl+F)"
                   >
-                    🎛️ Filtri
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                    Filtri
                     {hasActiveFilters && (
-                      <span className="absolute -top-1 -right-1 w-4 h-4 bg-purple-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                      <span className="ml-1 px-1.5 py-0.5 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">
                         {(activeFilters.dipartimento?.size || 0) + 
                          (activeFilters.ufficio?.size || 0) + 
                          (activeFilters.ruolo?.size || 0)}
@@ -1645,18 +1766,19 @@ const App: React.FC = () => {
                   <ExportMenu tree={tree} />
 
                   {/* Separatore */}
-                  <div className="w-px h-8 bg-slate-300"></div>
+                  <div className="w-px h-8 bg-slate-200"></div>
 
-                  {/* Pulsante Smartsheet Sync con Indicatore */}
-                  <div className="flex flex-col items-end gap-0.5">
+                  {/* Pulsante Smartsheet Sync Uniformato */}
+                  <div className="flex items-center gap-2">
+                    {/* Pulsante Aggiorna Principale */}
                     <button
                       type="button"
-                      onClick={handleSmartsheetUpdate}
+                      onClick={() => handleSmartsheetUpdate(false)}
                       disabled={isSmartsheetSyncing}
-                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 ${
+                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 shadow-sm ${
                         isSmartsheetSyncing
                           ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                          : "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-md hover:shadow-lg"
+                          : "bg-gradient-to-r from-orange-400 to-amber-500 text-white hover:from-orange-500 hover:to-amber-600 shadow-md hover:shadow-lg"
                       }`}
                       title={lastSyncTime ? `Ultima sincronizzazione: ${lastSyncTime.toLocaleString('it-IT')}` : "Sincronizza dati da Smartsheet"}
                     >
@@ -1674,12 +1796,49 @@ const App: React.FC = () => {
                         </>
                       )}
                     </button>
+                    
+                    {/* Pulsante Force Refresh */}
+                    <button
+                      type="button"
+                      onClick={() => handleSmartsheetUpdate(true)}
+                      disabled={isSmartsheetSyncing}
+                      className={`p-2 rounded-lg transition-all shadow-sm ${
+                        isSmartsheetSyncing
+                          ? "bg-slate-200 cursor-not-allowed opacity-50"
+                          : "bg-white border border-slate-300 hover:bg-amber-50/80 hover:border-amber-300 hover:shadow-md"
+                      }`}
+                      title="Forza aggiornamento completo (ignora cache)"
+                    >
+                      <svg className={`w-4 h-4 ${isSmartsheetSyncing ? 'text-slate-400' : 'text-amber-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    </button>
+                    
+                    {/* Indicatore Timestamp Compatto */}
                     {lastSyncTime && !isSmartsheetSyncing && (
-                      <span className="text-[10px] text-slate-500">
-                        {new Date().getTime() - lastSyncTime.getTime() < 60000 
-                          ? 'Ora' 
-                          : lastSyncTime.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
-                      </span>
+                      <div className="flex items-center gap-1 px-2 py-1 bg-slate-50 rounded-md border border-slate-200">
+                        <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-xs text-slate-600 font-medium">
+                          {new Date().getTime() - lastSyncTime.getTime() < 60000 
+                            ? 'Ora' 
+                            : lastSyncTime.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                        {syncState.fromCache && (
+                          <span className="text-xs" title="Dati dalla cache">📦</span>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Progress Bar quando in sync */}
+                    {isSmartsheetSyncing && syncState.progress > 0 && (
+                      <div className="w-20 bg-slate-200 rounded-full h-1.5 shadow-inner">
+                        <div 
+                          className="bg-gradient-to-r from-orange-400 to-amber-500 h-1.5 rounded-full transition-all duration-300"
+                          style={{ width: `${syncState.progress}%` }}
+                        ></div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -1698,7 +1857,7 @@ const App: React.FC = () => {
                 centerViewRef={centerViewRef}
               />
               
-              {/* 📅 Indicatore Data - Bottom Right */}
+              {/* 📅 Indicatore Data e Cache - Bottom Right */}
               <div className="absolute bottom-4 right-4 z-40 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg shadow-md border border-slate-200">
                 <div className="flex items-center gap-2">
                   <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1716,6 +1875,23 @@ const App: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                
+                {/* Cache Info */}
+                {(() => {
+                  const cacheMetadata = getCacheMetadata();
+                  if (cacheMetadata) {
+                    const cacheAge = Math.round((Date.now() - new Date(cacheMetadata.lastSync).getTime()) / 1000 / 60);
+                    return (
+                      <div className="mt-1 flex items-center gap-1">
+                        <span className="text-[10px] text-blue-600">📦</span>
+                        <span className="text-[10px] text-slate-500">
+                          Cache: {cacheAge < 60 ? `${cacheAge}m` : `${Math.round(cacheAge / 60)}h`} fa
+                        </span>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             </div>
           </div>

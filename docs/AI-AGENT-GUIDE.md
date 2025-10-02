@@ -1,4 +1,4 @@
-# 🤖 AI Agent Collaboration Guide - Clevertech Organigramma v4.1.0
+# 🤖 AI Agent Collaboration Guide - Clevertech Organigramma v4.3.2
 
 ## 🎯 **Quick Context for AI Agents**
 
@@ -9,8 +9,200 @@ Questo progetto è un **organigramma interattivo production-ready** per Cleverte
 - ✅ **Ricerca fuzzy** + **Filtri intelligenti**
 - ✅ **Assegnazione smart** basata su algoritmo di punteggio
 
-**Versione**: 4.1.0 (Ristrutturata Ottobre 2025)  
-**Status**: ✅ **Production Ready + Smartsheet Integration**
+**Versione**: 4.3.2 (Ristrutturata Ottobre 2025)  
+**Status**: ✅ **Production Ready + Documentazione Potenziata per AI Agents**
+
+---
+
+## 🎯 **PRINCIPI FONDAMENTALI - Leggi SEMPRE Prima di Agire**
+
+### **📋 Priorità dell'AI Agent (in ordine)**
+
+1. **🔍 LEGGI → CAPISCI → POI AGISCI**
+   - Leggi README.md + questo file completamente PRIMA di toccare codice
+   - Cerca file esistenti PRIMA di crearne di nuovi
+   - Verifica lo stato attuale PRIMA di assumere cosa serve
+
+2. **✅ NON RICREARE CIÒ CHE ESISTE GIÀ**
+   - `.env` file → **MAI crearlo**, è già presente e configurato
+   - `package.json` → **NON riscriverlo** se ha 171 pacchetti installati
+   - Config files → **Controlla sempre** con `ls` o `Get-Content` prima
+
+3. **🛡️ NON ROMPERE IL CODICE FUNZIONANTE**
+   - ❌ **NON refactorare** senza richiesta esplicita
+   - ❌ **NON "ottimizzare"** codice complesso (es: buildRoleTree, smart assignment)
+   - ❌ **NON cambiare** dimensioni card (w-80 h-[33rem] è standard)
+   - ❌ **NON modificare** logica testata per "best practices"
+
+4. **⚡ AGGIORNA, NON FORZARE**
+   - Se vedi errore dopo modifica → **Rigenera build** (`npm install`)
+   - Se lint/test falliscono → **Controlla se è problema temporaneo** di cache
+   - Se porta occupata → **Termina processo esistente**, non cambiare porta
+   - Se TypeScript si lamenta → **Verifica types**, non disabilitare strict mode
+
+5. **📍 DOVE AGIRE (Mappa Decisionale)**
+   ```
+   PROBLEMA → AZIONE
+   
+   ❌ "npm install installa solo 7 pacchetti"
+      ✅ Usa comando PowerShell documentato in QUICK-START.md
+   
+   ❌ ".env non trovato"
+      ✅ CONTROLLA PRIMA se esiste (non crearlo al volo)
+      ✅ Se manca davvero → Chiedi all'utente il token
+   
+   ❌ "Errore TypeScript in build"
+      ✅ Leggi TUTTO l'errore
+      ✅ Controlla se è file nuovo che hai creato TU
+      ✅ Se codice esistente → CHIEDI prima di modificare
+   
+   ❌ "Server non si avvia"
+      ✅ Verifica dipendenze installate (171 pacchetti?)
+      ✅ Verifica porte libere (3000, 3001)
+      ✅ Leggi log per errore specifico
+      ✅ NON modificare configurazioni server al volo
+   
+   ❌ "Vuoi migliorare il codice?"
+      ✅ SOLO se richiesto esplicitamente
+      ✅ Altrimenti → Sistema è production-ready, NON toccare
+   ```
+
+### **🚫 COSA NON FARE MAI**
+
+| ❌ NON FARE | ✅ FARE INVECE |
+|-------------|----------------|
+| Creare `.env` senza controllare | `ls .env` prima, chiedi se manca |
+| Refactorare codice funzionante | Lascialo com'è salvo richiesta |
+| Modificare dimensioni card | Mantieni w-80 h-[33rem] sempre |
+| Cambiare porte (3000/3001) | Libera porte occupate |
+| Disabilitare linter per "fix rapido" | Risolvi la causa, non il sintomo |
+| Installare nuove dipendenze per "best practice" | Usa quelle esistenti |
+| Modificare smart assignment algorithm | È complesso e testato, NON toccare |
+| Creare file di test/config non richiesti | Minimizza file creati |
+
+### **✅ FLUSSO CORRETTO**
+
+```
+1. Leggi README.md + AI-AGENT-GUIDE.md (questo file)
+2. Verifica stato attuale (ls, cat package.json, npm list)
+3. Identifica problema reale (non assumere)
+4. Cerca soluzione documentata (QUICK-START, changelog)
+5. Se soluzione nota → Applicala
+6. Se problema nuovo → CHIEDI prima di modificare codice core
+7. Testa la modifica
+8. Documenta se è fix riutilizzabile
+```
+
+### **🎓 Esempi Pratici**
+
+**❌ Agent Sbagliato:**
+```
+User: "Aggiorna le dipendenze"
+Agent: *Riscrive package.json con versioni latest*
+        *Rompe compatibilità React 19*
+        *App non si avvia più*
+```
+
+**✅ Agent Corretto:**
+```
+User: "Aggiorna le dipendenze"
+Agent: *Legge package.json attuale*
+        *Esegue npm outdated*
+        *Vede che tutto è aggiornato*
+        "Le dipendenze sono già aggiornate (171 pacchetti, versioni corrette)"
+```
+
+**❌ Agent Sbagliato:**
+```
+User: "Fix TypeScript errors"
+Agent: *Aggiunge @ts-ignore dappertutto*
+        *Disabilita strict mode*
+```
+
+**✅ Agent Corretto:**
+```
+User: "Fix TypeScript errors"
+Agent: *Legge errori specifici*
+        *Controlla se sono in codice nuovo o esistente*
+        *Se esistente: "Gli errori sono in codice production-ready,
+         probabilmente è problema di cache. Rigenero?"*
+```
+
+### **💡 Mentalità Corretta**
+
+> **"Questo progetto è PRODUCTION-READY. Non sei qui per migliorarlo, sei qui per mantenerlo o estenderlo su richiesta."**
+
+- ✅ Sistema è **già ottimizzato** (React 19, Vite 6, 467 dipendenti testati)
+- ✅ Codice è **già documentato** (architecture, types, comments)
+- ✅ Patterns sono **già stabiliti** (src/ structure, card system, colors)
+- ✅ Il tuo lavoro è **conservare** questo stato, non "migliorarlo" autonomamente
+
+---
+
+## 🚨 **QUICK FIX - Leggi Prima di Tutto!**
+
+### **⚡ Problema: package.json corrotto / dipendenze mancanti**
+
+**Sintomo**: `npm install` installa solo 7 pacchetti invece di 171. L'app non si avvia.
+
+**Causa**: Il `package.json` a volte si corrompe rimanendo solo con 2 dipendenze (framer-motion e lucide-react).
+
+**Soluzione Rapida (30 secondi)**:
+```powershell
+# 1. Ripristina package.json completo con PowerShell
+@'
+{
+  "name": "interactive-organizational-chart",
+  "private": true,
+  "version": "4.3.2",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "screenshot": "node scripts/capture-screenshots.mjs",
+    "proxy": "node server-proxy.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "fuse.js": "^7.1.0",
+    "lucide-react": "^0.544.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-hot-toast": "^2.6.0",
+    "react-zoom-pan-pinch": "^3.7.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "^1.55.1",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}
+'@ | Set-Content -Path package.json
+
+# 2. Rimuovi node_modules e reinstalla
+rm -r node_modules
+npm install
+
+# ✅ Risultato atteso: "added 168 packages, audited 171 packages"
+```
+
+**Verifica Successo**:
+```powershell
+Get-Content package.json | Select-Object -First 10
+# Dovresti vedere "name": "interactive-organizational-chart", "version": "4.3.1"
+```
+
+**Note**:
+- ⚠️ Vulnerabilità nota in `xlsx` (Prototype Pollution) - nessun fix disponibile, rischio basso
+- ✅ Dopo il fix, l'app è pronta per essere avviata con `npm run dev` + `npm run proxy`
 
 ---
 
@@ -433,5 +625,6 @@ npm run proxy & npm run dev
 
 **🤖 This system is production-ready with Smartsheet integration. Architecture is clean, documented, and maintainable.**
 
-*📅 Last Updated: October 2025 - v4.1.0*  
+*📅 Last Updated: October 2025 - v4.3.2*  
 *📝 Keep this guide updated when making significant changes.*
+*🎯 Quick fixes documented - setup time reduced from 15+ min to <2 min*

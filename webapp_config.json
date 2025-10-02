@@ -14,10 +14,10 @@
   "browser": {
     "url": "http://localhost:3000",
     "window": {
-      "width": 1400,
-      "height": 900,
-      "position_x": 100,
-      "position_y": 100
+      "width": 1700,
+      "height": 1000,
+      "position_x": 110,
+      "position_y": 40
     }
   },
   "logging": {
