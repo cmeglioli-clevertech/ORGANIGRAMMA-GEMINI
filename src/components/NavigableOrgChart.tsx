@@ -126,15 +126,15 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
             <div className="absolute top-20 right-4 z-50 flex flex-col items-center gap-2">
               
               {/* Indicatore Zoom - Design Coerente */}
-              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 px-3 py-2 text-center w-[72px]">
-                <div className="text-[9px] font-semibold text-blue-600 uppercase tracking-wider mb-0.5">Zoom</div>
-                <div className="text-xl font-black text-blue-600 leading-none">
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 px-1.5 py-1.5 text-center w-[50px]">
+                <div className="text-[8px] font-semibold text-blue-600 uppercase tracking-wide mb-0.5">Zoom</div>
+                <div className="text-base font-black text-blue-600 leading-none">
                   {currentZoom}%
                 </div>
               </div>
 
               {/* Gruppo Zoom - Design Bilanciato */}
-              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[72px]">
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[50px]">
                 <button
                   onClick={() => zoomIn(0.2)}
                   className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-blue-50 transition-all text-blue-600 hover:text-blue-700 border border-transparent hover:border-blue-300"
@@ -161,7 +161,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
               </div>
 
               {/* Gruppo Navigazione - Design Bilanciato */}
-              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[72px]">
+              <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-lg border border-slate-200 p-2 flex flex-col items-center gap-2 w-[50px]">
                 {/* Comprimi Tutto */}
                 <button
                   onClick={() => onCollapseAll(centerView)}
