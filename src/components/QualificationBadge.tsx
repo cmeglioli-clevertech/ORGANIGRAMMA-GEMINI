@@ -51,7 +51,7 @@ const QUALIFICATION_ICONS: Record<string, React.ReactNode> = {
 // Sigle brevi per badge compatti
 const QUALIFICATION_LABELS: Record<string, string> = {
   'dirigente': 'DIR',
-  'direttivo-quadro-gestione-del-cambiamento': 'QUADRO',
+  'direttivo-quadro-gestione-del-cambiamento': 'DIRETTORE',
   'direttivo-responsabile-di-team-processi': 'RESP',
   'direttivo-tecnico-organizzativo': 'TEC/ORG',
   'tecnico-specializzato': 'SPEC',

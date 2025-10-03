@@ -234,11 +234,6 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ node, onClose
                 value={metadata?.reportsTo} 
               />
               <InfoRow 
-                icon={<Award className="w-4 h-4" />} 
-                label="Qualifica" 
-                value={metadata?.qualification} 
-              />
-              <InfoRow 
                 icon={<User className="w-4 h-4" />} 
                 label="Genere" 
                 value={metadata?.gender} 
@@ -251,7 +246,7 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ node, onClose
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
               <h4 className="text-sm font-bold text-blue-900 mb-2 flex items-center gap-2">
                 <Award className="w-4 h-4" />
-                Descrizione Livello
+                Descrizione
               </h4>
               <p className="text-sm text-blue-800 leading-relaxed">
                 {metadata.qualificationDescription}
