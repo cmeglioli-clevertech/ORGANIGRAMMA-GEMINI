@@ -7,8 +7,18 @@
  * Documentazione API: https://smartsheet.redoc.ly/
  */
 
-// URL del proxy locale (risolve il problema CORS)
-const PROXY_API_BASE = 'http://localhost:3001/api/smartsheet';
+// URL dell'API proxy (locale o Vercel)
+function getProxyApiBase(): string {
+  // In produzione (Vercel): usa le API routes serverless
+  if (import.meta.env.PROD) {
+    return '/api/smartsheet';
+  }
+  
+  // In sviluppo: usa il proxy locale Express
+  return 'http://localhost:3001/api/smartsheet';
+}
+
+const PROXY_API_BASE = getProxyApiBase();
 
 interface SmartsheetCell {
   columnId: number;
