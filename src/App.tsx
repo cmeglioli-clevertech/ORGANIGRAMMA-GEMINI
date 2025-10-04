@@ -168,7 +168,7 @@ const QUALIFICATION_DEFINITION_SEEDS: QualificationDefinitionSeed[] = [
     order: 2,
     newLevel: "A1",
     oldCode: "8",
-    description: "Guida di funzioni/aree e impulso all’innovazione; ampia autonomia e responsabilità su processi e risultati.",
+    description: "Guida di funzioni/aree e impulso all'innovazione; ampia autonomia e responsabilità su processi e risultati.",
     colorClass: "bg-orange-50 text-orange-700 border-orange-300",
     synonyms: [
       "quadro / direttore",
@@ -1226,83 +1226,31 @@ const expandAllNodes = (node: Node): Node => ({
 });
 
 /**
- * 🎯 CALCOLO INTELLIGENTE DI CENTRO E ZOOM OTTIMALE
- * Calcola il bounding box di tutti i nodi filtrati e determina
- * il centro geometrico e lo zoom ottimale per visualizzarli tutti
+ * 🎯 CENTRATURA INTELLIGENTE SEMPLIFICATA
+ * Usa valori fissi ottimizzati invece di calcoli geometrici complessi
+ * Molto più veloce, stabile e affidabile
  */
-const calculateOptimalViewAndCenter = (
-  filteredNodes: Set<string>, 
+const smartCenter = (
+  nodeCount: number, 
   centerViewRef: React.MutableRefObject<((scale?: number, animationTime?: number) => void) | null>
 ): void => {
-  try {
-    // Trova tutti gli elementi DOM dei nodi filtrati
-    const nodeElements: HTMLElement[] = [];
-    filteredNodes.forEach(nodeId => {
-      const element = document.querySelector(`[data-node-id="${nodeId}"]`) as HTMLElement;
-      if (element) {
-        nodeElements.push(element);
-      }
-    });
-
-    if (nodeElements.length === 0) {
-      console.warn('🎯 Nessun elemento DOM trovato per i nodi filtrati');
-      return;
-    }
-
-    // Calcola il bounding box di tutti i nodi
-    let minX = Infinity, minY = Infinity;
-    let maxX = -Infinity, maxY = -Infinity;
-
-    nodeElements.forEach(element => {
-      const rect = element.getBoundingClientRect();
-      minX = Math.min(minX, rect.left);
-      minY = Math.min(minY, rect.top);
-      maxX = Math.max(maxX, rect.right);
-      maxY = Math.max(maxY, rect.bottom);
-    });
-
-    // Calcola dimensioni dell'area contenente tutti i nodi
-    const contentWidth = maxX - minX;
-    const contentHeight = maxY - minY;
-
-    // Ottieni dimensioni del viewport
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    // Calcola zoom ottimale con margine di sicurezza (80% del viewport)
-    const maxUsableWidth = viewportWidth * 0.8;
-    const maxUsableHeight = viewportHeight * 0.8;
-    
-    const scaleX = maxUsableWidth / contentWidth;
-    const scaleY = maxUsableHeight / contentHeight;
-    const optimalScale = Math.min(scaleX, scaleY, 1.5); // Max zoom 1.5x
-
-    // Assicurati che lo zoom non sia troppo piccolo o troppo grande
-    const finalScale = Math.max(0.3, Math.min(1.2, optimalScale));
-
-    console.log(`🎯 Calcolo geometrico intelligente:`, {
-      filteredNodes: filteredNodes.size,
-      contentWidth: Math.round(contentWidth),
-      contentHeight: Math.round(contentHeight),
-      viewportWidth,
-      viewportHeight,
-      scaleX: Math.round(scaleX * 100) / 100,
-      scaleY: Math.round(scaleY * 100) / 100,
-      finalScale: Math.round(finalScale * 100) / 100
-    });
-
-    // Applica zoom ottimale
-    if (centerViewRef.current) {
-      centerViewRef.current(finalScale, 500);
-    }
-
-  } catch (error) {
-    console.error('❌ Errore nel calcolo geometrico:', error);
-    // Fallback al metodo precedente
-    if (centerViewRef.current) {
-      centerViewRef.current(0.7, 500);
-    }
+  if (!centerViewRef.current) return;
+  
+  // 🎯 Valori fissi intelligenti basati sul numero di nodi
+  let optimalZoom: number;
+  
+  if (nodeCount === 1) {
+    optimalZoom = 1.0; // Singolo risultato: zoom per leggibilità
+  } else if (nodeCount <= 3) {
+    optimalZoom = 0.8; // Pochi risultati: zoom medio
+  } else if (nodeCount <= 8) {
+    optimalZoom = 0.6; // Diversi risultati: zoom ampio
+  } else {
+    optimalZoom = 0.4; // Molti risultati: panoramica completa
   }
+  
+  // Applica centratura dolce con timeout consistente
+  centerViewRef.current(optimalZoom, 200);
 };
 
 const App: React.FC = () => {
@@ -1456,9 +1404,9 @@ const App: React.FC = () => {
     // Aspetta che il DOM si aggiorni, poi calcola centro e zoom ottimale
     setTimeout(() => {
       if (centerViewRef.current && resultCount > 0 && highlightedNodes.size > 0) {
-        calculateOptimalViewAndCenter(highlightedNodes, centerViewRef);
+        smartCenter(highlightedNodes.size, centerViewRef);
       }
-    }, 300); // Aumentato timeout per permettere rendering completo
+    }, 200); // Timeout uniforme per consistenza
   }, [expandedNodesStr, viewMode, searchQuery, resultCount]); // Dipende da searchQuery per resettare quando cambia
 
   // 🎛️ Espansione automatica dei nodi durante il filtraggio
@@ -1487,9 +1435,9 @@ const App: React.FC = () => {
     // Aspetta che il DOM si aggiorni, poi calcola centro e zoom ottimale
     setTimeout(() => {
       if (centerViewRef.current && filteredNodes.size > 0) {
-        calculateOptimalViewAndCenter(filteredNodes, centerViewRef);
+        smartCenter(filteredNodes.size, centerViewRef);
       }
-    }, 300); // Aumentato timeout per permettere rendering completo
+    }, 200); // Timeout uniforme per consistenza
   }, [expandedFilterNodesStr, viewMode, hasActiveFilters, searchQuery, filteredNodes.size]); // Dipende dai filtri attivi
 
   const handleToggleNode = useCallback((nodeId: string) => {
@@ -1538,9 +1486,9 @@ const App: React.FC = () => {
       setRoleTree((prev) => (prev ? collapseTree(prev) : prev));
     }
     
-    // Centra la vista con zoom 0.65 per visualizzare CEO + tutti i direttori
+    // Centra la vista con zoom 0.5 per panoramica ampia CEO + direttori
     setTimeout(() => {
-      centerView(0.65, 400);
+      centerView(0.5, 400);
     }, 150);
   }, [viewMode, searchQuery, nodesToExpand, resultCount]);
 
@@ -1571,9 +1519,9 @@ const App: React.FC = () => {
         collectAllNodes(tree);
         
         // Applica la centratura intelligente per tutto l'albero
-        calculateOptimalViewAndCenter(allNodeIds, centerViewRef);
+        smartCenter(allNodeIds.size, centerViewRef);
       }
-    }, 400); // Timeout maggiore per permettere rendering di tutti i nodi
+    }, 200); // Timeout uniforme per consistenza
   }, [viewMode, tree, centerViewRef]);
 
   /**

@@ -75,15 +75,15 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
       />
       <TransformWrapper
         initialScale={0.4}
-        minScale={0.05}
-        maxScale={5}
+        minScale={0.3}
+        maxScale={2.0}
         centerZoomedOut={false}
         centerOnInit={true}
         onTransformed={handleTransformed}
         wheel={{
           wheelDisabled: isModalOpen,
           touchPadDisabled: isModalOpen,
-          step: 0.1,
+          step: 0.15,
         }}
         panning={{
           disabled: isModalOpen,
@@ -194,8 +194,8 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
                 <button
                   onClick={() => {
                     resetTransform();
-                    // Centratura automatica con zoom adattivo ottimale per l'organigramma
-                    setTimeout(() => centerView(0.7, 500), 50);
+                    // Centratura automatica con zoom ottimizzato per leggibilità
+                    setTimeout(() => centerView(0.8, 500), 50);
                   }}
                   className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-emerald-50/60 transition-all text-slate-600 hover:text-emerald-600 border border-transparent hover:border-emerald-200"
                   type="button"
@@ -215,38 +215,37 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
             >
               <div className="flex justify-center items-center min-h-full p-24 overflow-visible">
                 {(() => {
-                  // ✅ Scroll minimo compensativo: mantiene card cliccata visibile
-                  const handleToggleWithStability = (id: string) => {
+                  // 🎯 CENTRATURA INTELLIGENTE: solo quando necessario per stabilità massima
+                  const handleToggleWithSmartCenter = (id: string) => {
+                    // Trova l'elemento prima del toggle
                     const el = nodeElemsRef.current.get(id);
+                    const currentScale = currentScaleRef.current;
                     
-                    // Salva posizione attuale della card
-                    const rectBefore = el?.getBoundingClientRect();
-                    
-                    // Esegui toggle
+                    // Esegui toggle immediato
                     onToggle(id);
                     
-                    // Dopo il rendering, controlla se la card è ancora visibile
+                    // Verifica se centratura è necessaria dopo il rendering
                     requestAnimationFrame(() => {
                       requestAnimationFrame(() => {
-                        if (!el || !rectBefore) return;
+                        if (!el || !centerViewRef.current) return;
                         
-                        const rectAfter = el.getBoundingClientRect();
-                        
-                        // Controlla se la card è uscita dal viewport o si è spostata troppo
+                        // 🎯 Verifica semplice: elemento ragionevolmente visibile?
+                        const rect = el.getBoundingClientRect();
                         const viewportHeight = window.innerHeight;
-                        const isOutOfView = 
-                          rectAfter.top < 0 || 
-                          rectAfter.bottom > viewportHeight ||
-                          Math.abs(rectAfter.top - rectBefore.top) > 200; // Spostamento > 200px
+                        const viewportWidth = window.innerWidth;
                         
+                        // Considera "fuori viewport" se è molto in alto, in basso, o ai lati
+                        const isOutOfView = 
+                          rect.top < 100 ||                          // Troppo in alto
+                          rect.bottom > viewportHeight - 100 ||     // Troppo in basso
+                          rect.left < 50 ||                         // Troppo a sinistra  
+                          rect.right > viewportWidth - 50;         // Troppo a destra
+                        
+                        // ✅ CENTRA solo se davvero necessario
                         if (isOutOfView) {
-                          // Scroll minimo per mantenere visibile (non center, ma 'nearest')
-                          el.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'nearest',  // ✅ Scroll minimo, non centra
-                            inline: 'nearest'
-                          });
+                          centerViewRef.current(currentScale, 200);
                         }
+                        // Altrimenti: nessun movimento, massima stabilità
                       });
                     });
                   };
@@ -254,7 +253,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
                   return (
                     <OrgChartNode 
                       node={tree} 
-                      onToggle={handleToggleWithStability}
+                      onToggle={handleToggleWithSmartCenter}
                       depth={0}
                       highlightedNodes={highlightedNodes}
                       visibleNodes={visibleNodes}
