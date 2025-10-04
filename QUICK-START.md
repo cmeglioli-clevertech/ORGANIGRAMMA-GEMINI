@@ -58,9 +58,19 @@ npm install
 
 ---
 
-## ✅ **Dopo il Fix - Avvio Standard**
+## ✅ **Avvio Applicazione**
 
-### **Opzione 1: WebApp Launcher (Raccomandato)**
+### **🚀 Opzione 1: Script Automatico PowerShell (NUOVO - Raccomandato)**
+```powershell
+.\start-app.ps1
+```
+**✅ Cosa fa:**
+- Verifica ambiente (Node.js, npm, dipendenze)
+- Pulisce cache Vite (previene errori 504)
+- Avvia proxy (3001) e frontend (3000) insieme
+- Apre browser automaticamente
+
+### **🐍 Opzione 2: WebApp Launcher Python**
 ```powershell
 # Doppio click su:
 start_webapp.pyw
@@ -70,7 +80,7 @@ python start_webapp.pyw
 ```
 → Avvia automaticamente proxy + frontend + browser
 
-### **Opzione 2: Avvio Manuale (2 terminali)**
+### **🔧 Opzione 3: Avvio Manuale (2 terminali)**
 
 **Terminale 1 - Proxy Smartsheet:**
 ```powershell

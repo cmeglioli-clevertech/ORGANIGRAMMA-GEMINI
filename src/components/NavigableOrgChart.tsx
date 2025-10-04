@@ -11,6 +11,7 @@ interface NavigableOrgChartProps {
   visibleNodes?: Set<string> | null;
   isSearchNarrowed?: boolean;
   onCollapseAll: (centerView: (scale?: number, animationTime?: number) => void) => void;
+  onExpandAll: (centerView: (scale?: number, animationTime?: number) => void) => void;
   centerViewRef?: React.MutableRefObject<((scale?: number, animationTime?: number) => void) | null>;
 }
 
@@ -21,6 +22,7 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
   visibleNodes = null,
   isSearchNarrowed = false,
   onCollapseAll,
+  onExpandAll,
   centerViewRef: externalCenterViewRef
 }) => {
   const nodeElemsRef = useRef<Map<string, HTMLElement>>(new Map());
@@ -162,6 +164,18 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
 
               {/* Gruppo Navigazione - Design Bilanciato */}
               <div className="bg-white/95 backdrop-blur-md rounded-lg shadow-md border border-slate-200 p-2 flex flex-col items-center gap-2 w-[50px]">
+                {/* Espandi Tutto */}
+                <button
+                  onClick={() => onExpandAll(centerView)}
+                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-green-50/60 transition-all text-slate-600 hover:text-green-600 border border-transparent hover:border-green-200"
+                  type="button"
+                  title="Espandi tutto"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
                 {/* Comprimi Tutto */}
                 <button
                   onClick={() => onCollapseAll(centerView)}
@@ -176,32 +190,19 @@ const NavigableOrgChart: React.FC<NavigableOrgChartProps> = ({
                 
                 <div className="w-8 h-px bg-slate-200"></div>
                 
-                {/* Reset Vista */}
+                {/* Reset Vista con Centratura Intelligente */}
                 <button
                   onClick={() => {
                     resetTransform();
-                    setTimeout(() => centerView(1, 300), 50);
+                    // Centratura automatica con zoom adattivo ottimale per l'organigramma
+                    setTimeout(() => centerView(0.7, 500), 50);
                   }}
                   className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-emerald-50/60 transition-all text-slate-600 hover:text-emerald-600 border border-transparent hover:border-emerald-200"
                   type="button"
-                  title="Reset zoom 100%"
+                  title="Reset e centra vista"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                </button>
-                
-                <div className="w-8 h-px bg-slate-200"></div>
-                
-                {/* Centra Vista */}
-                <button
-                  onClick={() => centerView()}
-                  className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-purple-50/60 transition-all text-slate-600 hover:text-purple-600 border border-transparent hover:border-purple-200"
-                  type="button"
-                  title="Centra vista"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
                 </button>
               </div>

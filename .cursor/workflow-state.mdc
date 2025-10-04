@@ -1,18 +1,32 @@
 # Workflow State - Organigramma Clevertech
 
 ## State
-**Workflow Stage**: VALIDATE *(2025-10-01)*  
-**Current Phase**: PRODUCTION READY ✅  
-**Last Updated**: 2025-10-01 21:30  
-**Project**: Interactive Organizational Chart for Clevertech - v4.3.0 AUTO-SYNC + UX IMPROVEMENTS
-**Status**: Complete Implementation with Auto-Sync Smartsheet & Centered View
+**Workflow Stage**: VALIDATE *(2025-10-04)*  
+**Current Phase**: PRODUCTION READY ✅ + AUTOMATED SETUP  
+**Last Updated**: 2025-10-04 12:45  
+**Project**: Interactive Organizational Chart for Clevertech - v4.4.2 AUTOMATED AI COLLABORATION
+**Status**: Complete Implementation + Automation Scripts for AI Agents
+**Setup Method**: `.\start-app.ps1` (ONE COMMAND SOLUTION)
 
-## Plan
-1. Allineare `parseCsvEmployees` e l'interfaccia `Employee` al nuovo CSV, normalizzando valori (pipe iniziali, manager assegnato, livello ipotetico, sesso, azienda) e propagando i metadati aggiuntivi nei nodi.
-2. Derivare una mappatura coerente dalle nuove qualifiche (`Livelli e Qualifiche.xlsx`) per aggiornare ordine, colori e fallback delle badge in `App.tsx` e `OrgChartNode.tsx`, mantenendo retrocompatibilità.
-3. Estendere `NodeMetadata` e le card per mostrare le informazioni aggiuntive (livello, azienda, responsabile assegnato, sesso) garantendo consistenza in ricerca, filtri e statistica dei nodi.
-4. Validare il nuovo dataset aggiornando pipeline/script se necessario e sincronizzando filtri/ricerca con i nomi normalizzati.
-5. Eseguire `npm run build` per il controllo finale e aggiornare README, changelog e questa `workflow-state.mdc` con log sintetico delle modifiche.
+## Plan (AUTOMATED SOLUTION FOR AI AGENTS)
+
+🚨 **CRITICAL: USE AUTOMATION SCRIPT ONLY**
+```powershell
+.\start-app.ps1
+```
+
+### 🔄 Standard Procedure (NO MANUAL STEPS)
+1. **Verification**: Script checks Node.js, npm, dependencies automatically
+2. **Cache Cleanup**: Vite cache cleared (prevents 504 errors)  
+3. **Dual Server Start**: Frontend (3000) + Proxy (3001) launched in parallel
+4. **Browser Launch**: App opens automatically at http://localhost:3000
+5. **Environment Check**: .env detected automatically (if present)
+
+### ❌ DEPRECATED PROCEDURES (DO NOT USE)
+- ~~npm install + npm run dev~~ → Use `.\start-app.ps1`
+- ~~Manual proxy start~~ → Script handles both servers  
+- ~~Manual cache cleanup~~ → Script includes cleanup
+- ~~Manual .env check~~ → Script verifies automatically
 
 ## Context
 Sistema organigramma interattivo **production-ready** per Clevertech con 467 dipendenti. Implementazione completa con:
@@ -204,6 +218,15 @@ server-proxy.js (root)            // Node.js proxy for Smartsheet API
 - **add-responsabili.cjs**: Legacy script (maintained for compatibility)
 
 ## Log
+
+### 2025-10-04 12:45 - AUTOMATED AI COLLABORATION v4.4.2 ✅
+- ✅ **ONE-COMMAND SETUP**: Script `start-app.ps1` risolve tutti i problemi ricorrenti degli AI agents
+- ✅ **AUTOMATIC ENVIRONMENT CHECK**: Verifica Node.js, npm, dipendenze, .env automaticamente
+- ✅ **DUAL SERVER AUTOMATION**: Proxy (3001) + Frontend (3000) avviati in parallelo
+- ✅ **VITE CACHE CLEANUP**: Prevenzione automatica errori 504 "Outdated Optimize Dep"
+- ✅ **BROWSER AUTO-LAUNCH**: App si apre automaticamente dopo 3 secondi
+- ✅ **AI AGENT DOCUMENTATION**: Workflow-state.mdc aggiornato per evitare errori comuni
+- ✅ **ZERO MANUAL INTERVENTION**: Risolti problemi: .env check, proxy start, cache cleaning
 
 ### 2025-10-01 21:30 - AUTO-SYNC & UX IMPROVEMENTS v4.3.0 ✅
 - ✅ **AUTO-LOAD SMARTSHEET**: App carica automaticamente dati da Smartsheet all'avvio (proxy attivo)

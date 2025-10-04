@@ -1215,6 +1215,96 @@ const expandNodes = (node: Node, nodeIdsToExpand: Set<string>): Node => ({
   children: node.children?.map((child) => expandNodes(child, nodeIdsToExpand)),
 });
 
+/**
+ * 🌳 ESPANDE TUTTI I NODI DELL'ALBERO
+ * Espande ricorsivamente tutti i nodi con figli per mostrare l'organigramma completo
+ */
+const expandAllNodes = (node: Node): Node => ({
+  ...node,
+  isExpanded: Boolean(node.children && node.children.length > 0),
+  children: node.children?.map((child) => expandAllNodes(child)),
+});
+
+/**
+ * 🎯 CALCOLO INTELLIGENTE DI CENTRO E ZOOM OTTIMALE
+ * Calcola il bounding box di tutti i nodi filtrati e determina
+ * il centro geometrico e lo zoom ottimale per visualizzarli tutti
+ */
+const calculateOptimalViewAndCenter = (
+  filteredNodes: Set<string>, 
+  centerViewRef: React.MutableRefObject<((scale?: number, animationTime?: number) => void) | null>
+): void => {
+  try {
+    // Trova tutti gli elementi DOM dei nodi filtrati
+    const nodeElements: HTMLElement[] = [];
+    filteredNodes.forEach(nodeId => {
+      const element = document.querySelector(`[data-node-id="${nodeId}"]`) as HTMLElement;
+      if (element) {
+        nodeElements.push(element);
+      }
+    });
+
+    if (nodeElements.length === 0) {
+      console.warn('🎯 Nessun elemento DOM trovato per i nodi filtrati');
+      return;
+    }
+
+    // Calcola il bounding box di tutti i nodi
+    let minX = Infinity, minY = Infinity;
+    let maxX = -Infinity, maxY = -Infinity;
+
+    nodeElements.forEach(element => {
+      const rect = element.getBoundingClientRect();
+      minX = Math.min(minX, rect.left);
+      minY = Math.min(minY, rect.top);
+      maxX = Math.max(maxX, rect.right);
+      maxY = Math.max(maxY, rect.bottom);
+    });
+
+    // Calcola dimensioni dell'area contenente tutti i nodi
+    const contentWidth = maxX - minX;
+    const contentHeight = maxY - minY;
+
+    // Ottieni dimensioni del viewport
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Calcola zoom ottimale con margine di sicurezza (80% del viewport)
+    const maxUsableWidth = viewportWidth * 0.8;
+    const maxUsableHeight = viewportHeight * 0.8;
+    
+    const scaleX = maxUsableWidth / contentWidth;
+    const scaleY = maxUsableHeight / contentHeight;
+    const optimalScale = Math.min(scaleX, scaleY, 1.5); // Max zoom 1.5x
+
+    // Assicurati che lo zoom non sia troppo piccolo o troppo grande
+    const finalScale = Math.max(0.3, Math.min(1.2, optimalScale));
+
+    console.log(`🎯 Calcolo geometrico intelligente:`, {
+      filteredNodes: filteredNodes.size,
+      contentWidth: Math.round(contentWidth),
+      contentHeight: Math.round(contentHeight),
+      viewportWidth,
+      viewportHeight,
+      scaleX: Math.round(scaleX * 100) / 100,
+      scaleY: Math.round(scaleY * 100) / 100,
+      finalScale: Math.round(finalScale * 100) / 100
+    });
+
+    // Applica zoom ottimale
+    if (centerViewRef.current) {
+      centerViewRef.current(finalScale, 500);
+    }
+
+  } catch (error) {
+    console.error('❌ Errore nel calcolo geometrico:', error);
+    // Fallback al metodo precedente
+    if (centerViewRef.current) {
+      centerViewRef.current(0.7, 500);
+    }
+  }
+};
+
 const App: React.FC = () => {
   const { modalNode, closeModal } = useModal();
   const [locationTree, setLocationTree] = useState<Node | null>(null);
@@ -1362,15 +1452,13 @@ const App: React.FC = () => {
       setRoleTree((prev) => prev ? expandNodes(prev, nodeIds) : prev);
     }
     
-    // 🎯 CENTRATURA AUTOMATICA dopo espansione ricerca
-    // Aspetta che il DOM si aggiorni, poi centra la vista sui risultati
+    // 🎯 CENTRATURA INTELLIGENTE dopo espansione ricerca
+    // Aspetta che il DOM si aggiorni, poi calcola centro e zoom ottimale
     setTimeout(() => {
-      if (centerViewRef.current && resultCount > 0) {
-        // Zoom intelligente basato sul numero di risultati
-        const zoomLevel = resultCount === 1 ? 1.2 : resultCount <= 3 ? 0.9 : 0.7;
-        centerViewRef.current(zoomLevel, 500);
+      if (centerViewRef.current && resultCount > 0 && highlightedNodes.size > 0) {
+        calculateOptimalViewAndCenter(highlightedNodes, centerViewRef);
       }
-    }, 200);
+    }, 300); // Aumentato timeout per permettere rendering completo
   }, [expandedNodesStr, viewMode, searchQuery, resultCount]); // Dipende da searchQuery per resettare quando cambia
 
   // 🎛️ Espansione automatica dei nodi durante il filtraggio
@@ -1394,7 +1482,15 @@ const App: React.FC = () => {
     } else if (viewMode === "role") {
       setRoleTree((prev) => prev ? expandNodes(prev, nodeIds) : prev);
     }
-  }, [expandedFilterNodesStr, viewMode, hasActiveFilters, searchQuery]); // Dipende dai filtri attivi
+    
+    // 🎯 CENTRATURA INTELLIGENTE CON CALCOLO GEOMETRICO
+    // Aspetta che il DOM si aggiorni, poi calcola centro e zoom ottimale
+    setTimeout(() => {
+      if (centerViewRef.current && filteredNodes.size > 0) {
+        calculateOptimalViewAndCenter(filteredNodes, centerViewRef);
+      }
+    }, 300); // Aumentato timeout per permettere rendering completo
+  }, [expandedFilterNodesStr, viewMode, hasActiveFilters, searchQuery, filteredNodes.size]); // Dipende dai filtri attivi
 
   const handleToggleNode = useCallback((nodeId: string) => {
     // Forza il toggle indipendentemente dallo stato corrente
@@ -1447,6 +1543,38 @@ const App: React.FC = () => {
       centerView(0.65, 400);
     }, 150);
   }, [viewMode, searchQuery, nodesToExpand, resultCount]);
+
+  /**
+   * 🌳 ESPANDE TUTTI I NODI DELL'ALBERO
+   * Espande completamente l'organigramma e applica centratura intelligente
+   */
+  const handleExpandAll = useCallback((centerView: (scale?: number, animationTime?: number) => void) => {
+    // Espandi tutti i nodi nell'albero corrente
+    if (viewMode === "location") {
+      setLocationTree((prev) => (prev ? expandAllNodes(prev) : prev));
+    } else {
+      setRoleTree((prev) => (prev ? expandAllNodes(prev) : prev));
+    }
+    
+    // 🎯 CENTRATURA INTELLIGENTE dopo espansione completa
+    // Aspetta che il DOM si aggiorni, poi calcola centro e zoom ottimale per l'albero completo
+    setTimeout(() => {
+      if (centerViewRef.current && tree) {
+        // Raccogli tutti i nodi dell'albero per la centratura
+        const allNodeIds = new Set<string>();
+        const collectAllNodes = (node: Node) => {
+          allNodeIds.add(node.id);
+          if (node.children) {
+            node.children.forEach(collectAllNodes);
+          }
+        };
+        collectAllNodes(tree);
+        
+        // Applica la centratura intelligente per tutto l'albero
+        calculateOptimalViewAndCenter(allNodeIds, centerViewRef);
+      }
+    }, 400); // Timeout maggiore per permettere rendering di tutti i nodi
+  }, [viewMode, tree, centerViewRef]);
 
   /**
    * Gestisce l'aggiornamento dei dati da Smartsheet con cache intelligente
@@ -1847,13 +1975,14 @@ const App: React.FC = () => {
 
             {/* Organigramma a schermo pieno */}
             <div className="pt-20 h-full w-full relative">
-              <NavigableOrgChart 
+              <NavigableOrgChart
                 tree={tree} 
                 onToggle={handleToggleNode}
                 highlightedNodes={combinedHighlightedNodes}
                 visibleNodes={combinedVisibilitySet}
                 isSearchNarrowed={isVisibilityNarrowed}
                 onCollapseAll={handleCollapseAll}
+                onExpandAll={handleExpandAll}
                 centerViewRef={centerViewRef}
               />
               

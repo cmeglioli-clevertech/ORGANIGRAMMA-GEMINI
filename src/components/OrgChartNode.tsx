@@ -130,6 +130,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
       <div
         ref={(el) => registerNodeElem?.(node.id, el)}
         id={`node-${node.id}`}
+        data-node-id={node.id}
         className={`
           relative w-80 ${hasChildren ? 'h-[30rem]' : 'h-[28rem]'}
           bg-white rounded-xl shadow-lg 
