@@ -6,14 +6,5 @@
     "api/health.js": {
       "maxDuration": 10
     }
-  },
-  "env": {
-    "SMARTSHEET_TOKEN": "@smartsheet-token",
-    "VITE_SMARTSHEET_SHEET_ID": "@smartsheet-sheet-id"
-  },
-  "build": {
-    "env": {
-      "VITE_SMARTSHEET_SHEET_ID": "@smartsheet-sheet-id"
-    }
   }
 }
