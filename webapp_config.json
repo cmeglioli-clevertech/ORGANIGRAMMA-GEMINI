@@ -2,7 +2,7 @@
   "servers": {
     "proxy": {
       "port": 3001,
-      "command": "npm run proxy",
+      "command": "node server-proxy.js",
       "startup_timeout": 30
     },
     "frontend": {
