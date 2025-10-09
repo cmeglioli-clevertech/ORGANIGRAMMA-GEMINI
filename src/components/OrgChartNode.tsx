@@ -132,7 +132,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
         id={`node-${node.id}`}
         data-node-id={node.id}
         className={`
-          relative w-80 h-[28rem]
+          relative w-80 h-[30rem]
           bg-white rounded-xl shadow-lg 
           border-2 ${shouldHighlight ? 'border-blue-500 ring-4 ring-blue-200' : borderColor}
           overflow-visible
@@ -140,6 +140,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
           hover:shadow-xl hover:scale-[1.02]
           cursor-default
           group
+          flex flex-col
         `}
         style={{ zIndex: 10 }}
       >
@@ -223,7 +224,7 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
           </div>
           
         {/* Informazioni Principali - Layout Ottimizzato */}
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           {/* Slot 1: Nome - Centrato, 2 righe */}
           <div className="min-h-[62px] flex items-center justify-center px-6 mb-5">
             <h3 className="text-[24px] font-bold text-slate-900 leading-tight line-clamp-2 text-center">
@@ -295,35 +296,37 @@ const OrgChartNode: React.FC<OrgChartNodeProps> = ({
           )}
         </div>
 
-        {/* Footer Cliccabile - Area di espansione/compressione - Ingrandito */}
+        {/* Footer Cliccabile - Area di espansione/compressione - Nel flusso normale */}
         {hasChildren && (
-          <button
-            onClick={handleFooterClick}
-            className={`
-              absolute bottom-0 left-0 right-0 h-14
-              flex items-center justify-center gap-2.5
-              rounded-b-xl
-              transition-all duration-200
-              cursor-pointer
-              ${nodeExpanded 
-                ? 'bg-gradient-to-t from-emerald-100 to-emerald-50 hover:from-emerald-200 hover:to-emerald-100' 
-                : 'bg-gradient-to-t from-blue-100 to-blue-50 hover:from-blue-200 hover:to-blue-100'
-              }
-              border-t-2 ${nodeExpanded ? 'border-emerald-300' : 'border-blue-300'}
-              group/footer
-            `}
-            title={nodeExpanded ? 'Click per comprimere team' : 'Click per espandere team'}
-            aria-label={nodeExpanded ? 'Comprimi team' : 'Espandi team'}
-          >
-            <span className={`text-[16px] font-bold ${nodeExpanded ? 'text-emerald-600' : 'text-blue-600'}`}>
-              {nodeExpanded ? 'Comprimi Team' : 'Espandi Team'}
-            </span>
-            {nodeExpanded ? (
-              <ChevronUp className="w-6 h-6 text-emerald-500 group-hover/footer:scale-110 transition-transform" />
-            ) : (
-              <ChevronDown className="w-6 h-6 text-blue-500 group-hover/footer:scale-110 transition-transform" />
-            )}
-          </button>
+          <div className="mt-auto">
+            <button
+              onClick={handleFooterClick}
+              className={`
+                w-full h-14
+                flex items-center justify-center gap-2.5
+                rounded-b-xl
+                transition-all duration-200
+                cursor-pointer
+                ${nodeExpanded 
+                  ? 'bg-gradient-to-t from-emerald-100 to-emerald-50 hover:from-emerald-200 hover:to-emerald-100' 
+                  : 'bg-gradient-to-t from-blue-100 to-blue-50 hover:from-blue-200 hover:to-blue-100'
+                }
+                border-t-2 ${nodeExpanded ? 'border-emerald-300' : 'border-blue-300'}
+                group/footer
+              `}
+              title={nodeExpanded ? 'Click per comprimere team' : 'Click per espandere team'}
+              aria-label={nodeExpanded ? 'Comprimi team' : 'Espandi team'}
+            >
+              <span className={`text-[16px] font-bold ${nodeExpanded ? 'text-emerald-600' : 'text-blue-600'}`}>
+                {nodeExpanded ? 'Comprimi Team' : 'Espandi Team'}
+              </span>
+              {nodeExpanded ? (
+                <ChevronUp className="w-6 h-6 text-emerald-500 group-hover/footer:scale-110 transition-transform" />
+              ) : (
+                <ChevronDown className="w-6 h-6 text-blue-500 group-hover/footer:scale-110 transition-transform" />
+              )}
+            </button>
+          </div>
         )}
 
       </div>
