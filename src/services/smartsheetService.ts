@@ -9,13 +9,9 @@
 
 // URL dell'API proxy (locale o Vercel)
 function getProxyApiBase(): string {
+  // In sviluppo: usa il proxy Vite configurato
   // In produzione (Vercel): usa le API routes serverless
-  if (import.meta.env.PROD) {
-    return '/api/smartsheet';
-  }
-  
-  // In sviluppo: usa il proxy locale Express
-  return 'http://localhost:3001/api/smartsheet';
+  return '/api/smartsheet';
 }
 
 const PROXY_API_BASE = getProxyApiBase();
