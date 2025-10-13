@@ -234,9 +234,19 @@ const EmployeeDetailModal: React.FC<EmployeeDetailModalProps> = ({ node, onClose
                 value={metadata?.reportsTo} 
               />
               <InfoRow 
-                icon={<User className="w-4 h-4" />} 
-                label="Genere" 
-                value={metadata?.gender} 
+                icon={<Mail className="w-4 h-4" />} 
+                label="Email" 
+                value={metadata?.email} 
+              />
+              <InfoRow 
+                icon={<Phone className="w-4 h-4" />} 
+                label="Telefono" 
+                value={metadata?.phone} 
+              />
+              <InfoRow 
+                icon={<UserCheck className="w-4 h-4" />} 
+                label="Tipo Dipendente" 
+                value={metadata?.employmentType} 
               />
             </div>
           </div>

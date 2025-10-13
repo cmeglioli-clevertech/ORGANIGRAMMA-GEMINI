@@ -21,6 +21,10 @@ export interface NodeMetadata {
   level?: string | null;
   levelCode?: string | null;
   levelHypothetical?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  hireDate?: string | null;
+  employmentType?: string | null;
 }
 
 export interface Node {

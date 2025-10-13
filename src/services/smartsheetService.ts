@@ -162,6 +162,10 @@ function convertSmartsheetToCSV(sheet: SmartsheetSheet): string[][] {
   const columnNameMapping: Record<string, string> = {
     'Principale': 'Nome (Nome, Cognome)',  // Nome colonna diverso in Smartsheet
     'Mansione': 'MANSIONE',                // Smartsheet usa tutto maiuscolo
+    'EMAIL': 'MAIL',                       // Colonna email aziendale
+    'TELEFONO': 'Nr. Aziend',              // Numero aziendale (telefono)
+    'ASSUNZIONE': 'ASSUNZIONE',            // Data assunzione
+    'INTERNI/ESTERNI': 'INTERNI/ESTERNI'   // Tipo dipendente
   };
 
   // Ordine colonne atteso dal CSV (come in _Suddivisione Clevertech light.csv)
@@ -179,7 +183,11 @@ function convertSmartsheetToCSV(sheet: SmartsheetSheet): string[][] {
     'Età',
     'Sesso',
     'RESPONSABILE ASSEGNATO',
-    'AZIENDA'
+    'AZIENDA',
+    'EMAIL',
+    'TELEFONO',
+    'ASSUNZIONE',
+    'INTERNI/ESTERNI'
   ];
 
   // Costruisci header CSV

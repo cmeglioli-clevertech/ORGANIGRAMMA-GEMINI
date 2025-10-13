@@ -35,6 +35,10 @@ interface Employee {
   age: number | null;
   gender: string | null;
   company: string | null;
+  email: string | null;
+  phone: string | null;
+  hireDate: string | null;
+  employmentType: string | null;
 }
 
 interface NodeWithParent {
@@ -395,7 +399,7 @@ const EMPLOYEE_IMAGE_MAP: Map<string, string> = (() => {
   });
   return map;
 })();
-const parseCsvEmployees = (csvText: string): Employee[] => {
+const parseCsvEmployees = (csvText: string, isFromSmartsheet: boolean = false): Employee[] => {
   const lines = csvText.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").slice(1);
   const employees: Employee[] = [];
 
@@ -422,6 +426,17 @@ const parseCsvEmployees = (csvText: string): Employee[] => {
     const genderRaw = parts[11] ?? "";
     const managerName = stripPipePrefix(parts[12] ?? "");
     const companyRaw = parts[13] ?? "";
+    
+    // Usa indici diversi in base alla fonte dati
+    const emailIdx = isFromSmartsheet ? 14 : 20;  // Smartsheet: 15 (EMAIL), CSV: 21 (MAIL)
+    const phoneIdx = isFromSmartsheet ? 15 : 23;  // Smartsheet: 16 (TELEFONO), CSV: 24 (Nr. Aziend)
+    const hireDateIdx = isFromSmartsheet ? 16 : 25;  // Smartsheet: 17 (ASSUNZIONE), CSV: 26 (ASSUNZIONE)
+    const employmentTypeIdx = isFromSmartsheet ? 17 : 35;  // Smartsheet: 18 (INTERNI/ESTERNI), CSV: 36 (INTERNI/ESTERNI)
+    
+    const email = getPart(emailIdx) || null;
+    const phone = getPart(phoneIdx) || null;
+    const hireDate = getPart(hireDateIdx) || null;
+    const employmentType = getPart(employmentTypeIdx) || null;
 
     const resolvedQualification = resolveQualification(qualificationRaw);
     const orderVal = Number.parseInt(orderStr, 10);
@@ -451,6 +466,10 @@ const parseCsvEmployees = (csvText: string): Employee[] => {
       age: Number.isNaN(ageVal) ? null : ageVal,
       gender: normalizeGender(stripPipePrefix(genderRaw ?? "")),
       company: normalizeCompany(stripPipePrefix(companyRaw ?? "")),
+      email: email,
+      phone: phone,
+      hireDate: hireDate,
+      employmentType: employmentType,
     });
   });
 
@@ -540,6 +559,10 @@ const createPersonNode = (emp: Employee, context: {
     level: emp.levelShort ?? emp.qualification ?? null,
     levelCode: emp.levelCode,
     levelHypothetical: emp.levelHypothetical,
+    email: emp.email,
+    phone: emp.phone,
+    hireDate: emp.hireDate,
+    employmentType: emp.employmentType,
   },
   children: undefined,
 });
@@ -558,6 +581,10 @@ const createManualEmployee = (data: {
   sede: string;
   age?: number | null;
   company?: string | null;
+  email?: string | null;
+  phone?: string | null;
+  hireDate?: string | null;
+  employmentType?: string | null;
 }): Employee => {
   const resolvedQualification = resolveQualification(data.qualification);
 
@@ -583,6 +610,10 @@ const createManualEmployee = (data: {
     age: data.age ?? null,
     gender: null,
     company: data.company ?? null,
+    email: data.email ?? null,
+    phone: data.phone ?? null,
+    hireDate: data.hireDate ?? null,
+    employmentType: data.employmentType ?? null,
   };
 };
 
@@ -1255,6 +1286,17 @@ const smartCenter = (
 
 const App: React.FC = () => {
   const { modalNode, closeModal } = useModal();
+  
+  // Pulisci cache se versione cambiata
+  useEffect(() => {
+    const CACHE_VERSION = '2.0'; // Incrementa quando cambia struttura dati
+    const currentVersion = localStorage.getItem('app_cache_version');
+    if (currentVersion !== CACHE_VERSION) {
+      localStorage.clear();
+      localStorage.setItem('app_cache_version', CACHE_VERSION);
+      console.log('🧹 Cache pulita per nuova versione');
+    }
+  }, []);
   const [locationTree, setLocationTree] = useState<Node | null>(null);
   const [roleTree, setRoleTree] = useState<Node | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -1328,7 +1370,7 @@ const App: React.FC = () => {
         console.log('🔄 Tentativo caricamento dati con cache intelligente...');
         try {
           const result = await syncWithCache(false); // Non forzare, usa cache se disponibile
-          const employees = parseCsvEmployees(csvArrayToString(result.csvData));
+          const employees = parseCsvEmployees(csvArrayToString(result.csvData), true);
           const orgTree = buildOrgTree(employees);
           const roleTree = buildRoleTree(employees);
           
@@ -1353,13 +1395,13 @@ const App: React.FC = () => {
         }
 
         // 📄 FALLBACK: Carica CSV locale se Smartsheet non disponibile
-        const csvUrl = new URL("./_Suddivisione Clevertech light.csv", import.meta.url);
+        const csvUrl = new URL("./_ORGANICO CLEVERTECH.csv", import.meta.url);
         const response = await fetch(csvUrl);
         if (!response.ok) {
           throw new Error(`Failed to fetch data file: ${response.statusText}`);
         }
         const text = await response.text();
-        const employees = parseCsvEmployees(text);
+        const employees = parseCsvEmployees(text, false);
         const orgTree = buildOrgTree(employees);
         const roleTree = buildRoleTree(employees);
         setLocationTree(orgTree);
