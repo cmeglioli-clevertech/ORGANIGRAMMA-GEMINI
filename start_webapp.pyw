@@ -29,6 +29,7 @@ import signal
 from pathlib import Path
 from typing import Optional, Tuple, List
 from logging.handlers import RotatingFileHandler
+import psutil
 
 
 # =============================================================================
@@ -373,11 +374,23 @@ class WebAppLauncher:
             self.logger.error("❌ Impossibile avviare frontend server")
             return False
         
-        # Attendi disponibilità frontend
+        # Attendi disponibilità frontend (può usare porta diversa se 3000 occupata)
         self.logger.info("[4/5] ⏳ Attesa disponibilità server...")
-        if not wait_for_port(frontend_port, frontend_timeout, self.logger):
-            self.logger.error(f"❌ Frontend server non risponde su porta {frontend_port}")
+        actual_frontend_port = frontend_port
+        
+        # Prova porta 3000, poi 3001-3010 se occupata
+        for port in range(frontend_port, frontend_port + 10):
+            if wait_for_port(port, 5, self.logger):  # Timeout ridotto per test rapido
+                actual_frontend_port = port
+                if port != frontend_port:
+                    self.logger.info(f"ℹ️ Frontend su porta {port} (3000 occupata)")
+                break
+        else:
+            self.logger.error(f"❌ Frontend server non risponde su porte {frontend_port}-{frontend_port + 9}")
             return False
+        
+        # Salva la porta effettiva per uso successivo
+        self.actual_frontend_port = actual_frontend_port
         
         self.logger.info("✅ Server pronti!")
         return True
@@ -385,9 +398,48 @@ class WebAppLauncher:
     def _check_servers_alive(self) -> bool:
         """Verifica che entrambi i server rispondano."""
         proxy_port = self.config.get('servers', 'proxy', 'port')
-        frontend_port = self.config.get('servers', 'frontend', 'port')
+        frontend_port = getattr(self, 'actual_frontend_port', self.config.get('servers', 'frontend', 'port'))
         
         return is_port_open(proxy_port) and is_port_open(frontend_port)
+    
+    def _monitor_chrome_windows(self, url: str) -> None:
+        """
+        Monitora se ci sono finestre Chrome aperte con l'URL dell'app.
+        Termina quando tutti i processi Chrome con l'URL sono chiusi.
+        """
+        self.logger.info("👀 Monitoraggio applicazione...")
+        
+        # Attendi un attimo per permettere a Chrome di avviarsi completamente
+        time.sleep(3)
+        
+        while True:
+            time.sleep(2)
+            
+            # Verifica che i server siano ancora attivi
+            if not self._check_servers_alive():
+                self.logger.error("❌ Un server si è arrestato, chiusura applicazione")
+                break
+            
+            # Cerca processi Chrome con l'URL dell'app nella command line
+            chrome_processes = []
+            try:
+                for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+                    try:
+                        if proc.info['name'] and 'chrome' in proc.info['name'].lower():
+                            cmdline = proc.info['cmdline'] or []
+                            cmdline_str = ' '.join(str(arg) for arg in cmdline)
+                            if url in cmdline_str:
+                                chrome_processes.append(proc.info['pid'])
+                    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                        pass
+            except Exception as e:
+                self.logger.warning(f"⚠️ Errore durante monitoraggio processi: {e}")
+                continue
+            
+            # Se non ci sono più processi Chrome con l'URL, l'app è chiusa
+            if not chrome_processes:
+                self.logger.info("🛑 Browser chiuso dall'utente")
+                break
     
     def launch_browser(self) -> Optional[subprocess.Popen]:
         """
@@ -405,8 +457,10 @@ class WebAppLauncher:
         
         self.logger.info(f"✅ Browser trovato: {chrome_path.name}")
         
-        # Costruisci comando Chrome
-        url = self.config.get('browser', 'url')
+        # Costruisci comando Chrome con porta dinamica
+        # Usa la porta effettiva del frontend invece di quella configurata
+        actual_frontend_port = getattr(self, 'actual_frontend_port', self.config.get('servers', 'frontend', 'port'))
+        url = f"http://localhost:{actual_frontend_port}"
         width = self.config.get('browser', 'window', 'width')
         height = self.config.get('browser', 'window', 'height')
         pos_x = self.config.get('browser', 'window', 'position_x')
@@ -449,17 +503,10 @@ class WebAppLauncher:
             browser_process = self.launch_browser()
             
             if browser_process:
-                # Monitora browser E server
-                self.logger.info("👀 Monitoraggio applicazione...")
-                while browser_process.poll() is None:
-                    # Verifica che i server siano ancora attivi
-                    if not self._check_servers_alive():
-                        self.logger.error("❌ Un server si è arrestato, riavvio necessario")
-                        browser_process.terminate()
-                        return 1
-                    time.sleep(2)
-
-                self.logger.info("🛑 Browser chiuso dall'utente")
+                # Monitora tutti i processi Chrome con l'URL dell'app
+                actual_frontend_port = getattr(self, 'actual_frontend_port', self.config.get('servers', 'frontend', 'port'))
+                url = f"http://localhost:{actual_frontend_port}"
+                self._monitor_chrome_windows(url)
             else:
                 # Se browser non si apre, mantieni server attivi
                 self.logger.info("⚠️ Browser non avviato, ma server attivi")
