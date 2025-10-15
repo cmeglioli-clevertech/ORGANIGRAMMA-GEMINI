@@ -404,13 +404,21 @@ class WebAppLauncher:
     
     def _monitor_chrome_windows(self, url: str) -> None:
         """
-        Monitora se ci sono finestre Chrome aperte con l'URL dell'app.
-        Termina quando tutti i processi Chrome con l'URL sono chiusi.
+        Monitora se ci sono connessioni attive alla porta del frontend.
+        Termina quando non ci sono più connessioni (finestra chiusa).
         """
         self.logger.info("👀 Monitoraggio applicazione...")
         
         # Attendi un attimo per permettere a Chrome di avviarsi completamente
         time.sleep(3)
+        
+        # Estrai la porta dall'URL
+        import re
+        port_match = re.search(r':(\d+)', url)
+        if not port_match:
+            self.logger.error(f"❌ Impossibile estrarre porta da URL: {url}")
+            return
+        frontend_port = int(port_match.group(1))
         
         while True:
             time.sleep(2)
@@ -420,24 +428,21 @@ class WebAppLauncher:
                 self.logger.error("❌ Un server si è arrestato, chiusura applicazione")
                 break
             
-            # Cerca processi Chrome con l'URL dell'app nella command line
-            chrome_processes = []
+            # Controlla se ci sono connessioni ESTABLISHED alla porta del frontend
+            has_connections = False
             try:
-                for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-                    try:
-                        if proc.info['name'] and 'chrome' in proc.info['name'].lower():
-                            cmdline = proc.info['cmdline'] or []
-                            cmdline_str = ' '.join(str(arg) for arg in cmdline)
-                            if url in cmdline_str:
-                                chrome_processes.append(proc.info['pid'])
-                    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                        pass
+                for conn in psutil.net_connections(kind='inet'):
+                    if (conn.laddr.port == frontend_port and 
+                        conn.status == 'ESTABLISHED' and 
+                        conn.raddr.ip == '127.0.0.1'):
+                        has_connections = True
+                        break
             except Exception as e:
-                self.logger.warning(f"⚠️ Errore durante monitoraggio processi: {e}")
+                self.logger.warning(f"⚠️ Errore durante controllo connessioni: {e}")
                 continue
             
-            # Se non ci sono più processi Chrome con l'URL, l'app è chiusa
-            if not chrome_processes:
+            # Se non ci sono connessioni attive, l'app è chiusa
+            if not has_connections:
                 self.logger.info("🛑 Browser chiuso dall'utente")
                 break
     
