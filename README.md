@@ -244,8 +244,8 @@ npm install
 ### **🔧 Setup Rapido**
 ```bash
 npm install
-npm run dev
-# Apri http://localhost:3000
+npm start
+# Oppure doppio click su start_webapp.pyw
 ```
 
 ### **⚡ Funzionalità Principali**
@@ -255,6 +255,11 @@ npm run dev
 4. **⚡ Navigazione**: Zoom con mouse, pan trascinando, pulsante + per espandere
 5. **📤 Export**: Esporta in JSON/CSV/Stampa per analisi esterne
 6. **📡 Smartsheet**: Click "↻ Smartsheet" → Sincronizza dati in tempo reale
+
+### **🚀 Metodi di Avvio**
+- **Doppio click**: `start_webapp.pyw` (conferma chiusura server)
+- **PowerShell**: `.\start-app.ps1` o `npm start`
+- **Manuale**: `npm run proxy` + `npm run dev` (2 terminali)
 
 ### **🎯 Esperienza Utente**
 - **Vista Ruoli default**: Si apre nella modalità più utilizzata

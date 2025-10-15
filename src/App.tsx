@@ -402,6 +402,14 @@ const EMPLOYEE_IMAGE_MAP: Map<string, string> = (() => {
 const parseCsvEmployees = (csvText: string, isFromSmartsheet: boolean = false): Employee[] => {
   const lines = csvText.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").slice(1);
   const employees: Employee[] = [];
+  
+  // Log per debug colonne
+  if (lines.length > 0) {
+    const firstLine = lines[0];
+    const parts = firstLine.split(";");
+    console.log(`📊 CSV parsing: ${parts.length} colonne trovate, fonte: ${isFromSmartsheet ? 'Smartsheet' : 'CSV locale'}`);
+    console.log(`📋 Colonne: ${parts.slice(0, 10).join(', ')}${parts.length > 10 ? '...' : ''}`);
+  }
 
   lines.forEach((line, index) => {
     if (!line || !line.trim()) return;
@@ -427,16 +435,16 @@ const parseCsvEmployees = (csvText: string, isFromSmartsheet: boolean = false): 
     const managerName = stripPipePrefix(parts[12] ?? "");
     const companyRaw = parts[13] ?? "";
     
-    // Usa indici diversi in base alla fonte dati
-    const emailIdx = isFromSmartsheet ? 14 : 20;  // Smartsheet: 15 (EMAIL), CSV: 21 (MAIL)
-    const phoneIdx = isFromSmartsheet ? 15 : 23;  // Smartsheet: 16 (TELEFONO), CSV: 24 (Nr. Aziend)
-    const hireDateIdx = isFromSmartsheet ? 16 : 25;  // Smartsheet: 17 (ASSUNZIONE), CSV: 26 (ASSUNZIONE)
-    const employmentTypeIdx = isFromSmartsheet ? 17 : 35;  // Smartsheet: 18 (INTERNI/ESTERNI), CSV: 36 (INTERNI/ESTERNI)
+    // Usa indici diversi in base alla fonte dati e disponibilità colonne
+    const emailIdx = isFromSmartsheet ? 14 : (parts.length > 14 ? 14 : -1);  // Smartsheet: 15 (EMAIL), CSV: 15 se disponibile
+    const phoneIdx = isFromSmartsheet ? 15 : (parts.length > 15 ? 15 : -1);  // Smartsheet: 16 (TELEFONO), CSV: 16 se disponibile
+    const hireDateIdx = isFromSmartsheet ? 16 : (parts.length > 16 ? 16 : -1);  // Smartsheet: 17 (ASSUNZIONE), CSV: 17 se disponibile
+    const employmentTypeIdx = isFromSmartsheet ? 17 : (parts.length > 17 ? 17 : -1);  // Smartsheet: 18 (INTERNI/ESTERNI), CSV: 18 se disponibile
     
-    const email = getPart(emailIdx) || null;
-    const phone = getPart(phoneIdx) || null;
-    const hireDate = getPart(hireDateIdx) || null;
-    const employmentType = getPart(employmentTypeIdx) || null;
+    const email = emailIdx >= 0 ? (getPart(emailIdx) || null) : null;
+    const phone = phoneIdx >= 0 ? (getPart(phoneIdx) || null) : null;
+    const hireDate = hireDateIdx >= 0 ? (getPart(hireDateIdx) || null) : null;
+    const employmentType = employmentTypeIdx >= 0 ? (getPart(employmentTypeIdx) || null) : null;
 
     const resolvedQualification = resolveQualification(qualificationRaw);
     const orderVal = Number.parseInt(orderStr, 10);

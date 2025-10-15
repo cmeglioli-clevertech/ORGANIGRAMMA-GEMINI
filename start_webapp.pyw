@@ -254,6 +254,13 @@ class ProcessManager:
         try:
             self.logger.info(f"🚀 Avvio {name}: {command}")
             
+            # Output su file log invece di PIPE per evitare blocchi
+            log_dir = cwd / "logs"
+            log_dir.mkdir(exist_ok=True)
+            
+            stdout_file = open(log_dir / f"{name.replace(' ', '_').lower()}_output.log", 'w')
+            stderr_file = open(log_dir / f"{name.replace(' ', '_').lower()}_error.log", 'w')
+            
             # CREATE_NO_WINDOW per nascondere finestre console su Windows
             creation_flags = 0
             if sys.platform == 'win32':
@@ -263,13 +270,14 @@ class ProcessManager:
                 command,
                 shell=True,
                 cwd=cwd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                stdout=stdout_file,
+                stderr=stderr_file,
                 creationflags=creation_flags
             )
             
             self.processes.append(process)
             self.logger.info(f"✅ {name} avviato (PID: {process.pid})")
+            self.logger.info(f"📝 Log output: {log_dir / f'{name.replace(' ', '_').lower()}_output.log'}")
             return process
             
         except Exception as e:
@@ -374,6 +382,13 @@ class WebAppLauncher:
         self.logger.info("✅ Server pronti!")
         return True
     
+    def _check_servers_alive(self) -> bool:
+        """Verifica che entrambi i server rispondano."""
+        proxy_port = self.config.get('servers', 'proxy', 'port')
+        frontend_port = self.config.get('servers', 'frontend', 'port')
+        
+        return is_port_open(proxy_port) and is_port_open(frontend_port)
+    
     def launch_browser(self) -> Optional[subprocess.Popen]:
         """
         Apre Chrome in modalità app.
@@ -434,9 +449,16 @@ class WebAppLauncher:
             browser_process = self.launch_browser()
             
             if browser_process:
-                # Monitora processo browser
-                self.logger.info("👀 Monitoraggio finestra browser...")
-                browser_process.wait()
+                # Monitora browser E server
+                self.logger.info("👀 Monitoraggio applicazione...")
+                while browser_process.poll() is None:
+                    # Verifica che i server siano ancora attivi
+                    if not self._check_servers_alive():
+                        self.logger.error("❌ Un server si è arrestato, riavvio necessario")
+                        browser_process.terminate()
+                        return 1
+                    time.sleep(2)
+
                 self.logger.info("🛑 Browser chiuso dall'utente")
             else:
                 # Se browser non si apre, mantieni server attivi
@@ -457,8 +479,40 @@ class WebAppLauncher:
             self.logger.error(f"❌ Errore fatale: {e}", exc_info=True)
             return 1
         finally:
-            self.logger.info("🧹 Cleanup finale...")
-            self.process_manager.cleanup()
+            # Chiedi conferma prima di terminare server
+            self.logger.info("=" * 70)
+            self.logger.info("🛑 Applicazione chiusa")
+            
+            try:
+                import tkinter as tk
+                from tkinter import messagebox
+                
+                root = tk.Tk()
+                root.withdraw()
+                root.attributes('-topmost', True)
+                
+                response = messagebox.askyesno(
+                    "Clevertech Organigramma",
+                    "Terminare anche i server (proxy + frontend)?\n\n" +
+                    "• SI: Termina tutto (consigliato)\n" +
+                    "• NO: Mantieni server attivi per riavvio rapido",
+                    icon='question'
+                )
+                root.destroy()
+                
+                if response:
+                    self.logger.info("🧹 Cleanup finale...")
+                    self.process_manager.cleanup()
+                else:
+                    self.logger.info("ℹ️ Server mantenuti attivi")
+                    self.logger.info("📍 Porta proxy: 3001, frontend: 3000")
+                    # Non fare cleanup, lascia i processi attivi
+                    self.process_manager.processes.clear()
+                    
+            except ImportError:
+                # Fallback se tkinter non disponibile
+                self.logger.info("🧹 Cleanup automatico (tkinter non disponibile)...")
+                self.process_manager.cleanup()
 
 
 # =============================================================================

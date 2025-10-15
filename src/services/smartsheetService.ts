@@ -148,6 +148,14 @@ function convertSmartsheetToCSV(sheet: SmartsheetSheet): string[][] {
   });
   console.log('');
   
+  // Log specifico per colonne email/telefono
+  const emailCol = sheet.columns.find(col => col.title.includes('MAIL') || col.title.includes('EMAIL'));
+  const phoneCol = sheet.columns.find(col => col.title.includes('TELEFONO') || col.title.includes('Nr. Aziend'));
+  console.log('🔍 Colonne email/telefono trovate:');
+  console.log(`  Email: ${emailCol ? `"${emailCol.title}" (ID: ${emailCol.id})` : 'NON TROVATA'}`);
+  console.log(`  Telefono: ${phoneCol ? `"${phoneCol.title}" (ID: ${phoneCol.id})` : 'NON TROVATA'}`);
+  console.log('');
+  
   // Crea mappa: nome colonna → ID colonna Smartsheet
   const columnMap = new Map<string, number>();
   sheet.columns.forEach(col => {

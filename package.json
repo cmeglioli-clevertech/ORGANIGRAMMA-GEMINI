@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "screenshot": "node scripts/capture-screenshots.mjs",
-    "proxy": "node server-proxy.js"
+    "proxy": "node server-proxy.js",
+    "start": "powershell -ExecutionPolicy Bypass -File ./start-app.ps1"
   },
   "dependencies": {
     "cors": "^2.8.5",

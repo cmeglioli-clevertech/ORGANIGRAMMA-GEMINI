@@ -122,6 +122,7 @@ taskkill /PID <PID> /F
 ### **Smartsheet sync non funziona:**
 - Verifica che `.env` contenga `VITE_SMARTSHEET_TOKEN`
 - Controlla che proxy sia attivo su porta 3001
+- Log disponibili in: `logs/proxy_server_output.log`, `logs/frontend_server_output.log`
 
 ---
 
